@@ -19,6 +19,10 @@ public class PrecinctService {
     @Autowired
     public PrecinctService(@Qualifier("fakeDao") PrecinctDao precinctDao) {
         this.precinctDao = precinctDao;
+        Precinct tempPrecinct = new Precinct();
+        tempPrecinct.setPrecinctId("123");
+        tempPrecinct.setPopulation(12345);
+        this.precinctDao.insertPrecinct(UUID.randomUUID(), tempPrecinct);
     }
 
 
@@ -56,13 +60,17 @@ public class PrecinctService {
         return 0;
     }
 
-    public UUID createPrecinctById(UUID id) {
+    public UUID createPrecinct(Precinct precinct) {
 
         UUID newID = UUID.randomUUID();
-        precinctDao.insertPrecinct(newID, new Precinct());
-
-
+        precinctDao.insertPrecinct(newID, precinct);
         return newID;
+    }
+
+    public int createPrecinctById(UUID id, Precinct precinct) {
+
+        precinctDao.insertPrecinct(id, precinct);
+        return 0;
     }
 
 
@@ -85,6 +93,13 @@ public class PrecinctService {
 
     public List<Precinct> selectAllPrecincts() {
         return precinctDao.selectAllPrecincts();
+    }
+
+    public Precinct mergePrecincts(UUID id1, UUID id2) {
+        //fixme dunno what to do for now
+
+
+        return null;
     }
 
 

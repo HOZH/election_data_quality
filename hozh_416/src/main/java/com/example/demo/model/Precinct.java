@@ -8,6 +8,7 @@ import java.util.UUID;
 public class Precinct {
 
 
+    boolean isGhostPrecinct;
     private String stateId;
     private String countyId;
     private String districtId;
@@ -25,22 +26,12 @@ public class Precinct {
     private int hispanicA;
     private int nativeA;
     private ArrayList<Precinct> adjacentPrecincts;
-
-
-    private HashMap<UUID,String> commentBag;
-
-    public HashMap<UUID, String> getCommentBag() {
-        return commentBag;
-    }
-
-    public void setCommentBag(HashMap<UUID, String> commentBag) {
-        this.commentBag = commentBag;
-    }
+    private HashMap<UUID, String> commentBag;
 
     public Precinct() {
     }
 
-    public Precinct(String stateId, String countyId, String districtId, String precinctId, int population, int p16Dem, int p16Rep, int c16Dem, int c16Rep, int c18Dem, int c18Rep, int whiteA, int africanA, int asianA, int hispanicA, int nativeA) {
+    public Precinct(String stateId, String countyId, String districtId, String precinctId, int population, int p16Dem, int p16Rep, int c16Dem, int c16Rep, int c18Dem, int c18Rep, int whiteA, int africanA, int asianA, int hispanicA, int nativeA, boolean isGhostPrecinct) {
 
         PrecinctId = precinctId;
         this.population = population;
@@ -66,7 +57,25 @@ public class Precinct {
         this.districtId = districtId;
 
 
+        this.isGhostPrecinct = isGhostPrecinct;
 
+
+    }
+
+    public boolean isGhostPrecinct() {
+        return isGhostPrecinct;
+    }
+
+    public void setGhostPrecinct(boolean ghostPrecinct) {
+        isGhostPrecinct = ghostPrecinct;
+    }
+
+    public HashMap<UUID, String> getCommentBag() {
+        return commentBag;
+    }
+
+    public void setCommentBag(HashMap<UUID, String> commentBag) {
+        this.commentBag = commentBag;
     }
 
     public String getStateId() {
@@ -161,6 +170,10 @@ public class Precinct {
         return whiteA;
     }
 
+    public void setWhiteA(int whiteA) {
+        this.whiteA = whiteA;
+    }
+
     @Override
     public String toString() {
         return "Precinct{" +
@@ -182,10 +195,6 @@ public class Precinct {
                 ", nativeA=" + nativeA +
                 ", adjacentPrecincts=" + adjacentPrecincts +
                 '}';
-    }
-
-    public void setWhiteA(int whiteA) {
-        this.whiteA = whiteA;
     }
 
     public int getAfricanA() {
@@ -219,7 +228,6 @@ public class Precinct {
     public void setNativeA(int nativeA) {
         this.nativeA = nativeA;
     }
-
 
 
     public ArrayList<Precinct> getAdjacentPrecincts() {
