@@ -2,41 +2,11 @@ package com.example.demo.dao;
 
 
 import com.example.demo.model.Precinct;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import java.util.List;
-import java.util.UUID;
-
-public interface PrecinctDao {
-
-
-    int insertPrecinct(UUID id, Precinct precinct);
+@Repository
+public interface PrecinctDao extends JpaRepository<Precinct, Long> {
 
 
-    default Precinct formPrecinctFromObj(Precinct p) {
-
-        Precinct tempPrecinct = new Precinct(p.getStateId(), p.getCountyId(), p.getDistrictId(), p.getPrecinctId(), p.getPopulation(), p.getP16Dem(), p.getP16Rep(),
-                p.getC16Dem(), p.getC16Rep(), p.getC18Dem(), p.getC18Rep(), p.getWhiteA(),
-                p.getAfricanA(), p.getAsianA(), p.getHispanicA(), p.getNativeA(), p.isGhostPrecinct());
-
-
-        return tempPrecinct;
-    }
-
-    default int insertPrecinct(Precinct precinct) {
-
-        UUID id = UUID.randomUUID();
-
-        return insertPrecinct(id, precinct);
-
-    }
-
-
-    int deletePrecinctById(UUID id);
-
-    int updatePrecinctById(UUID id, Precinct precinct);
-
-    Precinct selectPrecinctById(UUID id);
-
-
-    List<Precinct> selectAllPrecincts();
 }
