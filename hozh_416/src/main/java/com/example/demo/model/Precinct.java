@@ -54,8 +54,8 @@ public class Precinct {
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "adjacentPrecincts" )
     private List<Precinct> adjacentTo;
 
-    @Transient
-//    @ElementCollection
+//    @Transient
+    @ElementCollection
     private List<Long> adjacentPrecinctIds;
 
     @ElementCollection

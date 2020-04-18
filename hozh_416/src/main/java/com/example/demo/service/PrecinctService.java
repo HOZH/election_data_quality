@@ -29,14 +29,68 @@ public class PrecinctService {
 
 //        precinct.setParent(precinct);
 
+        if(precinct.getId()==null)
+        {
+
+
+
+
+            precinct.getAdjacentPrecincts().addAll(adjs);
+
+                    var result = dao.save(precinct);
+
+                    return result;
+
+
+        }
+
+        else{
+
+            var exsit =dao.findById(precinct.getId()).orElse(null);
+
+            var deleted = exsit.getAdjacentPrecinctIds();
+            deleted.removeAll(precinct.getAdjacentPrecinctIds());
+
+
+            var added = precinct.getAdjacentPrecinctIds();
+            added.removeAll(exsit.getAdjacentPrecinctIds());
+
+
+            for(var i : exsit.getAdjacentPrecincts())
+            {
+                if(deleted.contains(i.getId())){
+
+                    exsit.getAdjacentPrecincts().remove(i);
+                }
+            }
+
+            for(var i : exsit.getAdjacentPrecincts())
+            {
+                if(!added.contains(i.getId())){
+
+                    exsit.getAdjacentPrecincts().add(i);
+                }
+            }
+
+
+
+            var result = dao.save(exsit);
+
+            return result;
+
+        }
 //        precinct.setAdjacentPrecincts(adjs);
-        precinct.getAdjacentPrecincts().addAll(adjs);
+//        precinct.setAdjacentPrecincts(adjs);
+//        precinct.getAdjacentPrecincts().addAll(adjs);
 
 
-        System.out.println();
-        System.err.println(precinct.getAdjacentPrecincts());
+//        System.out.println();
+//        System.err.println(precinct.getAdjacentPrecincts());
 
-        var result = dao.save(precinct);
+
+        //todo update other fields
+
+//        var result = dao.save(precinct);
 
 
 //        System.err.println(precinct.getAdjacentPrecinctIds());
@@ -53,7 +107,7 @@ public class PrecinctService {
 //        });
 
 
-        return result;
+//        return result;
     }
 
 
