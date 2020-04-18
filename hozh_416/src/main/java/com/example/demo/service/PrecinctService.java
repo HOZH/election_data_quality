@@ -27,6 +27,7 @@ public class PrecinctService {
 
 
         System.err.println(precinct.getAdjacentPrecinctIds());
+        System.err.println(precinct.getCoordinates().toString());
         dao.findAllById(precinct.getAdjacentPrecinctIds()).forEach(e -> {
 
             if (!e.getAdjacentPrecinctIds().contains(result.getId())) {
@@ -126,7 +127,6 @@ public class PrecinctService {
                         temp.getAdjacentPrecinctIds().remove(placeholder.getId());
 
                         dao.save(temp);
-
 
 
                     }

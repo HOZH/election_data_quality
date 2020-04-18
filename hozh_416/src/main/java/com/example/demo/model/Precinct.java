@@ -4,11 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-
+//fixme fix relationships between collection attrs and its container
 
 @Data
 @AllArgsConstructor
@@ -40,9 +42,11 @@ public class Precinct {
     @ElementCollection
     private List<Long> adjacentPrecinctIds;
 
+    @ElementCollection
+    private List<ArrayList<ArrayList<Double>>> coordinates;
 
     @ElementCollection
-    private Map<Integer, String> logList;
+    private Map<Integer, String> logBag;
 
 
 }
