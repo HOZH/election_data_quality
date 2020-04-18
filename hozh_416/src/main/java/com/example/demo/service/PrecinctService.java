@@ -42,55 +42,7 @@ public class PrecinctService {
         return result;
     }
 
-//
-//    public int addComment(UUID id, String newComment) {
-//
-//        precinctDao.selectPrecinctById(id).getCommentBag().put(UUID.randomUUID(), newComment);
-//        return 0;
-//
-//    }
-//
-//    public int removeComment(UUID id, UUID cid) {
-//
-//        precinctDao.selectPrecinctById(id).getCommentBag().remove(cid);
-//        return 0;
-//
-//    }
-//
-//    public int addNeighboringPrecincts(UUID id, UUID neighborId) {
-//
-//        Precinct primaryPrecinct = precinctDao.selectPrecinctById(id);
-//        Precinct secondaryPrecinct = precinctDao.selectPrecinctById(neighborId);
-//
-//        primaryPrecinct.getAdjacentPrecincts().add(secondaryPrecinct);
-//        secondaryPrecinct.getAdjacentPrecincts().add(primaryPrecinct);
-//        return 0;
-//    }
-//
-//    public int removeNeighboringPrecincts(UUID id, UUID neighborId) {
-//
-//        Precinct primaryPrecinct = precinctDao.selectPrecinctById(id);
-//        Precinct secondaryPrecinct = precinctDao.selectPrecinctById(neighborId);
-//
-//        primaryPrecinct.getAdjacentPrecincts().remove(secondaryPrecinct);
-//        secondaryPrecinct.getAdjacentPrecincts().remove(primaryPrecinct);
-//        return 0;
-//    }
-//
-//    public UUID createPrecinct(Precinct precinct) {
-//
-//        UUID newID = UUID.randomUUID();
-//        precinctDao.insertPrecinct(newID, precinct);
-//        return newID;
-//    }
-//
-//    public int createPrecinctById(UUID id, Precinct precinct) {
-//
-//        precinctDao.insertPrecinct(id, precinct);
-//        return 0;
-//    }
-//
-//
+
 
     public Precinct updateNeighbors(Precinct newPrecinct) {
 
@@ -153,12 +105,49 @@ public class PrecinctService {
 
     }
 
-//    public Precinct mergePrecincts(UUID id1, UUID id2) {
-//        //fixme dunno what to do for now
-//
-//
-//        return null;
-//    }
+    public Precinct mergePrecincts(List<Precinct> precincts) {
+        //fixme dunno what to do for now
+
+        Precinct merged = precincts.get(0);
+        Precinct placeholder = precincts.get(1);
+
+//        List<Long> toRemove = new ArrayList<>();
+
+        placeholder.getAdjacentPrecinctIds().forEach(e -> {
+
+
+                    if (!merged.getAdjacentPrecinctIds().contains(e)) {
+
+                        if(!e.equals(merged.getId()))
+                        merged.getAdjacentPrecinctIds().add(e);
+
+                        var temp = dao.findById(e).orElse(null);
+                        temp.getAdjacentPrecinctIds().add(merged.getId());
+                        temp.getAdjacentPrecinctIds().remove(placeholder.getId());
+
+                        dao.save(temp);
+
+
+
+                    }
+
+
+//                    toRemove.add(e);
+
+
+                }
+
+        );
+
+//        placeholder.getAdjacentPrecinctIds().removeAll(toRemove);
+        merged.getAdjacentPrecinctIds().remove(placeholder.getId());
+        dao.save(merged);
+//        dao.save(placeholder);
+
+        dao.deleteById(placeholder.getId());
+
+        return null;
+    }
 
 
 }

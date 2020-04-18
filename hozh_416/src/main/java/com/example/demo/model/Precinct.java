@@ -28,6 +28,7 @@ public class Precinct {
     private UUID stateId;
     private String canonicalName;
     private int population;
+    private boolean ghost;
 
 
     @ElementCollection

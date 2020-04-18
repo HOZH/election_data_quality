@@ -65,12 +65,14 @@ public class PrecinctController {
     }
 //
 //
-//    @DeleteMapping(path = "/merge/{id1}/{id2}")
-//    public Precinct mergePrecincts(@PathVariable("id1") UUID id1, @PathVariable("id2") UUID id2) {
-//
-//        return this.precinctService.mergePrecincts(id1, id2);
-//
-//    }
+    // index 0 merged precinct, index 1 deleting precinct
+    // front end already merge all the data from the deleting precinct expect for the adjacentPrecinct
+    @DeleteMapping(path = "/merge")
+    public Precinct mergePrecincts(@Valid @NotNull @RequestBody List<Precinct> precincts) {
+
+        return this.precinctService.mergePrecincts(precincts);
+
+    }
 
 
 }
