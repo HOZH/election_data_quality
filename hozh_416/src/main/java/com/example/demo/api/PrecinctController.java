@@ -39,8 +39,6 @@ public class PrecinctController {
         return precinctService.selectAllPrecincts();
     }
 
-    //
-//
     @GetMapping(path = "/{id}")
     public Precinct getPrecinctById(@PathVariable("id") Long id) {
 
@@ -63,8 +61,7 @@ public class PrecinctController {
         return precinctService.savePrecinct(precinct);
 
     }
-//
-//
+
     // index 0 merged precinct, index 1 deleting precinct
     // front end already merge all the data from the deleting precinct expect for the adjacentPrecinct
     @DeleteMapping(path = "/merge")

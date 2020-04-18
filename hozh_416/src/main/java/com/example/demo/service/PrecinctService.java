@@ -44,7 +44,6 @@ public class PrecinctService {
     }
 
 
-
     public Precinct updateNeighbors(Precinct newPrecinct) {
 
         var oldPrecinct = dao.findById(newPrecinct.getId()).orElse(null);
@@ -119,8 +118,8 @@ public class PrecinctService {
 
                     if (!merged.getAdjacentPrecinctIds().contains(e)) {
 
-                        if(!e.equals(merged.getId()))
-                        merged.getAdjacentPrecinctIds().add(e);
+                        if (!e.equals(merged.getId()))
+                            merged.getAdjacentPrecinctIds().add(e);
 
                         var temp = dao.findById(e).orElse(null);
                         temp.getAdjacentPrecinctIds().add(merged.getId());
