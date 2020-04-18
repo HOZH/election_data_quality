@@ -1,8 +1,7 @@
 package com.example.demo.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -14,6 +13,8 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString(exclude = { "adjacentTo","adjacentPrecinct"})
+@EqualsAndHashCode(exclude = { "adjacentTo","adjacentPrecinct"})
 @Entity(name = "PRECINCT_TBL")
 @Table
 public class Precinct {
@@ -38,7 +39,23 @@ public class Precinct {
     @ElementCollection
     private Map<ElectionEnum, Integer> electionMap;
 
-    @ElementCollection
+
+//    @ManyToOne
+//    @JoinColumn
+//    private Precinct parent;
+
+    //    @OneToMany(mappedBy = "parent")
+    @JsonIgnoreProperties("adjacentTo")
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Precinct> adjacentPrecincts;
+
+
+    @JsonIgnoreProperties("adjacentPrecinct")
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "adjacentPrecincts" )
+    private List<Precinct> adjacentTo;
+
+    @Transient
+//    @ElementCollection
     private List<Long> adjacentPrecinctIds;
 
     @ElementCollection

@@ -25,12 +25,12 @@ public class PrecinctController {
     }
 
 
-    @PutMapping(path = "/neighbor")
-    public Precinct updateNeighborPrecinct(@Valid @NotNull @RequestBody Precinct precinct) {
-
-        return precinctService.updateNeighbors(precinct);
-
-    }
+//    @PutMapping(path = "/neighbor")
+//    public Precinct updateNeighborPrecinct(@Valid @NotNull @RequestBody Precinct precinct) {
+//
+//        return precinctService.updateNeighbors(precinct);
+//
+//    }
 
     @GetMapping(path = "/getAllPrecincts")
     public List<Precinct> getAllPrecinct() {
@@ -64,12 +64,12 @@ public class PrecinctController {
 
     // index 0 merged precinct, index 1 deleting precinct
     // front end already merge all the data from the deleting precinct expect for the adjacentPrecinct
-    @DeleteMapping(path = "/merge")
-    public Precinct mergePrecincts(@Valid @NotNull @RequestBody List<Precinct> precincts) {
-
-        return this.precinctService.mergePrecincts(precincts);
-
-    }
+//    @DeleteMapping(path = "/merge")
+//    public Precinct mergePrecincts(@Valid @NotNull @RequestBody List<Precinct> precincts) {
+//
+//        return this.precinctService.mergePrecincts(precincts);
+//
+//    }
 
 
 }
