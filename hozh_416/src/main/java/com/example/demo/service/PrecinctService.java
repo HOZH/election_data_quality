@@ -1,10 +1,5 @@
 package com.example.demo.service;
 
-/*
- * @created 19/03/2020 - 4:14 PM
- * @project  hozh-416-server
- * @author Hong Zheng
- */
 
 import com.example.demo.dao.PrecinctDao;
 import com.example.demo.model.District;
@@ -15,12 +10,18 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/**
+ * @author Hong Zheng
+ * @created 19/03/2020 - 4:14 PM
+ * @project hozh-416-server
+ */
 @Service
 public class PrecinctService {
 
 
     private final PrecinctDao precinctDao;
-    private DistrictService districtService;
+    private final DistrictService districtService;
 
     @Autowired
     public PrecinctService(PrecinctDao precinctDao, DistrictService districtService) {
@@ -67,14 +68,11 @@ public class PrecinctService {
 
             var oldPrecinct = precinctDao.findById(precinct.getId()).orElse(null);
 
-            if (oldPrecinct.getAdjacentPrecinctIds().containsAll(precinct.getAdjacentPrecinctIds()) && oldPrecinct.getAdjacentPrecinctIds().size() == precinct.getAdjacentPrecinctIds().size())
+            if (oldPrecinct.getAdjacentPrecinctIds().containsAll(precinct.getAdjacentPrecinctIds()) && oldPrecinct.getAdjacentPrecinctIds().size() == precinct.getAdjacentPrecinctIds().size()) {
                 return precinctDao.save(precinct);
-
-
-            else
-
-
+            } else {
                 return updateNeighbors(precinct);
+            }
         }
     }
 
@@ -94,7 +92,7 @@ public class PrecinctService {
         for (var i : precinctDao.findAllById(deleted)) {
 
             //fixme may throw exception here
-            i.getAdjacentPrecinctIds().remove(i.getAdjacentPrecinctIds().indexOf(newPrecinct.getId()));
+            i.getAdjacentPrecinctIds().remove(newPrecinct.getId());
             precinctDao.save(i);
         }
 
@@ -142,8 +140,9 @@ public class PrecinctService {
 
                     if (!merged.getAdjacentPrecinctIds().contains(e)) {
 
-                        if (!e.equals(merged.getId()))
+                        if (!e.equals(merged.getId())) {
                             merged.getAdjacentPrecinctIds().add(e);
+                        }
 
                         var temp = precinctDao.findById(e).orElse(null);
                         temp.getAdjacentPrecinctIds().add(merged.getId());

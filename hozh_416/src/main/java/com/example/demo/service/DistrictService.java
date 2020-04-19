@@ -1,10 +1,5 @@
 package com.example.demo.service;
 
-/*
- * @created 19/03/2020 - 4:14 PM
- * @project  hozh-416-server
- * @author Hong Zheng
- */
 
 import com.example.demo.dao.DistrictDao;
 import com.example.demo.model.District;
@@ -12,6 +7,11 @@ import com.example.demo.model.State;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * @author Hong Zheng
+ * @created 19/03/2020 - 4:14 PM
+ * @project hozh-416-server
+ */
 @Service
 public class DistrictService {
 

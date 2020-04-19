@@ -1,11 +1,5 @@
 package com.example.demo.api;
 
-/*
- * @created 19/03/2020 - 4:14 PM
- * @project  hozh-416-server
- * @author Hong Zheng
- */
-
 
 import com.example.demo.model.District;
 import com.example.demo.model.Precinct;
@@ -20,6 +14,11 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
+/**
+ * @author Hong Zheng
+ * @created 19/03/2020 - 4:14 PM
+ * @project hozh-416-server
+ */
 @RequestMapping("api")
 @RestController
 public class Controller {

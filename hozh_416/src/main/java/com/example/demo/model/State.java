@@ -1,12 +1,6 @@
 package com.example.demo.model;
 
 
-/*
- * @created 19/03/2020 - 4:14 PM
- * @project  hozh-416-server
- * @author Hong Zheng
- */
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,6 +11,11 @@ import java.util.List;
 
 import static javax.persistence.CascadeType.ALL;
 
+/**
+ * @author Hong Zheng
+ * @created 19/03/2020 - 4:14 PM
+ * @project hozh-416-server
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
