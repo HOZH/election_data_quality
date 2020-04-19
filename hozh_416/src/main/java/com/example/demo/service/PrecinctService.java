@@ -2,10 +2,8 @@ package com.example.demo.service;
 
 
 import com.example.demo.dao.PrecinctDao;
-import com.example.demo.dao.StateDao;
 import com.example.demo.model.District;
 import com.example.demo.model.Precinct;
-import com.example.demo.model.State;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +18,7 @@ public class PrecinctService {
     private DistrictService districtService;
 
     @Autowired
-    public PrecinctService(PrecinctDao precinctDao,DistrictService districtService) {
+    public PrecinctService(PrecinctDao precinctDao, DistrictService districtService) {
         this.precinctDao = precinctDao;
         this.districtService = districtService;
     }
@@ -28,38 +26,22 @@ public class PrecinctService {
 
     public Precinct savePrecinct(Precinct precinct) {
 
-        System.err.println(precinct.getStateId().getClass().getName()+precinct.getDistrictId().getClass().getName());
-
 
         if (precinct.getId() == null) {
 
             var tempDistrict = districtService.selectDistrictById(precinct.getDistrictId());
-//            var tempDistrict = stateDao.findById(precinct.getStateId()).orElse(null);
-            if(tempDistrict==null)
-            {
+            if (tempDistrict == null) {
 
                 tempDistrict = new District();
                 tempDistrict.setId(precinct.getDistrictId());
                 tempDistrict.setStateId(precinct.getStateId());
                 districtService.saveDistrict(tempDistrict);
-//                tempState = new State();
-//                tempState.setId(precinct.getStateId());
-//                stateDao.save(tempState);
-//                stateDao.flush();
             }
 
-            System.err.println(tempDistrict);
             precinct.setDistrict(tempDistrict);
-//            precinct.setState(tempState);
 
 
-            System.out.println("\n\n\n\n\n\n\n\n\n\n");
             var result = precinctDao.save(precinct);
-
-
-
-            System.err.println(precinct.getAdjacentPrecinctIds());
-            System.err.println(precinct.getCoordinates().toString());
 
 
             precinctDao.findAllById(precinct.getAdjacentPrecinctIds()).forEach(e -> {
@@ -131,8 +113,6 @@ public class PrecinctService {
         precinctDao.deleteById(id);
 
 
-//        return precinctDao.deletePrecinctById(id);
-
     }
 
 
@@ -152,7 +132,6 @@ public class PrecinctService {
         Precinct merged = precincts.get(0);
         Precinct placeholder = precincts.get(1);
 
-//        List<Long> toRemove = new ArrayList<>();
 
         placeholder.getAdjacentPrecinctIds().forEach(e -> {
 
@@ -170,8 +149,6 @@ public class PrecinctService {
 
 
                     }
-
-
 
 
                 }

@@ -27,7 +27,6 @@ data fomart convertion for json
 
 
     #id remove this line, id is a auto increasing long type. only use when update a exsiting precinct(may throw error/mess up db if the precinct with input id is not in the databse, don't use it when add a precinct!!!!!), dont include this field in add precinct
-       "precinctId": "p id string",
     "districtId": "a integer string here, like 1 or 2 or 3. all the districtid are unique to each other, it means no two district will have same id when they are in diff state",
     "countyId": "c id string",
     "stateId": "a integer string here, like 1 or 2 or 3, we can make convention about what state is mapping to each key later like 1 is for new york and 2 is for florida",

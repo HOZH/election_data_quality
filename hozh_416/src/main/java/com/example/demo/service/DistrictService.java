@@ -11,45 +11,36 @@ import org.springframework.stereotype.Service;
 public class DistrictService {
 
 
-
     private final DistrictDao districtDao;
     private final StateService stateService;
 
 
     @Autowired
-    public DistrictService(DistrictDao districtDao,StateService stateService) {
+    public DistrictService(DistrictDao districtDao, StateService stateService) {
         this.districtDao = districtDao;
         this.stateService = stateService;
     }
 
 
-    public District selectDistrictById(Long id){
-
-        System.err.println("1"+districtDao.findById(id).orElse(null)+" \n");
+    public District selectDistrictById(Long id) {
 
 
         return districtDao.findById(id).orElse(null);
 
-//        return districtDao.findById(id).orElse(null);
     }
 
 
-    public District saveDistrict(District district){
+    public District saveDistrict(District district) {
 
         var tempState = stateService.selectStateById(district.getStateId());
 
-//        var tempState = stateDao.findById(precinct.getStateId()).orElse(null);
-        if(tempState==null)
-        {
+        if (tempState == null) {
             tempState = new State();
             tempState.setId(district.getStateId());
             stateService.saveState(tempState);
-//                stateDao.flush();
         }
 
-        System.err.println(tempState);
         district.setState(tempState);
-
 
 
         return districtDao.save(district);

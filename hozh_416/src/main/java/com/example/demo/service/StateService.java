@@ -1,6 +1,5 @@
 package com.example.demo.service;
 
-import com.example.demo.dao.PrecinctDao;
 import com.example.demo.dao.StateDao;
 import com.example.demo.model.State;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,14 +19,13 @@ public class StateService {
 
     }
 
-    public State selectStateById(Long id){
+    public State selectStateById(Long id) {
 
         return stateDao.findById(id).orElse(null);
     }
 
 
-    public State saveState(State state){
-
+    public State saveState(State state) {
 
 
         return stateDao.save(state);

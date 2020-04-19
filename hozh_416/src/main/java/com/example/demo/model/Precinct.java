@@ -10,7 +10,6 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 //fixme fix relationships between collection attrs and its container
 
 @Data
@@ -27,10 +26,7 @@ public class Precinct {
     private Long id;
 
 
-    private String precinctId;
-//    private String districtId;
     private String countyId;
-//    private String stateId;
     private String canonicalName;
     private int population;
     private boolean ghost;
@@ -43,10 +39,8 @@ public class Precinct {
 
 
     @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name="state_id", nullable=false)
     @JsonIgnoreProperties("precincts")
     private District district;
-
 
 
     @ElementCollection

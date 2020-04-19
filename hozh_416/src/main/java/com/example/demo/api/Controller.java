@@ -54,9 +54,8 @@ public class Controller {
     @GetMapping(path = "/district/{id}")
     public District getDistrictById(@PathVariable("id") Long id) {
 
-var temp =                districtService.selectDistrictById(id);
+        var temp = districtService.selectDistrictById(id);
 
-        System.err.println(temp+"233");
         return temp;
 
 //        return null;

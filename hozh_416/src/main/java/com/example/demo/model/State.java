@@ -7,9 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import static javax.persistence.CascadeType.ALL;
 
@@ -25,13 +23,10 @@ public class State {
     private Long id;
 
 
-
-//    private String stateId;
     private String canonicalName;
 
 
-
-    @OneToMany( fetch = FetchType.LAZY, cascade=ALL, mappedBy = "state")
+    @OneToMany(fetch = FetchType.LAZY, cascade = ALL, mappedBy = "state")
     @JsonIgnoreProperties("state")
 
     private List<District> districts;
