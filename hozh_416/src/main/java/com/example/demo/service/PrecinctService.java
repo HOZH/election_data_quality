@@ -1,5 +1,10 @@
 package com.example.demo.service;
 
+/*
+ * @created 19/03/2020 - 4:14 PM
+ * @project  hozh-416-server
+ * @author Hong Zheng
+ */
 
 import com.example.demo.dao.PrecinctDao;
 import com.example.demo.model.District;
@@ -127,7 +132,6 @@ public class PrecinctService {
     }
 
     public Precinct mergePrecincts(List<Precinct> precincts) {
-        //fixme dunno what to do for now
 
         Precinct merged = precincts.get(0);
         Precinct placeholder = precincts.get(1);

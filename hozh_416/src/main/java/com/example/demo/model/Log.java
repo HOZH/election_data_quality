@@ -1,5 +1,10 @@
 package com.example.demo.model;
 
+/*
+ * @created 19/03/2020 - 4:14 PM
+ * @project  hozh-416-server
+ * @author Hong Zheng
+ */
 
 import java.util.UUID;
 
@@ -12,10 +17,7 @@ public class Log {
     private LogEnum logType;
     private LogState logState;
     private String comment;
-    //    private ArrayList<Precinct> overlappingPrecinct;
-//    private Precinct enclosingPrecinct;
-//    private Precinct currentPrecinct;
-//    private Precinct selectedPrecinct;
+
     private String timeStamp;
 
 
