@@ -20,8 +20,16 @@ spring:
     hibernate:
       ddl-auto: update
     properties.hibernate.dialect: org.hibernate.dialect.MySQL5Dialect
+
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
+
 server:
   port: 8080
+
+
+
 
 
 
@@ -40,6 +48,11 @@ spring:
     hibernate:
       ddl-auto: update
     properties.hibernate.dialect: org.hibernate.dialect.MySQL5Dialect
+
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
+
 server:
   port: 8080
 

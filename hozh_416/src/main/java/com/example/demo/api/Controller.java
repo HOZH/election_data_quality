@@ -1,7 +1,9 @@
 package com.example.demo.api;
 
+import com.example.demo.model.District;
 import com.example.demo.model.Precinct;
 import com.example.demo.model.State;
+import com.example.demo.service.DistrictService;
 import com.example.demo.service.PrecinctService;
 import com.example.demo.service.StateService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,14 +22,15 @@ public class Controller {
 
     private final PrecinctService precinctService;
     private final StateService stateService;
+    private final DistrictService districtService;
 
 
     @Autowired
-    public Controller(PrecinctService precinctService,StateService stateService) {
+    public Controller(PrecinctService precinctService, StateService stateService, DistrictService districtService) {
         this.precinctService = precinctService;
         this.stateService = stateService;
+        this.districtService = districtService;
     }
-
 
 
     @GetMapping(path = "/getAllPrecincts")
@@ -42,6 +45,23 @@ public class Controller {
 
 
         return stateService.selectStateById(id);
+
+
+        //todo next to implement once the real database is set up, for now we don't have enough realistic geo data from db
+//        return null;
+    }
+
+    @GetMapping(path = "/district/{id}")
+    public District getDistrictById(@PathVariable("id") Long id) {
+
+var temp =                districtService.selectDistrictById(id);
+
+        System.err.println(temp+"233");
+        return temp;
+
+//        return null;
+
+//        return temp;
 
 
         //todo next to implement once the real database is set up, for now we don't have enough realistic geo data from db
@@ -78,12 +98,9 @@ public class Controller {
     public Precinct mergePrecincts(@Valid @NotNull @RequestBody List<Precinct> precincts) {
 
 
-
         return this.precinctService.mergePrecincts(precincts);
 
     }
-
-
 
 
 }

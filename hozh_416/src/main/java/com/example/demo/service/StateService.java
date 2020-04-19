@@ -11,13 +11,11 @@ import org.springframework.stereotype.Service;
 public class StateService {
 
 
-    private final PrecinctDao precinctDao;
     private final StateDao stateDao;
 
 
     @Autowired
-    public StateService(PrecinctDao precinctDao,StateDao stateDao) {
-        this.precinctDao = precinctDao;
+    public StateService(StateDao stateDao) {
         this.stateDao = stateDao;
 
     }
@@ -25,6 +23,14 @@ public class StateService {
     public State selectStateById(Long id){
 
         return stateDao.findById(id).orElse(null);
+    }
+
+
+    public State saveState(State state){
+
+
+
+        return stateDao.save(state);
     }
 
 }

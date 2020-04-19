@@ -3,6 +3,7 @@ package com.example.demo.service;
 
 import com.example.demo.dao.PrecinctDao;
 import com.example.demo.dao.StateDao;
+import com.example.demo.model.District;
 import com.example.demo.model.Precinct;
 import com.example.demo.model.State;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,31 +17,40 @@ public class PrecinctService {
 
 
     private final PrecinctDao precinctDao;
-    private final StateDao stateDao;
+    private DistrictService districtService;
 
     @Autowired
-    public PrecinctService(PrecinctDao precinctDao,StateDao stateDao) {
+    public PrecinctService(PrecinctDao precinctDao,DistrictService districtService) {
         this.precinctDao = precinctDao;
-        this.stateDao=stateDao;
+        this.districtService = districtService;
     }
 
 
     public Precinct savePrecinct(Precinct precinct) {
 
+        System.err.println(precinct.getStateId().getClass().getName()+precinct.getDistrictId().getClass().getName());
+
 
         if (precinct.getId() == null) {
 
-            var tempState = stateDao.findById(precinct.getStateId()).orElse(null);
-            if(tempState==null)
+            var tempDistrict = districtService.selectDistrictById(precinct.getDistrictId());
+//            var tempDistrict = stateDao.findById(precinct.getStateId()).orElse(null);
+            if(tempDistrict==null)
             {
-                tempState = new State();
-                tempState.setId(precinct.getStateId());
-                stateDao.save(tempState);
+
+                tempDistrict = new District();
+                tempDistrict.setId(precinct.getDistrictId());
+                tempDistrict.setStateId(precinct.getStateId());
+                districtService.saveDistrict(tempDistrict);
+//                tempState = new State();
+//                tempState.setId(precinct.getStateId());
+//                stateDao.save(tempState);
 //                stateDao.flush();
             }
 
-            System.err.println(tempState);
-            precinct.setState(tempState);
+            System.err.println(tempDistrict);
+            precinct.setDistrict(tempDistrict);
+//            precinct.setState(tempState);
 
 
             System.out.println("\n\n\n\n\n\n\n\n\n\n");

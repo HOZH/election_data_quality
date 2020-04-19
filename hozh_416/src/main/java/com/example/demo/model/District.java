@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -14,11 +15,12 @@ import java.util.Map;
 import static javax.persistence.CascadeType.ALL;
 
 @Data
+@ToString(exclude = {"state"})
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "STATE_TBL")
+@Entity(name = "District_TBL")
 @Table
-public class State {
+public class District {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,15 +28,25 @@ public class State {
 
 
 
-//    private String stateId;
+    //    private String stateId;
     private String canonicalName;
 
+    @Transient
+    private Long stateId;
 
 
-    @OneToMany( fetch = FetchType.LAZY, cascade=ALL, mappedBy = "state")
-    @JsonIgnoreProperties("state")
 
-    private List<District> districts;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties("district")
+
+    private State state;
+
+
+
+    @OneToMany( fetch = FetchType.LAZY, cascade=ALL, mappedBy = "district")
+    @JsonIgnoreProperties("district")
+
+    private List<Precinct> precincts;
 
 
 }

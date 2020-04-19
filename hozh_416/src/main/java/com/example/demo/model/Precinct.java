@@ -14,7 +14,7 @@ import java.util.UUID;
 //fixme fix relationships between collection attrs and its container
 
 @Data
-@ToString(exclude = {"state"})
+@ToString(exclude = {"district"})
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "PRECINCT_TBL")
@@ -28,7 +28,7 @@ public class Precinct {
 
 
     private String precinctId;
-    private String districtId;
+//    private String districtId;
     private String countyId;
 //    private String stateId;
     private String canonicalName;
@@ -38,11 +38,14 @@ public class Precinct {
     @Transient
     private Long stateId;
 
+    @Transient
+    private Long districtId;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name="state_id", nullable=false)
     @JsonIgnoreProperties("precincts")
-    private State state;
+    private District district;
 
 
 
