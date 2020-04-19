@@ -36,13 +36,16 @@ public class PrecinctService {
                 tempState = new State();
                 tempState.setId(precinct.getStateId());
                 stateDao.save(tempState);
+//                stateDao.flush();
             }
+
+            System.err.println(tempState);
             precinct.setState(tempState);
 
 
-            System.err.println("state precinct bag size "+tempState.getPrecincts().size());
             System.out.println("\n\n\n\n\n\n\n\n\n\n");
             var result = precinctDao.save(precinct);
+
 
 
             System.err.println(precinct.getAdjacentPrecinctIds());

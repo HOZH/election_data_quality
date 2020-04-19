@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import java.util.UUID;
 //fixme fix relationships between collection attrs and its container
 
 @Data
+@ToString(exclude = {"state"})
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "PRECINCT_TBL")
@@ -21,7 +23,7 @@ import java.util.UUID;
 public class Precinct {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
 

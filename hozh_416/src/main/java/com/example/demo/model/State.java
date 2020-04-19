@@ -21,7 +21,7 @@ import static javax.persistence.CascadeType.ALL;
 public class State {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
 
