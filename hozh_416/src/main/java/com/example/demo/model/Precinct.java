@@ -58,6 +58,7 @@ public class Precinct {
     @ElementCollection
     private List<Long> adjacentPrecinctIds;
 
+    @Column(length = 2000)
     @ElementCollection
     private List<ArrayList<ArrayList<Double>>> coordinates;
 
