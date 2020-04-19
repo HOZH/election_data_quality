@@ -20,27 +20,45 @@ public class PrecinctService {
         this.dao = precinctDao;
     }
 
+
     public Precinct savePrecinct(Precinct precinct) {
 
 
-        var result = dao.save(precinct);
+        if (precinct.getId() == null) {
+            var result = dao.save(precinct);
 
 
-        System.err.println(precinct.getAdjacentPrecinctIds());
-        System.err.println(precinct.getCoordinates().toString());
-        dao.findAllById(precinct.getAdjacentPrecinctIds()).forEach(e -> {
-
-            if (!e.getAdjacentPrecinctIds().contains(result.getId())) {
-                e.getAdjacentPrecinctIds().add(result.getId());
-
-                dao.save(e);
+            System.err.println(precinct.getAdjacentPrecinctIds());
+            System.err.println(precinct.getCoordinates().toString());
 
 
-            }
-        });
+            dao.findAllById(precinct.getAdjacentPrecinctIds()).forEach(e -> {
+
+                if (!e.getAdjacentPrecinctIds().contains(result.getId())) {
+                    e.getAdjacentPrecinctIds().add(result.getId());
+
+                    dao.save(e);
 
 
-        return result;
+                }
+
+            });
+
+
+            return result;
+        } else {
+
+            var oldPrecinct = dao.findById(precinct.getId()).orElse(null);
+
+            if (oldPrecinct.getAdjacentPrecinctIds().containsAll(precinct.getAdjacentPrecinctIds()) && oldPrecinct.getAdjacentPrecinctIds().size() == precinct.getAdjacentPrecinctIds().size())
+                return dao.save(precinct);
+
+
+            else
+
+
+                return updateNeighbors(precinct);
+        }
     }
 
 
@@ -77,23 +95,16 @@ public class PrecinctService {
 
     }
 
-    public int deletePrecinctById(Long id) {
+    public void deletePrecinctById(Long id) {
 
 
         dao.deleteById(id);
 
-        return 0;
+
 //        return precinctDao.deletePrecinctById(id);
 
     }
 
-
-    public Precinct updatePrecinct(Precinct p) {
-
-        return dao.save(p);
-
-
-    }
 
     public Precinct selectPrecinctById(Long id) {
         return dao.findById(id).orElse(null);
@@ -131,21 +142,18 @@ public class PrecinctService {
                     }
 
 
-//                    toRemove.add(e);
 
 
                 }
 
         );
 
-//        placeholder.getAdjacentPrecinctIds().removeAll(toRemove);
         merged.getAdjacentPrecinctIds().remove(placeholder.getId());
-        dao.save(merged);
-//        dao.save(placeholder);
 
         dao.deleteById(placeholder.getId());
 
-        return null;
+        return dao.save(merged);
+
     }
 
 

@@ -1,4 +1,13 @@
 spring:
+  profiles:
+    active: review
+
+
+
+
+---
+spring:
+  profiles: development
   datasource:
     username: root
     password: 123456
@@ -12,6 +21,27 @@ spring:
 server:
   port: 8080
 
+
+
+---
+
+
+spring:
+  profiles: review
+  datasource:
+    username: hyejeong
+    password: ENC(YXbdQsErstFCCthiGfMYPbCLP37vd7l2)
+    url: jdbc:mysql://mysql3.cs.stonybrook.edu:3306/hyejeong
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties.hibernate.dialect: org.hibernate.dialect.MySQL5Dialect
+server:
+  port: 8080
+
 jasypt:
   encryptor:
     password: retail_salt
+
