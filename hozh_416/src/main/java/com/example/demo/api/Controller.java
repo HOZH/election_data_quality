@@ -1,7 +1,9 @@
 package com.example.demo.api;
 
 import com.example.demo.model.Precinct;
+import com.example.demo.model.State;
 import com.example.demo.service.PrecinctService;
+import com.example.demo.service.StateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,11 +19,13 @@ public class Controller {
     // todo completement merge precincts later
 
     private final PrecinctService precinctService;
+    private final StateService stateService;
 
 
     @Autowired
-    public Controller(PrecinctService precinctService) {
+    public Controller(PrecinctService precinctService,StateService stateService) {
         this.precinctService = precinctService;
+        this.stateService = stateService;
     }
 
 
@@ -34,11 +38,14 @@ public class Controller {
     }
 
     @GetMapping(path = "/state/{id}")
-    public List<Precinct> selectStateById(@PathVariable("id") Long id) {
+    public State getStateById(@PathVariable("id") Long id) {
+
+
+        return stateService.selectStateById(id);
 
 
         //todo next to implement once the real database is set up, for now we don't have enough realistic geo data from db
-        return null;
+//        return null;
     }
 
 

@@ -2,7 +2,9 @@ package com.example.demo.service;
 
 
 import com.example.demo.dao.PrecinctDao;
+import com.example.demo.dao.StateDao;
 import com.example.demo.model.Precinct;
+import com.example.demo.model.State;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,11 +15,13 @@ import java.util.List;
 public class PrecinctService {
 
 
-    private final PrecinctDao dao;
+    private final PrecinctDao precinctDao;
+    private final StateDao stateDao;
 
     @Autowired
-    public PrecinctService(PrecinctDao precinctDao) {
-        this.dao = precinctDao;
+    public PrecinctService(PrecinctDao precinctDao,StateDao stateDao) {
+        this.precinctDao = precinctDao;
+        this.stateDao=stateDao;
     }
 
 
@@ -25,19 +29,32 @@ public class PrecinctService {
 
 
         if (precinct.getId() == null) {
-            var result = dao.save(precinct);
+
+            var tempState = stateDao.findById(precinct.getStateId()).orElse(null);
+            if(tempState==null)
+            {
+                tempState = new State();
+                tempState.setId(precinct.getStateId());
+                stateDao.save(tempState);
+            }
+            precinct.setState(tempState);
+
+
+            System.err.println("state precinct bag size "+tempState.getPrecincts().size());
+            System.out.println("\n\n\n\n\n\n\n\n\n\n");
+            var result = precinctDao.save(precinct);
 
 
             System.err.println(precinct.getAdjacentPrecinctIds());
             System.err.println(precinct.getCoordinates().toString());
 
 
-            dao.findAllById(precinct.getAdjacentPrecinctIds()).forEach(e -> {
+            precinctDao.findAllById(precinct.getAdjacentPrecinctIds()).forEach(e -> {
 
                 if (!e.getAdjacentPrecinctIds().contains(result.getId())) {
                     e.getAdjacentPrecinctIds().add(result.getId());
 
-                    dao.save(e);
+                    precinctDao.save(e);
 
 
                 }
@@ -48,10 +65,10 @@ public class PrecinctService {
             return result;
         } else {
 
-            var oldPrecinct = dao.findById(precinct.getId()).orElse(null);
+            var oldPrecinct = precinctDao.findById(precinct.getId()).orElse(null);
 
             if (oldPrecinct.getAdjacentPrecinctIds().containsAll(precinct.getAdjacentPrecinctIds()) && oldPrecinct.getAdjacentPrecinctIds().size() == precinct.getAdjacentPrecinctIds().size())
-                return dao.save(precinct);
+                return precinctDao.save(precinct);
 
 
             else
@@ -64,7 +81,7 @@ public class PrecinctService {
 
     public Precinct updateNeighbors(Precinct newPrecinct) {
 
-        var oldPrecinct = dao.findById(newPrecinct.getId()).orElse(null);
+        var oldPrecinct = precinctDao.findById(newPrecinct.getId()).orElse(null);
 
 
         ArrayList<Long> deleted = new ArrayList(oldPrecinct.getAdjacentPrecinctIds());
@@ -74,23 +91,23 @@ public class PrecinctService {
         added.remove(new ArrayList(oldPrecinct.getAdjacentPrecinctIds()));
 
 
-        for (var i : dao.findAllById(deleted)) {
+        for (var i : precinctDao.findAllById(deleted)) {
 
             //fixme may throw exception here
             i.getAdjacentPrecinctIds().remove(i.getAdjacentPrecinctIds().indexOf(newPrecinct.getId()));
-            dao.save(i);
+            precinctDao.save(i);
         }
 
 
-        for (var i : dao.findAllById(added)) {
+        for (var i : precinctDao.findAllById(added)) {
 
             //fixme may throw exception here
             i.getAdjacentPrecinctIds().add(newPrecinct.getId());
-            dao.save(i);
+            precinctDao.save(i);
 
         }
 
-        return dao.save(newPrecinct);
+        return precinctDao.save(newPrecinct);
 
 
     }
@@ -98,7 +115,7 @@ public class PrecinctService {
     public void deletePrecinctById(Long id) {
 
 
-        dao.deleteById(id);
+        precinctDao.deleteById(id);
 
 
 //        return precinctDao.deletePrecinctById(id);
@@ -107,11 +124,11 @@ public class PrecinctService {
 
 
     public Precinct selectPrecinctById(Long id) {
-        return dao.findById(id).orElse(null);
+        return precinctDao.findById(id).orElse(null);
     }
 
     public List<Precinct> selectAllPrecincts() {
-        return dao.findAll();
+        return precinctDao.findAll();
 
 
     }
@@ -132,11 +149,11 @@ public class PrecinctService {
                         if (!e.equals(merged.getId()))
                             merged.getAdjacentPrecinctIds().add(e);
 
-                        var temp = dao.findById(e).orElse(null);
+                        var temp = precinctDao.findById(e).orElse(null);
                         temp.getAdjacentPrecinctIds().add(merged.getId());
                         temp.getAdjacentPrecinctIds().remove(placeholder.getId());
 
-                        dao.save(temp);
+                        precinctDao.save(temp);
 
 
                     }
@@ -150,9 +167,9 @@ public class PrecinctService {
 
         merged.getAdjacentPrecinctIds().remove(placeholder.getId());
 
-        dao.deleteById(placeholder.getId());
+        precinctDao.deleteById(placeholder.getId());
 
-        return dao.save(merged);
+        return precinctDao.save(merged);
 
     }
 

@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,6 +17,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Entity(name = "PRECINCT_TBL")
 @Table
+
 public class Precinct {
 
     @Id
@@ -26,10 +28,20 @@ public class Precinct {
     private String precinctId;
     private String districtId;
     private String countyId;
-    private String stateId;
+//    private String stateId;
     private String canonicalName;
     private int population;
     private boolean ghost;
+
+    @Transient
+    private Long stateId;
+
+
+    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name="state_id", nullable=false)
+    @JsonIgnoreProperties("precincts")
+    private State state;
+
 
 
     @ElementCollection
