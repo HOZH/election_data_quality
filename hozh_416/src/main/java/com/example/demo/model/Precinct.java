@@ -23,10 +23,10 @@ public class Precinct {
     private Long id;
 
 
-    private UUID precinctId;
-    private UUID districtId;
-    private UUID countyId;
-    private UUID stateId;
+    private String precinctId;
+    private String districtId;
+    private String countyId;
+    private String stateId;
     private String canonicalName;
     private int population;
     private boolean ghost;
