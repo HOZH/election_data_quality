@@ -45,7 +45,7 @@ public class Precinct {
 
     //fixme will be change later
     @Transient
-    private Map<EthnicityEnum, Integer> ethnicityMap;
+    private Map<EthnicityEnum, Integer> ethnicityMap; //todo is required when filling data into database/ not required for production stage
 
 //    @Transient
 //    private Long districtId;
