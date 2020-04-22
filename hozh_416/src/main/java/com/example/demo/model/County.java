@@ -9,6 +9,7 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Map;
 
 import static javax.persistence.CascadeType.ALL;
 
@@ -22,9 +23,13 @@ import static javax.persistence.CascadeType.ALL;
 @ToString(exclude = {"state"})
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "District_TBL")
+@Entity(name = "County_TBL")
 @Table
-public class District {
+public class County {
+
+
+    @ElementCollection
+    private Map<EthnicityEnum, Integer> ethnicityMap;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,13 +43,13 @@ public class District {
 
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties("district")
+    @JsonIgnoreProperties("county")
 
     private State state;
 
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = ALL, mappedBy = "district")
-    @JsonIgnoreProperties("district")
+    @OneToMany(fetch = FetchType.LAZY, cascade = ALL, mappedBy = "county")
+    @JsonIgnoreProperties("county")
 
     private List<Precinct> precincts;
 

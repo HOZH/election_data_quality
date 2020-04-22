@@ -19,7 +19,7 @@ import java.util.Map;
  * @project hozh-416-server
  */
 @Data
-@ToString(exclude = {"district"})
+@ToString(exclude = {"county"})
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "PRECINCT_TBL")
@@ -32,7 +32,6 @@ public class Precinct {
     private Long id;
 
 
-    private String countyId;
     private String canonicalName;
     private int population;
     private boolean ghost;
@@ -41,16 +40,21 @@ public class Precinct {
     private Long stateId;
 
     @Transient
-    private Long districtId;
+    private Long countyId;
+
+
+    //fixme will be change later
+    @Transient
+    private Map<EthnicityEnum, Integer> ethnicityMap;
+
+//    @Transient
+//    private Long districtId;
 
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties("precincts")
-    private District district;
+    private County county;
 
-
-    @ElementCollection
-    private Map<EthnicityEnum, Integer> ethnicityMap;
 
     @ElementCollection
     private Map<ElectionEnum, Integer> electionMap;
@@ -62,6 +66,8 @@ public class Precinct {
     @ElementCollection
     private List<ArrayList<ArrayList<Double>>> coordinates;
 
+
+    //todo change name later
     @ElementCollection
     private Map<Integer, String> logBag;
 

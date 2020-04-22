@@ -34,7 +34,7 @@ public class State {
     @OneToMany(fetch = FetchType.LAZY, cascade = ALL, mappedBy = "state")
     @JsonIgnoreProperties("state")
 
-    private List<District> districts;
+    private List<County> counties;
 
 
 }

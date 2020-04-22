@@ -1,7 +1,7 @@
 package com.example.demo.dao;
 
 
-import com.example.demo.model.District;
+import com.example.demo.model.County;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -11,5 +11,5 @@ import org.springframework.stereotype.Repository;
  * @project hozh-416-server
  */
 @Repository
-public interface DistrictDao extends JpaRepository<District, Long> {
+public interface CountyDao extends JpaRepository<County, Long> {
 }
