@@ -2,7 +2,7 @@ package com.example.demo.service;
 
 
 import com.example.demo.dao.PrecinctDao;
-import com.example.demo.model.District;
+import com.example.demo.model.County;
 import com.example.demo.model.Precinct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,12 +21,12 @@ public class PrecinctService {
 
 
     private final PrecinctDao precinctDao;
-    private final DistrictService districtService;
+    private final CountyService countyService;
 
     @Autowired
-    public PrecinctService(PrecinctDao precinctDao, DistrictService districtService) {
+    public PrecinctService(PrecinctDao precinctDao, CountyService countyService) {
         this.precinctDao = precinctDao;
-        this.districtService = districtService;
+        this.countyService = countyService;
     }
 
 
@@ -35,16 +35,17 @@ public class PrecinctService {
 
         if (precinct.getId() == null) {
 
-            var tempDistrict = districtService.selectDistrictById(precinct.getDistrictId());
-            if (tempDistrict == null) {
+            var tempCounty = countyService.selectCountyById(precinct.getCountyId());
+            if (tempCounty == null) {
 
-                tempDistrict = new District();
-                tempDistrict.setId(precinct.getDistrictId());
-                tempDistrict.setStateId(precinct.getStateId());
-                districtService.saveDistrict(tempDistrict);
+                tempCounty = new County();
+                tempCounty.setId(precinct.getCountyId());
+                tempCounty.setStateId(precinct.getStateId());
+                tempCounty.setEthnicityMap(precinct.getEthnicityMap());
+                countyService.saveCounty(tempCounty);
             }
 
-            precinct.setDistrict(tempDistrict);
+            precinct.setCounty(tempCounty);
 
 
             var result = precinctDao.save(precinct);

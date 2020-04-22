@@ -1,10 +1,10 @@
 package com.example.demo.api;
 
 
-import com.example.demo.model.District;
+import com.example.demo.model.County;
 import com.example.demo.model.Precinct;
 import com.example.demo.model.State;
-import com.example.demo.service.DistrictService;
+import com.example.demo.service.CountyService;
 import com.example.demo.service.PrecinctService;
 import com.example.demo.service.StateService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,14 +26,14 @@ public class Controller {
 
     private final PrecinctService precinctService;
     private final StateService stateService;
-    private final DistrictService districtService;
+    private final CountyService countyService;
 
 
     @Autowired
-    public Controller(PrecinctService precinctService, StateService stateService, DistrictService districtService) {
+    public Controller(PrecinctService precinctService, StateService stateService, CountyService countyService) {
         this.precinctService = precinctService;
         this.stateService = stateService;
-        this.districtService = districtService;
+        this.countyService = countyService;
     }
 
 
@@ -69,10 +69,10 @@ public class Controller {
      * @param id -> type Long, fetched through path variable
      * @return District object base on its id, null when the Object is not found in our database via query
      */
-    @GetMapping(path = "/district/{id}")
-    public District getDistrictByIdRequest(@PathVariable("id") Long id) {
+    @GetMapping(path = "/county/{id}")
+    public County getCountyByIdRequest(@PathVariable("id") Long id) {
 
-        var temp = districtService.selectDistrictById(id);
+        var temp = countyService.selectCountyById(id);
 
         return temp;
 
