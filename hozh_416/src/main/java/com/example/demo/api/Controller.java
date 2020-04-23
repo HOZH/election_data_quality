@@ -110,6 +110,15 @@ public class Controller {
     }
 
 
+//fixme testing route
+@GetMapping(path = "/precinct/default/{defaultId}")
+
+public Precinct findPrecinctByDefaultIdRequest(@PathVariable("defaultId") String defaultId) {
+
+return precinctService.selectByDefaultId(defaultId);
+    }
+
+
     /**
      * Put/Post method router for adding/updating a precinct with database.
      * Distinction between add/update will be detect on service layer

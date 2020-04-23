@@ -30,6 +30,14 @@ public class PrecinctService {
     }
 
 
+    public Precinct selectByDefaultId(String defaultId){
+
+
+       return  precinctDao.findByDefaultId(defaultId);
+
+
+    }
+
     public Precinct savePrecinct(Precinct precinct) {
 
 

@@ -43,6 +43,9 @@ public class Precinct {
     private Long countyId;
 
 
+    private String defaultId;
+
+
     //fixme will be change later
     @Transient
     private Map<EthnicityEnum, Integer> ethnicityMap; //todo is required when filling data into database/ not required for production stage
@@ -61,6 +64,11 @@ public class Precinct {
 
     @ElementCollection
     private List<Long> adjacentPrecinctIds;
+
+
+    //fixme change naming later
+    @ElementCollection
+    private List<String> enClosingPrecinctIds;
 
     @Column(length = 2000)
     @ElementCollection
