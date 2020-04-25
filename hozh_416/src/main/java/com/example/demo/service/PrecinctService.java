@@ -50,6 +50,8 @@ public class PrecinctService {
                 tempCounty.setId(precinct.getCountyId());
                 tempCounty.setStateId(precinct.getStateId());
                 tempCounty.setEthnicityMap(precinct.getEthnicityMap());
+                System.err.println(tempCounty.getStateId());
+                System.out.println();
                 countyService.saveCounty(tempCounty);
             }
 

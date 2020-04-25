@@ -35,7 +35,9 @@ public class CountyService {
     }
 
 
-    public County saveCounty(County county) {
+    public County saveCounty( County county) {
+
+        System.out.print(county);
 
         var tempState = stateService.selectStateById(county.getStateId());
 

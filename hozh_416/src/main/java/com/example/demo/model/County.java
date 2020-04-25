@@ -32,7 +32,7 @@ public class County {
     private Map<EthnicityEnum, Integer> ethnicityMap;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
 
