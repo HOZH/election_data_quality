@@ -45,8 +45,8 @@ public class PrecinctService {
 
         //todo warp this method with exception handler, return null if any exception raised ->resulting in a 400 status code in the controller layer
 
-
-        if (precinct.getId() == null) {
+        if (precinct.getId() == null || precinctDao.findById(precinct.getId()).orElse(null) == null
+        ) {
 
             var tempCounty = countyService.selectCountyById(precinct.getCountyId());
             if (tempCounty == null) {
@@ -58,8 +58,12 @@ public class PrecinctService {
                 System.err.println(tempCounty.getStateId());
                 System.out.println();
                 countyService.saveCounty(tempCounty);
-            }
+            } else if (precinct.getEthnicityData() != null) {
+                //update ethnicity data if it's not null
+                tempCounty.setEthnicityData(precinct.getEthnicityData());
+                countyService.saveCounty(tempCounty);
 
+            }
             precinct.setCounty(tempCounty);
 
             precinct.setId(UUID.randomUUID().toString());
@@ -84,9 +88,26 @@ public class PrecinctService {
             return result;
         } else {
 
+//            var oldPrecinct = precinctDao.findById(precinct.getId()).orElse(null);
+//            if(oldPrecinct==null)
+//            {
+//                return precinctDao.save(precinct);
+//                //fixme maybe combining with next if statement?
+//            }
             var oldPrecinct = precinctDao.findById(precinct.getId()).orElse(null);
-
             if (oldPrecinct.getAdjacentPrecinctIds().containsAll(precinct.getAdjacentPrecinctIds()) && oldPrecinct.getAdjacentPrecinctIds().size() == precinct.getAdjacentPrecinctIds().size()) {
+
+                if (precinct.getEthnicityData() != null) {
+
+                    var tempCounty = countyService.selectCountyById(precinct.getCountyId());
+
+                    //update ethnicity data if it's not null
+                    tempCounty.setEthnicityData(precinct.getEthnicityData());
+                    countyService.saveCounty(tempCounty);
+
+                }
+
+
                 return precinctDao.save(precinct);
             } else {
                 return updateNeighbors(precinct);
@@ -125,7 +146,16 @@ public class PrecinctService {
             precinctDao.save(i);
 
         }
+//
+        if (newPrecinct.getEthnicityData() != null) {
 
+            var tempCounty = countyService.selectCountyById(newPrecinct.getCountyId());
+
+            //update ethnicity data if it's not null
+            tempCounty.setEthnicityData(newPrecinct.getEthnicityData());
+            countyService.saveCounty(tempCounty);
+
+        }
         return precinctDao.save(newPrecinct);
 
 
