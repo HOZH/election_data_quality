@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -36,6 +35,8 @@ public class Precinct {
     private int population;
     private boolean ghost;
 
+    private boolean multipleBorder;
+
     @Transient
     private Long stateId;
 
@@ -44,6 +45,11 @@ public class Precinct {
 
 
     private String defaultId;
+
+
+
+    private String coordinates;
+
 
 
     //fixme will be change later
@@ -68,11 +74,12 @@ public class Precinct {
 
     //fixme change naming later
     @ElementCollection
-    private List<String> enClosingPrecinctIds;
+    private List<String> enclosingPrecinctIds;
 
-    @Column(length = 2000)
-    @ElementCollection
-    private List<ArrayList<ArrayList<Double>>> coordinates;
+//    @Column(length = 2000)
+//    @ElementCollection
+//    private List<ArrayList<ArrayList<Double>>> coordinates;
+
 
 
     //todo change name later
