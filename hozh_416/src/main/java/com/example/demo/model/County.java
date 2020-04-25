@@ -33,13 +33,13 @@ public class County {
 
     @Id
 //    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
 
     private String canonicalName;
 
     @Transient
-    private Long stateId;
+    private String stateId;
 
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
  * @project hozh-416-server
  */
 @Repository
-public interface PrecinctDao extends JpaRepository<Precinct, Long> {
+public interface PrecinctDao extends JpaRepository<Precinct, String> {
 
 
     Precinct findByDefaultId(String defaultId);

@@ -27,7 +27,7 @@ public class CountyService {
     }
 
 
-    public County selectCountyById(Long id) {
+    public County selectCountyById(String id) {
 
 
         return countyDao.findById(id).orElse(null);

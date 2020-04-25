@@ -11,5 +11,5 @@ import org.springframework.stereotype.Repository;
  * @project hozh-416-server
  */
 @Repository
-public interface StateDao extends JpaRepository<State, Long> {
+public interface StateDao extends JpaRepository<State, String> {
 }

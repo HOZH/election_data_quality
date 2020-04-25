@@ -24,7 +24,7 @@ public class StateService {
 
     }
 
-    public State selectStateById(Long id) {
+    public State selectStateById(String id) {
 
         return stateDao.findById(id).orElse(null);
     }

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 
 /**
@@ -16,6 +17,8 @@ import java.util.List;
  * @created 19/03/2020 - 4:14 PM
  * @project hozh-416-server
  */
+
+//todo write checker for non uuid format string keys and try catch block in precincts services.
 @Service
 public class PrecinctService {
 
@@ -57,6 +60,8 @@ public class PrecinctService {
 
             precinct.setCounty(tempCounty);
 
+            precinct.setId(UUID.randomUUID().toString());
+
 
             var result = precinctDao.save(precinct);
 
@@ -93,8 +98,8 @@ public class PrecinctService {
         var oldPrecinct = precinctDao.findById(newPrecinct.getId()).orElse(null);
 
 
-        ArrayList<Long> deleted = new ArrayList(oldPrecinct.getAdjacentPrecinctIds());
-        ArrayList<Long> added = new ArrayList(newPrecinct.getAdjacentPrecinctIds());
+        ArrayList<String> deleted = new ArrayList(oldPrecinct.getAdjacentPrecinctIds());
+        ArrayList<String> added = new ArrayList(newPrecinct.getAdjacentPrecinctIds());
 
         deleted.remove(new ArrayList(newPrecinct.getAdjacentPrecinctIds()));
         added.remove(new ArrayList(oldPrecinct.getAdjacentPrecinctIds()));
@@ -121,7 +126,7 @@ public class PrecinctService {
 
     }
 
-    public void deletePrecinctById(Long id) {
+    public void deletePrecinctById(String id) {
 
 
         precinctDao.deleteById(id);
@@ -130,7 +135,7 @@ public class PrecinctService {
     }
 
 
-    public Precinct selectPrecinctById(Long id) {
+    public Precinct selectPrecinctById(String id) {
         return precinctDao.findById(id).orElse(null);
     }
 

@@ -11,5 +11,5 @@ import org.springframework.stereotype.Repository;
  * @project hozh-416-server
  */
 @Repository
-public interface CountyDao extends JpaRepository<County, Long> {
+public interface CountyDao extends JpaRepository<County, String> {
 }

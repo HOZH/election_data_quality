@@ -27,8 +27,8 @@ import java.util.Map;
 public class Precinct {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private String id;
 
 
     private String canonicalName;
@@ -38,13 +38,13 @@ public class Precinct {
     private boolean multipleBorder;
 
     @Transient
-    private Long stateId;
+    private String stateId;
 
     @Transient
-    private Long countyId;
+    private String countyId;
 
 
-    private String defaultId;
+//    private String defaultId;
 
 
 
@@ -69,7 +69,7 @@ public class Precinct {
     private Map<ElectionEnum, Integer> electionMap;
 
     @ElementCollection
-    private List<Long> adjacentPrecinctIds;
+    private List<String> adjacentPrecinctIds;
 
 
     //fixme change naming later

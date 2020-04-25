@@ -56,7 +56,7 @@ public class Controller {
      * @return State Object base on its id, null when the Object is not found in our database via query
      */
     @GetMapping(path = "/state/{id}")
-    public State getStateByIdRequest(@PathVariable("id") Long id) {
+    public State getStateByIdRequest(@PathVariable("id") String id) {
 
 
         return stateService.selectStateById(id);
@@ -70,7 +70,7 @@ public class Controller {
      * @return District object base on its id, null when the Object is not found in our database via query
      */
     @GetMapping(path = "/county/{id}")
-    public County getCountyByIdRequest(@PathVariable("id") Long id) {
+    public County getCountyByIdRequest(@PathVariable("id") String id) {
 
         var temp = countyService.selectCountyById(id);
 
@@ -86,7 +86,7 @@ public class Controller {
      * @return Precinct object base on its id, null when the Object is not found in our database via query
      */
     @GetMapping(path = "/precinct/{id}")
-    public Precinct getPrecinctByIdRequest(@PathVariable("id") Long id) {
+    public Precinct getPrecinctByIdRequest(@PathVariable("id") String id) {
 
         return precinctService.selectPrecinctById(id);
 
@@ -102,7 +102,7 @@ public class Controller {
      * //todo may change to void before code review/final delivery
      */
     @DeleteMapping(path = "/precinct/{id}")
-    public String removePrecinctByIdRequest(@PathVariable("id") Long id) {
+    public String removePrecinctByIdRequest(@PathVariable("id") String id) {
 
         precinctService.deletePrecinctById(id);
 
