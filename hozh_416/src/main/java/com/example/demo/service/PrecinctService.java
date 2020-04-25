@@ -33,15 +33,17 @@ public class PrecinctService {
     }
 
 
-    public Precinct selectByDefaultId(String defaultId){
-
-
-       return  precinctDao.findByDefaultId(defaultId);
-
-
-    }
+//    public Precinct selectByDefaultId(String defaultId){
+//
+//
+//       return  precinctDao.findByDefaultId(defaultId);
+//
+//
+//    }
 
     public Precinct savePrecinct(Precinct precinct) {
+
+        //todo warp this method with exception handler, return null if any exception raised ->resulting in a 400 status code in the controller layer
 
 
         if (precinct.getId() == null) {
@@ -95,6 +97,9 @@ public class PrecinctService {
 
     public Precinct updateNeighbors(Precinct newPrecinct) {
 
+        //todo warp this method with exception handler, return null if any exception raised ->resulting in a 400 status code in the controller layer
+
+
         var oldPrecinct = precinctDao.findById(newPrecinct.getId()).orElse(null);
 
 
@@ -146,6 +151,9 @@ public class PrecinctService {
     }
 
     public Precinct mergePrecincts(List<Precinct> precincts) {
+
+        //todo warp this method with exception handler, return null if any exception raised ->resulting in a 400 status code in the controller layer
+
 
         Precinct merged = precincts.get(0);
         Precinct placeholder = precincts.get(1);
