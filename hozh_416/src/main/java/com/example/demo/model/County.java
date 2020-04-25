@@ -23,13 +23,16 @@ import static javax.persistence.CascadeType.ALL;
 @ToString(exclude = {"state"})
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "County_TBL")
+@Entity(name = "COUNTY_TBL")
 @Table
 public class County {
 
 
+    @SuppressWarnings("JpaDataSourceORMInspection")
     @ElementCollection
-    private Map<EthnicityEnum, Integer> ethnicityMap;
+    @CollectionTable(name = "ETHNICITY_DATA")
+
+    private Map<EthnicityEnum, Integer> ethnicityData;
 
     @Id
 //    @GeneratedValue(strategy = GenerationType.IDENTITY)

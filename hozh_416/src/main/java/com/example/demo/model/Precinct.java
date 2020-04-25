@@ -47,14 +47,12 @@ public class Precinct {
 //    private String defaultId;
 
 
-
     private String coordinates;
-
 
 
     //fixme will be change later
     @Transient
-    private Map<EthnicityEnum, Integer> ethnicityMap; //todo is required when filling data into database/ not required for production stage
+    private Map<EthnicityEnum, Integer> ethnicityData; //todo is required when filling data into database/ not required for production stage
 
 //    @Transient
 //    private Long districtId;
@@ -64,16 +62,21 @@ public class Precinct {
     @JsonIgnoreProperties("precincts")
     private County county;
 
-
+    @SuppressWarnings("JpaDataSourceORMInspection")
     @ElementCollection
-    private Map<ElectionEnum, Integer> electionMap;
+    @CollectionTable(name = "ELECTION_DATA")
+    private Map<ElectionEnum, Integer> electionData;
 
+
+    @SuppressWarnings("JpaDataSourceORMInspection")
     @ElementCollection
+    @CollectionTable(name = "ADJACENT_PRECINCT_IDS")
     private List<String> adjacentPrecinctIds;
 
 
-    //fixme change naming later
+    @SuppressWarnings("JpaDataSourceORMInspection")
     @ElementCollection
+    @CollectionTable(name = "ENCLOSING_PRECINCT_IDS")
     private List<String> enclosingPrecinctIds;
 
 //    @Column(length = 2000)
@@ -81,9 +84,9 @@ public class Precinct {
 //    private List<ArrayList<ArrayList<Double>>> coordinates;
 
 
-
-    //todo change name later
+    @SuppressWarnings("JpaDataSourceORMInspection")
     @ElementCollection
+    @CollectionTable(name = "LOG_BAG")
     private Map<Integer, String> logBag;
 
 
