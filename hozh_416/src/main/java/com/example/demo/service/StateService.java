@@ -24,8 +24,13 @@ public class StateService {
 
     }
 
+    /**
+     * query a state by the given id
+     *
+     * @param id -> String type, using as a id to query the target state
+     * @return query result by given id -> type State, return null if illegal arg exception raised
+     */
     public State selectStateById(String id) {
-
 
         try {
             return stateEntityManager.findById(id).orElse(null);
@@ -39,7 +44,12 @@ public class StateService {
         }
     }
 
-
+    /**
+     * save a state object into database
+     *
+     * @param state -> State type
+     * @return the saved State entity -> type State, return null if null pointer exception raised
+     */
     public State saveState(State state) {
 
 
@@ -47,8 +57,8 @@ public class StateService {
 
             return stateEntityManager.save(state);
         } catch (Exception ex) {
-            //fixme for now we may encounter null pointer exception, change generic handler to more concrete one later
 
+            //fixme for now we may encounter null pointer exception, change generic handler to more concrete one later
             System.err.println(ex.getMessage());
             return null;
         }

@@ -25,6 +25,8 @@ finished 4/26:
   fix logic for saving precinct /update neighbor precincts
   Exception handling in service components
   change naming in local variables I used in service components
+  javadoc
+
 
 
 
@@ -45,7 +47,7 @@ todos:
     Hong:
 
       high priority:
-        javadoc
+        DI
         test
 
       low priority:

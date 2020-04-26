@@ -25,34 +25,104 @@ import java.util.Map;
 
 public class Precinct {
 
+    /**
+     * primary key for PRECINCT_TBL
+     */
     @Id
     @JsonProperty("precinctId")
     private String id;
 
+    /**
+     * flag to determine whether
+     * this precinct is a ghost precinct
+     */
+    private boolean ghost;
+
+    /**
+     * flag to determine whether this
+     * precinct contains multiple border error
+     */
+    private boolean multipleBorder;
+
+    /**
+     * String of coordinates -> geo data
+     */
+    @Column(length = 1024)
+    private String coordinates;
+
+    /**
+     * county that this precinct belongs to
+     */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties("precincts")
+    private County county;
+
+    /**
+     * election data of this precinct
+     */
+    @SuppressWarnings("JpaDataSourceORMInspection")
+    @ElementCollection
+    @CollectionTable(name = "ELECTION_DATA")
+    private Map<ElectionEnum, Integer> electionData;
+
+    /**
+     * list of precinct's ids for which adjacent to
+     * this precinct
+     */
+    @SuppressWarnings("JpaDataSourceORMInspection")
+    @ElementCollection
+    @CollectionTable(name = "ADJACENT_PRECINCT_IDS")
+    private List<String> adjacentPrecinctIds;
+
+    /**
+     * list of precinct's ids for which enclosing to
+     * this precinct -> used for determine errors
+     */
+    @SuppressWarnings("JpaDataSourceORMInspection")
+    @ElementCollection
+    @CollectionTable(name = "ENCLOSING_PRECINCT_IDS")
+    private List<String> enclosingPrecinctIds;
+
+    /**
+     * map for log messages
+     */
+    @SuppressWarnings("JpaDataSourceORMInspection")
+    @ElementCollection
+    @CollectionTable(name = "LOG_BAG")
+    private Map<Integer, String> logBag;
+
+    /**
+     * following are the help fields of the object which won't be persist in the database
+     */
 
     @Transient
     private String canonicalName;
+
+    @Transient
     private int population;
-    private boolean ghost;
 
-    private boolean multipleBorder;
-
-
+    /**
+     * help field for mapping the precinct to its belonging county
+     */
     @Transient
     private String stateId;
 
-
+    /**
+     * help field for mapping the precinct's belonging county to its belonging state
+     */
     @Transient
     private String countyId;
 
-
-    @Column(length = 2000)
-    private String coordinates;
-
-
+    /**
+     * flag to determine whether to update this precinct's belonging county's demographic data
+     */
     @Transient
     private boolean demographicDataModified;
 
+    /**
+     * following are the demographic population help fields,
+     * can be ignore if demographicDataModified is set to false
+     */
     @Transient
     private int white;
 
@@ -70,34 +140,5 @@ public class Precinct {
 
     @Transient
     private int pacificIslanders;
-
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties("precincts")
-    private County county;
-
-    @SuppressWarnings("JpaDataSourceORMInspection")
-    @ElementCollection
-    @CollectionTable(name = "ELECTION_DATA")
-    private Map<ElectionEnum, Integer> electionData;
-
-
-    @SuppressWarnings("JpaDataSourceORMInspection")
-    @ElementCollection
-    @CollectionTable(name = "ADJACENT_PRECINCT_IDS")
-    private List<String> adjacentPrecinctIds;
-
-
-    @SuppressWarnings("JpaDataSourceORMInspection")
-    @ElementCollection
-    @CollectionTable(name = "ENCLOSING_PRECINCT_IDS")
-    private List<String> enclosingPrecinctIds;
-
-
-    @SuppressWarnings("JpaDataSourceORMInspection")
-    @ElementCollection
-    @CollectionTable(name = "LOG_BAG")
-    private Map<Integer, String> logBag;
-
 
 }

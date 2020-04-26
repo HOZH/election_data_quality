@@ -32,6 +32,53 @@ public class PrecinctService {
     }
 
 
+    /**
+     * query a precinct by the given id
+     *
+     * @param id -> String type, using as a id to query the target precinct
+     * @return query result by given id -> type Precinct, return null if illegal arg exception raised
+     */
+    public Precinct selectPrecinctById(String id) {
+        try {
+            return precinctEntityManager.findById(id).orElse(null);
+        } catch (Exception ex) {
+
+            //fixme for now we may encounter Illegal arg exception, change generic handler to more concrete one later
+            System.err.println(ex.getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * return a collection of all the precinct records in the database
+     *
+     * @return query result -> type List<Precinct>
+     */
+    public List<Precinct> selectAllPrecincts() {
+
+        return precinctEntityManager.findAll();
+    }
+
+
+    /**
+     * delete a precinct record by the given id
+     *
+     * @param id -> String type, using as a id to query the target precinct
+     */
+    public void deletePrecinctById(String id) {
+
+        precinctEntityManager.deleteById(id);
+    }
+
+
+    /**
+     * save a precinct object into database. Used for both insertion and modification of a precinct record
+     *
+     * @param precinct -> precinct type
+     * @return the saved precinct entity -> type precinct, return null if null pointer/ illegal arg exception raised
+     * @see this.updateNeighbors
+     */
+
     public Precinct savePrecinct(Precinct precinct) {
 
         try {
@@ -124,14 +171,20 @@ public class PrecinctService {
     }
 
 
-    public Precinct updateNeighbors(Precinct precinct) {
+    /**
+     * helper method for updating a precinct, it will update the adjacentPrecinctIds list of target
+     * precinct and its adjacent precincts bidirectionally
+     *
+     * @param precinct -> precinct type
+     * @return the saved precinct entity -> type precinct, return null if null pointer/ illegal arg exception raised
+     */
 
+    public Precinct updateNeighbors(Precinct precinct) {
 
         try {
             // pull up record of target precinct in the database
             // nullity check has been done in the method calling this
             var precinctRecord = precinctEntityManager.findById(precinct.getId()).orElse(null);
-
 
             // set diff of adjacentPrecinctIds from the record in database and current precinct
             ArrayList<String> deleted = new ArrayList(precinctRecord.getAdjacentPrecinctIds());
@@ -159,7 +212,6 @@ public class PrecinctService {
 
             }
 
-
             // if the adjacentPrecinctIds of target precinct is not changed then check is demographic data modified for its county
             if (precinct.isDemographicDataModified()) {
 
@@ -169,7 +221,6 @@ public class PrecinctService {
                 countyService.saveCounty(targetCounty);
 
             }
-
 
             return precinctEntityManager.save(precinct);
         } catch (NullPointerException | IllegalArgumentException ex) {
@@ -181,20 +232,14 @@ public class PrecinctService {
 
     }
 
-    public void deletePrecinctById(String id) {
 
-        precinctEntityManager.deleteById(id);
+    /**
+     * merging two precincts
+     *
+     * @param precincts -> type List<Precinct>, index 0 -> primary precinct, index 1 deleting precinct
+     * @return Precinct object of survived precinct
+     */
 
-    }
-
-    public Precinct selectPrecinctById(String id) {
-        return precinctEntityManager.findById(id).orElse(null);
-    }
-
-    public List<Precinct> selectAllPrecincts() {
-        return precinctEntityManager.findAll();
-
-    }
 
     public Precinct mergePrecincts(List<Precinct> precincts) {
 
@@ -228,7 +273,6 @@ public class PrecinctService {
                     }
             );
 
-
             // deleting precinct's id from temp's list
             primaryPrecinct.getAdjacentPrecinctIds().remove(deletingPrecinct.getId());
 
@@ -238,7 +282,6 @@ public class PrecinctService {
 
             // save primaryPrecinct precinct
             return precinctEntityManager.save(primaryPrecinct);
-
 
         } catch (NullPointerException ex) {
             System.err.println("precinct adjacentPrecinctIds is null");
@@ -255,7 +298,6 @@ public class PrecinctService {
      * @param c -> type County, p -> type Precinct
      */
     private void updateEthnicityDataHelper(County c, Precinct p) {
-
 
         c.setWhite(p.getWhite());
         c.setAfricanAmerican(p.getAfricanAmerican());

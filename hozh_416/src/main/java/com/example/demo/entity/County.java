@@ -26,31 +26,44 @@ import static javax.persistence.CascadeType.ALL;
 @Table
 public class County {
 
-
+    /**
+     * primary key for COUNTRY_TBL table
+     */
     @Id
     private String id;
 
-
-    @Transient
-    private String stateId;
-
-    private int white;
-    private int africanAmerican;
-    private int asianPacific;
-    private int nativeAmerican;
-    private int others;
-    private int pacificIslanders;
-
-
+    /**
+     * state that this county belongs to
+     */
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties("county")
-
     private State state;
 
-
+    /**
+     * List of Precinct objects that belong to this county
+     */
     @OneToMany(fetch = FetchType.LAZY, cascade = ALL, mappedBy = "county")
     @JsonIgnoreProperties("county")
     private List<Precinct> precincts;
 
+    /**
+     * following are the demographic data in term of population of this precinct
+     */
+    private int white;
 
+    private int africanAmerican;
+
+    private int asianPacific;
+
+    private int nativeAmerican;
+
+    private int others;
+
+    private int pacificIslanders;
+
+    /**
+     * helper field for initialing the belonging state
+     */
+    @Transient
+    private String stateId;
 }
