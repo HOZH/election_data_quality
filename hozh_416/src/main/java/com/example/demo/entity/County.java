@@ -1,4 +1,4 @@
-package com.example.demo.model;
+package com.example.demo.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -9,7 +9,6 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.List;
-import java.util.Map;
 
 import static javax.persistence.CascadeType.ALL;
 
@@ -28,16 +27,8 @@ import static javax.persistence.CascadeType.ALL;
 public class County {
 
 
-//    @SuppressWarnings("JpaDataSourceORMInspection")
-//    @ElementCollection
-//    @CollectionTable(name = "ETHNICITY_DATA")
-//
-//    private Map<EthnicityEnum, Integer> ethnicityData;
-
     @Id
-//    @Column(length = 60)
     private String id;
-
 
 
     @Transient
@@ -51,11 +42,6 @@ public class County {
     private int pacificIslanders;
 
 
-
-
-
-
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties("county")
 
@@ -64,7 +50,6 @@ public class County {
 
     @OneToMany(fetch = FetchType.LAZY, cascade = ALL, mappedBy = "county")
     @JsonIgnoreProperties("county")
-
     private List<Precinct> precincts;
 
 

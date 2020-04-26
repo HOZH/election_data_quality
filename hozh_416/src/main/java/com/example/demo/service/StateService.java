@@ -1,7 +1,7 @@
 package com.example.demo.service;
 
-import com.example.demo.dao.StateDao;
-import com.example.demo.model.State;
+import com.example.demo.entity.State;
+import com.example.demo.entitymanager.StateEntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,25 +15,43 @@ import org.springframework.stereotype.Service;
 public class StateService {
 
 
-    private final StateDao stateDao;
+    private final StateEntityManager stateEntityManager;
 
 
     @Autowired
-    public StateService(StateDao stateDao) {
-        this.stateDao = stateDao;
+    public StateService(StateEntityManager stateEntityManager) {
+        this.stateEntityManager = stateEntityManager;
 
     }
 
     public State selectStateById(String id) {
 
-        return stateDao.findById(id).orElse(null);
+
+        try {
+            return stateEntityManager.findById(id).orElse(null);
+
+
+        } catch (Exception ex) {
+
+            //fixme for now we may encounter Illegal arg exception, change generic handler to more concrete one later
+            System.err.println(ex.getMessage());
+            return null;
+        }
     }
 
 
     public State saveState(State state) {
 
 
-        return stateDao.save(state);
+        try {
+
+            return stateEntityManager.save(state);
+        } catch (Exception ex) {
+            //fixme for now we may encounter null pointer exception, change generic handler to more concrete one later
+
+            System.err.println(ex.getMessage());
+            return null;
+        }
     }
 
 }

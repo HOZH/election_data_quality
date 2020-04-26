@@ -23,6 +23,10 @@ change all the value of keys from auto-generated to manually assigned (excepted 
 finished 4/26: 
   get rid of ethnicity data table, use multiple fields instead
   fix logic for saving precinct /update neighbor precincts
+  Exception handling in service components
+  change naming in local variables I used in service components
+
+
 
 
 
@@ -41,11 +45,11 @@ todos:
     Hong:
 
       high priority:
-        Exception handling in service components
-        change naming in local variables I used in service components
         javadoc
+        test
 
       low priority:
+        figure out some unhandled exceptions
         Time stamp for log bag
         change data type for log bag
         fix logic for merging two precincts

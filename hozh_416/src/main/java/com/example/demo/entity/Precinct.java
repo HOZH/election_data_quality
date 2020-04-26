@@ -1,9 +1,8 @@
-package com.example.demo.model;
+package com.example.demo.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -28,9 +27,7 @@ public class Precinct {
 
     @Id
     @JsonProperty("precinctId")
-//    @Column(length = 60)
     private String id;
-
 
 
     @Transient
@@ -49,19 +46,8 @@ public class Precinct {
     private String countyId;
 
 
-
-
     @Column(length = 2000)
     private String coordinates;
-
-
-//    //todo is required when filling data into database/ not required for production stage
-//    @Transient
-//    private Map<EthnicityEnum, Integer> ethnicityData;
-
-
-
-
 
 
     @Transient
@@ -84,16 +70,6 @@ public class Precinct {
 
     @Transient
     private int pacificIslanders;
-
-
-
-
-
-
-
-
-
-
 
 
     @ManyToOne(fetch = FetchType.LAZY)

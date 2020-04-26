@@ -1,9 +1,9 @@
 package com.example.demo.api;
 
 
-import com.example.demo.model.County;
-import com.example.demo.model.Precinct;
-import com.example.demo.model.State;
+import com.example.demo.entity.County;
+import com.example.demo.entity.Precinct;
+import com.example.demo.entity.State;
 import com.example.demo.service.CountyService;
 import com.example.demo.service.PrecinctService;
 import com.example.demo.service.StateService;
@@ -39,7 +39,7 @@ public class Controller {
         this.countyService = countyService;
     }
 
-//todo change naimg to XX handler
+
     /**
      * Get method router for records of all the precincts
      *
@@ -49,7 +49,7 @@ public class Controller {
      * return a status code with 500 level
      */
     @GetMapping(path = "/precinct/all")
-    private ResponseEntity<List<Precinct>> getAllPrecinctRequest() {
+    private ResponseEntity<List<Precinct>> getAllPrecinctRequestHandler() {
 
 
         return new ResponseEntity<>(precinctService.selectAllPrecincts(), HttpStatus.OK);
@@ -63,7 +63,7 @@ public class Controller {
      * status code is set to 200 if a record in the database is found otherwise 404
      */
     @GetMapping(path = "/state/{id}")
-    private ResponseEntity<State> getStateByIdRequest(@PathVariable("id") String id) {
+    private ResponseEntity<State> getStateByIdRequestHandler(@PathVariable("id") String id) {
 
 
         var queryResult = stateService.selectStateById(id);
@@ -80,7 +80,7 @@ public class Controller {
      * status code is set to 200 if a record in the database is found otherwise 404
      */
     @GetMapping(path = "/county/{id}")
-    private ResponseEntity<County> getCountyByIdRequest(@PathVariable("id") String id) {
+    private ResponseEntity<County> getCountyByIdRequestHandler(@PathVariable("id") String id) {
 
         var queryResult = countyService.selectCountyById(id);
 
@@ -97,7 +97,7 @@ public class Controller {
      * status code is set to 200 if a record in the database is found otherwise 404
      */
     @GetMapping(path = "/precinct/{id}")
-    private ResponseEntity<Precinct> getPrecinctByIdRequest(@PathVariable("id") String id) {
+    private ResponseEntity<Precinct> getPrecinctByIdRequestHandler(@PathVariable("id") String id) {
 
 
         var queryResult = precinctService.selectPrecinctById(id);
@@ -116,7 +116,7 @@ public class Controller {
      * //todo may change to void before code review/final delivery
      */
     @DeleteMapping(path = "/precinct/{id}")
-    private ResponseEntity<String> removePrecinctByIdRequest(@PathVariable("id") String id) {
+    private ResponseEntity<String> removePrecinctByIdRequestHandler(@PathVariable("id") String id) {
 
         precinctService.deletePrecinctById(id);
 
@@ -135,11 +135,7 @@ public class Controller {
      * //todo may change type of return before code review/final delivery
      */
     @RequestMapping(path = "/precinct", method = {RequestMethod.POST, RequestMethod.PUT})
-    private ResponseEntity<Precinct> savePrecinctRequest(@Valid @NotNull @RequestBody Precinct precinct) {
-        System.out.println("123");
-
-        System.err.println(precinct.getId());
-        System.out.println("123");
+    private ResponseEntity<Precinct> savePrecinctRequestHandler(@Valid @NotNull @RequestBody Precinct precinct) {
 
 
         var operationResult = precinctService.savePrecinct(precinct);
@@ -160,7 +156,7 @@ public class Controller {
      */
 
     @DeleteMapping(path = "/precinct/merge")
-    private ResponseEntity<Precinct> mergePrecinctsRequest(@Valid @NotNull @RequestBody List<Precinct> precincts) {
+    private ResponseEntity<Precinct> mergePrecinctsRequestHandler(@Valid @NotNull @RequestBody List<Precinct> precincts) {
 
 
         var mergingResult = precinctService.mergePrecincts(precincts);
@@ -171,15 +167,14 @@ public class Controller {
     }
 
 
-
     @GetMapping(path = "/precinct/temp")
     private ResponseEntity<List<String>> temp() {
 
         var ps = precinctService.selectAllPrecincts();
 
         var temp = new ArrayList<String>();
-        ps.stream().forEach(e->{
-            temp.add(e.getId()+" : "+e.getAdjacentPrecinctIds().toString()+"\n");
+        ps.stream().forEach(e -> {
+            temp.add(e.getId() + " : " + e.getAdjacentPrecinctIds().toString() + "\n");
         });
 
 

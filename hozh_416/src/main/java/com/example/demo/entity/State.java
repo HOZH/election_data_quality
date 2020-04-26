@@ -1,4 +1,4 @@
-package com.example.demo.model;
+package com.example.demo.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -23,14 +23,9 @@ import static javax.persistence.CascadeType.ALL;
 @Table
 public class State {
 
+
     @Id
-//    @Column(length = 60)
-
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
-
-
-//    private String canonicalName;
 
 
     @OneToMany(fetch = FetchType.LAZY, cascade = ALL, mappedBy = "state")

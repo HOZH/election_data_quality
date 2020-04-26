@@ -1,6 +1,6 @@
-package com.example.demo.dao;
+package com.example.demo.entitymanager;
 
-import com.example.demo.model.Precinct;
+import com.example.demo.entity.State;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -11,10 +11,5 @@ import org.springframework.stereotype.Repository;
  * @project hozh-416-server
  */
 @Repository
-public interface PrecinctDao extends JpaRepository<Precinct, String> {
-
-
-//    Precinct findByDefaultId(String defaultId);
-
-
+public interface StateEntityManager extends JpaRepository<State, String> {
 }
