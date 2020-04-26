@@ -2,6 +2,7 @@ package com.example.demo.model;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,26 +20,39 @@ import java.util.Map;
  */
 @Data
 @ToString(exclude = {"county"})
-@AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "PRECINCT_TBL")
 @Table
 
 public class Precinct {
 
+//    public Precinct() {
+//    }
+
     @Id
+    @JsonProperty("precinctId")
 //    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
+//
+//    @JsonProperty("cus")
+//    private String temp;
 
 
+
+
+    @Transient
     private String canonicalName;
     private int population;
     private boolean ghost;
 
     private boolean multipleBorder;
 
+
+    //todo get rid of this two field later
     @Transient
     private String stateId;
+
+    //todo get rid of this two field later
 
     @Transient
     private String countyId;
@@ -48,6 +62,7 @@ public class Precinct {
 
 
     private String coordinates;
+
 
 
     //fixme will be change later

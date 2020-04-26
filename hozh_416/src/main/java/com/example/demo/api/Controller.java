@@ -98,6 +98,7 @@ public class Controller {
     @GetMapping(path = "/precinct/{id}")
     public ResponseEntity<Precinct> getPrecinctByIdRequest(@PathVariable("id") String id) {
 
+
         var queryResult = precinctService.selectPrecinctById(id);
         return new ResponseEntity<>(queryResult, queryResult == null ? HttpStatus.NOT_FOUND : HttpStatus.OK);
 
@@ -134,6 +135,11 @@ public class Controller {
      */
     @RequestMapping(path = "/precinct", method = {RequestMethod.POST, RequestMethod.PUT})
     public ResponseEntity<Precinct> savePrecinctRequest(@Valid @NotNull @RequestBody Precinct precinct) {
+        System.out.println("123");
+
+        System.err.println(precinct.getId());
+        System.out.println("123");
+
 
         var operationResult = precinctService.savePrecinct(precinct);
 

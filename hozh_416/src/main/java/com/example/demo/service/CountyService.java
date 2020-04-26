@@ -39,16 +39,19 @@ public class CountyService {
 
         System.out.print(county);
 
-        var tempState = stateService.selectStateById(county.getStateId());
+       if(county.getState()==null)
+       {
+           var tempState = stateService.selectStateById(county.getStateId());
 
-        if (tempState == null) {
-            tempState = new State();
-            tempState.setId(county.getStateId());
-            stateService.saveState(tempState);
-        }
+           if (tempState == null) {
+               tempState = new State();
+               tempState.setId(county.getStateId());
+               stateService.saveState(tempState);
+           }
 
-        county.setState(tempState);
+           county.setState(tempState);
 
+       }
 
         return countyDao.save(county);
     }

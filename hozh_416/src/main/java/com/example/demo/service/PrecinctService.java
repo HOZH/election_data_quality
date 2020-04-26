@@ -45,6 +45,14 @@ public class PrecinctService {
 
         //todo warp this method with exception handler, return null if any exception raised ->resulting in a 400 status code in the controller layer
 
+//        var ids = precinct.getCanonicalName().split("-");
+//        precinct.setStateId(ids[0]);
+//        precinct.setCountyId(ids[1]);
+
+
+        System.out.println();
+
+
         if (precinct.getId() == null || precinctDao.findById(precinct.getId()).orElse(null) == null
         ) {
 
@@ -65,7 +73,7 @@ public class PrecinctService {
 
             }
             precinct.setCounty(tempCounty);
-
+            if(precinct.getId()==null)
             precinct.setId(UUID.randomUUID().toString());
 
 
@@ -103,12 +111,15 @@ public class PrecinctService {
 
                     //update ethnicity data if it's not null
                     tempCounty.setEthnicityData(precinct.getEthnicityData());
+                    precinct.setCounty(tempCounty);
                     countyService.saveCounty(tempCounty);
 
                 }
 
 
-                return precinctDao.save(precinct);
+                 precinctDao.save(precinct);
+                 precinctDao.flush();
+                 return precinct;
             } else {
                 return updateNeighbors(precinct);
             }
@@ -154,6 +165,8 @@ public class PrecinctService {
             //update ethnicity data if it's not null
             tempCounty.setEthnicityData(newPrecinct.getEthnicityData());
             countyService.saveCounty(tempCounty);
+            newPrecinct.setCounty(tempCounty);
+
 
         }
         return precinctDao.save(newPrecinct);
