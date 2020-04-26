@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,7 +33,7 @@ public class Controller {
 
 
     @Autowired
-    public Controller(PrecinctService precinctService, StateService stateService, CountyService countyService) {
+    private Controller(PrecinctService precinctService, StateService stateService, CountyService countyService) {
         this.precinctService = precinctService;
         this.stateService = stateService;
         this.countyService = countyService;
@@ -48,7 +49,7 @@ public class Controller {
      * return a status code with 500 level
      */
     @GetMapping(path = "/precinct/all")
-    public ResponseEntity<List<Precinct>> getAllPrecinctRequest() {
+    private ResponseEntity<List<Precinct>> getAllPrecinctRequest() {
 
 
         return new ResponseEntity<>(precinctService.selectAllPrecincts(), HttpStatus.OK);
@@ -62,7 +63,7 @@ public class Controller {
      * status code is set to 200 if a record in the database is found otherwise 404
      */
     @GetMapping(path = "/state/{id}")
-    public ResponseEntity<State> getStateByIdRequest(@PathVariable("id") String id) {
+    private ResponseEntity<State> getStateByIdRequest(@PathVariable("id") String id) {
 
 
         var queryResult = stateService.selectStateById(id);
@@ -79,7 +80,7 @@ public class Controller {
      * status code is set to 200 if a record in the database is found otherwise 404
      */
     @GetMapping(path = "/county/{id}")
-    public ResponseEntity<County> getCountyByIdRequest(@PathVariable("id") String id) {
+    private ResponseEntity<County> getCountyByIdRequest(@PathVariable("id") String id) {
 
         var queryResult = countyService.selectCountyById(id);
 
@@ -96,7 +97,7 @@ public class Controller {
      * status code is set to 200 if a record in the database is found otherwise 404
      */
     @GetMapping(path = "/precinct/{id}")
-    public ResponseEntity<Precinct> getPrecinctByIdRequest(@PathVariable("id") String id) {
+    private ResponseEntity<Precinct> getPrecinctByIdRequest(@PathVariable("id") String id) {
 
 
         var queryResult = precinctService.selectPrecinctById(id);
@@ -115,7 +116,7 @@ public class Controller {
      * //todo may change to void before code review/final delivery
      */
     @DeleteMapping(path = "/precinct/{id}")
-    public ResponseEntity<String> removePrecinctByIdRequest(@PathVariable("id") String id) {
+    private ResponseEntity<String> removePrecinctByIdRequest(@PathVariable("id") String id) {
 
         precinctService.deletePrecinctById(id);
 
@@ -134,7 +135,7 @@ public class Controller {
      * //todo may change type of return before code review/final delivery
      */
     @RequestMapping(path = "/precinct", method = {RequestMethod.POST, RequestMethod.PUT})
-    public ResponseEntity<Precinct> savePrecinctRequest(@Valid @NotNull @RequestBody Precinct precinct) {
+    private ResponseEntity<Precinct> savePrecinctRequest(@Valid @NotNull @RequestBody Precinct precinct) {
         System.out.println("123");
 
         System.err.println(precinct.getId());
@@ -159,7 +160,7 @@ public class Controller {
      */
 
     @DeleteMapping(path = "/precinct/merge")
-    public ResponseEntity<Precinct> mergePrecinctsRequest(@Valid @NotNull @RequestBody List<Precinct> precincts) {
+    private ResponseEntity<Precinct> mergePrecinctsRequest(@Valid @NotNull @RequestBody List<Precinct> precincts) {
 
 
         var mergingResult = precinctService.mergePrecincts(precincts);
@@ -170,6 +171,20 @@ public class Controller {
     }
 
 
+
+    @GetMapping(path = "/precinct/temp")
+    private ResponseEntity<List<String>> temp() {
+
+        var ps = precinctService.selectAllPrecincts();
+
+        var temp = new ArrayList<String>();
+        ps.stream().forEach(e->{
+            temp.add(e.getId()+" : "+e.getAdjacentPrecinctIds().toString()+"\n");
+        });
+
+
+        return new ResponseEntity<>(temp, HttpStatus.OK);
+    }
 
 
 }

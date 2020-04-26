@@ -28,23 +28,32 @@ import static javax.persistence.CascadeType.ALL;
 public class County {
 
 
-    @SuppressWarnings("JpaDataSourceORMInspection")
-    @ElementCollection
-    @CollectionTable(name = "ETHNICITY_DATA")
-
-    private Map<EthnicityEnum, Integer> ethnicityData;
+//    @SuppressWarnings("JpaDataSourceORMInspection")
+//    @ElementCollection
+//    @CollectionTable(name = "ETHNICITY_DATA")
+//
+//    private Map<EthnicityEnum, Integer> ethnicityData;
 
     @Id
-    @Column(length = 60)
-
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @Column(length = 60)
     private String id;
 
 
-    private String canonicalName;
 
     @Transient
     private String stateId;
+
+    private int white;
+    private int africanAmerican;
+    private int asianPacific;
+    private int nativeAmerican;
+    private int others;
+    private int pacificIslanders;
+
+
+
+
+
 
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -16,7 +16,17 @@ change keys to String in uuid v4 format
 warp returns in controller with ResponseEntity 
 use http status in returns
 changing tables’ names
-change all the value of keys from auto-generated to manually assigned (excepted for)
+change all the value of keys from auto-generated to manually assigned (excepted for unassigned precinctId at insertion)
+
+
+
+finished 4/26: 
+  get rid of ethnicity data table, use multiple fields instead
+  fix logic for saving precinct /update neighbor precincts
+
+
+
+
 
 
 
@@ -31,10 +41,9 @@ todos:
     Hong:
 
       high priority:
-        get rid of ethnicity data table, use multiple fields instead
-        fix logic for saving precinct /update neighbor precincts
         Exception handling in service components
         change naming in local variables I used in service components
+        javadoc
 
       low priority:
         Time stamp for log bag
@@ -85,26 +94,28 @@ data fomart convertion for json
     {
 
 
-    #id remove this line, id is a auto generated string type . only use when update a exsiting precinct(may throw error/mess up db if the precinct with input id is not in the databse, don't use it when add a precinct!!!!!), dont include this field in add precinct
+    #precinctId remove this line, id is a auto generated string type . only use when update a exsiting precinct(may throw error/mess up db if the precinct with input id is not in the databse, don't use it when add a precinct!!!!!), dont include this field in add precinct
 
 	
 	
 	
-		"precinctId":"3",
-        "countyId": "should be a string , cid",
-        "stateId": "should be a string , sid",
+	
+		"precinctId":"4",
+        "countyId": "cid",
+        "stateId": "sid",
         "canonicalName": "foo-bar",
         "population": "22",
-        "multipleBorder":false
+        "multipleBorder":false,
+        "demographicDataModified":true
         ,
         
-           "ethnicityData": {"WHITE":12,
-      "AFRICAN_AMERICAN":100,
-      "ASIAN_PACIFIC":200,
-      "HISPANIC":300,
-      "NATIVE":400,
-      "OTHER":200
-    },
+       "white":114,
+      "africanAmerican":100,
+      "asianPacific":200,
+      "nativeAmerican":300,
+      "others":400,
+      "pacificIslanders":10,
+   
     "electionData": {      "CONGRESSIONAL_16_REP":10,  "CONGRESSIONAL_18_REP":200,
       "PRESIDENTIAL_16_REP":300,
           "CONGRESSIONAL_16_DEM":100,
@@ -112,7 +123,7 @@ data fomart convertion for json
       "PRESIDENTIAL_16_DEM":300
     },
     
-        "adjacentPrecinctIds": ["1","2","3","id for precinct format"],
+        "adjacentPrecinctIds": ["1","2","3"],
         "enclosingPrecinctIds":["4","5","id for precinct"],
         "logBag": {
           "1": "i dunno what i'm doing",
@@ -125,8 +136,6 @@ data fomart convertion for json
 	
 	
 }
-
-
 
 
 

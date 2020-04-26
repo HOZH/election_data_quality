@@ -33,60 +33,69 @@ public class PrecinctService {
     }
 
 
-//    public Precinct selectByDefaultId(String defaultId){
-//
-//
-//       return  precinctDao.findByDefaultId(defaultId);
-//
-//
-//    }
-
     public Precinct savePrecinct(Precinct precinct) {
 
         //todo warp this method with exception handler, return null if any exception raised ->resulting in a 400 status code in the controller layer
 
-//        var ids = precinct.getCanonicalName().split("-");
-//        precinct.setStateId(ids[0]);
-//        precinct.setCountyId(ids[1]);
-
 
         System.out.println();
 
+        System.err.println();
 
+
+        // getCountyId is never going to be null by convention in our group
+        County tempCounty = countyService.selectCountyById(precinct.getCountyId());
+
+
+        // if the precinctId field is not passed then it will be the insertion of a new precinct
+        // if the select precinct by id result in a null it will be the insertion of a new precinct with given id
+        // first check the nullity of the precinct id field so the second predicate will be safely ignore with the short-circuit ||
         if (precinct.getId() == null || precinctDao.findById(precinct.getId()).orElse(null) == null
         ) {
+            //query current precinct's belonging county
 
-            var tempCounty = countyService.selectCountyById(precinct.getCountyId());
-            if (tempCounty == null) {
+
+            var countyNotFound = tempCounty == null;
+
+            // if the belonging county is not found in database then create the county with county id and ethnicity data wrapped in the current precinct
+            if (countyNotFound) {
 
                 tempCounty = new County();
                 tempCounty.setId(precinct.getCountyId());
                 tempCounty.setStateId(precinct.getStateId());
-                tempCounty.setEthnicityData(precinct.getEthnicityData());
-                System.err.println(tempCounty.getStateId());
-                System.out.println();
-                countyService.saveCounty(tempCounty);
-            } else if (precinct.getEthnicityData() != null) {
-                //update ethnicity data if it's not null
-                tempCounty.setEthnicityData(precinct.getEthnicityData());
+
+            }
+
+
+            // if the belonging county is not found in database or the flag for updating demographic data in current precinct
+            // is set to true then update ethnicity data wrapped in the current precinct to current county
+            if (countyNotFound || precinct.isDemographicDataModified()) {
+                updateEthnicityDataHelper(tempCounty, precinct);
                 countyService.saveCounty(tempCounty);
 
             }
+
+
+            // set the county field for target precinct
             precinct.setCounty(tempCounty);
-            if(precinct.getId()==null)
-            precinct.setId(UUID.randomUUID().toString());
 
+            // if the precinct id is not given then generate a random string id for the precinct in uuid version 4 format
+            if (precinct.getId() == null) {
+                precinct.setId(UUID.randomUUID().toString());
+            }
 
+            // save the target precinct into the database
             var result = precinctDao.save(precinct);
 
 
+            // inform the target precinct's adjacent precincts to add it to their adjacent precinct id list
             precinctDao.findAllById(precinct.getAdjacentPrecinctIds()).forEach(e -> {
 
+                // if not already include then add to the target's list and save the changes
                 if (!e.getAdjacentPrecinctIds().contains(result.getId())) {
                     e.getAdjacentPrecinctIds().add(result.getId());
 
                     precinctDao.save(e);
-
 
                 }
 
@@ -94,33 +103,36 @@ public class PrecinctService {
 
 
             return result;
-        } else {
+        }
+        // operation of modifying an existing precinct
+        else {
 
-//            var oldPrecinct = precinctDao.findById(precinct.getId()).orElse(null);
-//            if(oldPrecinct==null)
-//            {
-//                return precinctDao.save(precinct);
-//                //fixme maybe combining with next if statement?
-//            }
+
+            // nullity check has been done in first selection
+            // pull up the precinct record of target precinct in database
             var oldPrecinct = precinctDao.findById(precinct.getId()).orElse(null);
+
+            // comparing the adjacentPrecinctIds of the updated precinct and the record in the database
             if (oldPrecinct.getAdjacentPrecinctIds().containsAll(precinct.getAdjacentPrecinctIds()) && oldPrecinct.getAdjacentPrecinctIds().size() == precinct.getAdjacentPrecinctIds().size()) {
 
-                if (precinct.getEthnicityData() != null) {
 
-                    var tempCounty = countyService.selectCountyById(precinct.getCountyId());
+                // if the adjacentPrecinctIds of target precinct is not changed then check is demographic data modified for its county
+                if (precinct.isDemographicDataModified()) {
 
-                    //update ethnicity data if it's not null
-                    tempCounty.setEthnicityData(precinct.getEthnicityData());
-                    precinct.setCounty(tempCounty);
+                    updateEthnicityDataHelper(tempCounty, precinct);
                     countyService.saveCounty(tempCounty);
 
                 }
 
+                precinct.setCounty(tempCounty);
 
-                 precinctDao.save(precinct);
-                 precinctDao.flush();
-                 return precinct;
+                // save the target precinct into the database
+                return precinctDao.save(precinct);
+
+
             } else {
+
+                //else go to helper method updateNeighbors
                 return updateNeighbors(precinct);
             }
         }
@@ -132,16 +144,23 @@ public class PrecinctService {
         //todo warp this method with exception handler, return null if any exception raised ->resulting in a 400 status code in the controller layer
 
 
+        // pull up record of target precinct in the database
+        // nullity check has been done in the method calling this
         var oldPrecinct = precinctDao.findById(newPrecinct.getId()).orElse(null);
 
 
+        // set diff of adjacentPrecinctIds from the record in database and current precinct
         ArrayList<String> deleted = new ArrayList(oldPrecinct.getAdjacentPrecinctIds());
+
+        // set diff of adjacentPrecinctIds from current precinct and the record in database
         ArrayList<String> added = new ArrayList(newPrecinct.getAdjacentPrecinctIds());
 
+        // adjacentPrecinctIds cannot be null by convention
         deleted.remove(new ArrayList(newPrecinct.getAdjacentPrecinctIds()));
         added.remove(new ArrayList(oldPrecinct.getAdjacentPrecinctIds()));
 
 
+        // removing target precinct's id from its deleted precinct ids in their adjacent precinct ids list
         for (var i : precinctDao.findAllById(deleted)) {
 
             //fixme may throw exception here
@@ -149,7 +168,7 @@ public class PrecinctService {
             precinctDao.save(i);
         }
 
-
+        // adding target precinct's id to its newly added precinct ids in their adjacent precinct ids list
         for (var i : precinctDao.findAllById(added)) {
 
             //fixme may throw exception here
@@ -157,18 +176,19 @@ public class PrecinctService {
             precinctDao.save(i);
 
         }
-//
-        if (newPrecinct.getEthnicityData() != null) {
+
+
+        // if the adjacentPrecinctIds of target precinct is not changed then check is demographic data modified for its county
+        if (newPrecinct.isDemographicDataModified()) {
 
             var tempCounty = countyService.selectCountyById(newPrecinct.getCountyId());
-
-            //update ethnicity data if it's not null
-            tempCounty.setEthnicityData(newPrecinct.getEthnicityData());
-            countyService.saveCounty(tempCounty);
+            updateEthnicityDataHelper(tempCounty, newPrecinct);
             newPrecinct.setCounty(tempCounty);
-
+            countyService.saveCounty(tempCounty);
 
         }
+
+
         return precinctDao.save(newPrecinct);
 
 
@@ -197,41 +217,70 @@ public class PrecinctService {
 
         //todo warp this method with exception handler, return null if any exception raised ->resulting in a 400 status code in the controller layer
 
-
+        // primary precinct
         Precinct merged = precincts.get(0);
+        // deleting precinct
         Precinct placeholder = precincts.get(1);
 
 
+        //merge two's adjacent list and delete the deleting precinct's id from its adjacent precinct ids
         placeholder.getAdjacentPrecinctIds().forEach(e -> {
 
 
+                    //precinct queried by the ids in deleting precincts' adjacent precinct ids list
+                    var temp = precinctDao.findById(e).orElse(null);
+
+
+                    //if the primary precinct not already contained the temp then
                     if (!merged.getAdjacentPrecinctIds().contains(e)) {
+
+                        // if temp is not primary precinct then add each other to their id to their adjacent precinct ids
 
                         if (!e.equals(merged.getId())) {
                             merged.getAdjacentPrecinctIds().add(e);
+                            temp.getAdjacentPrecinctIds().add(merged.getId());
                         }
 
-                        var temp = precinctDao.findById(e).orElse(null);
-                        temp.getAdjacentPrecinctIds().add(merged.getId());
-                        temp.getAdjacentPrecinctIds().remove(placeholder.getId());
-
-                        precinctDao.save(temp);
+                        // temp.getAdjacentPrecinctIds().add(merged.getId());
 
 
                     }
+
+                    // deleting precinct's id from temp's list
+                    temp.getAdjacentPrecinctIds().remove(placeholder.getId());
+
+                    // save temp
+                    precinctDao.save(temp);
 
 
                 }
 
         );
 
+
+        // deleting precinct's id from temp's list
         merged.getAdjacentPrecinctIds().remove(placeholder.getId());
 
+
+        // remove deleting precinct from database
         precinctDao.deleteById(placeholder.getId());
 
+        // save merged precinct
         return precinctDao.save(merged);
 
     }
 
 
+    private void updateEthnicityDataHelper(County c, Precinct p) {
+
+        c.setWhite(p.getWhite());
+        c.setAfricanAmerican(p.getAfricanAmerican());
+        c.setAsianPacific(p.getAsianPacific());
+        c.setNativeAmerican(p.getNativeAmerican());
+        c.setPacificIslanders(p.getPacificIslanders());
+        c.setOthers(p.getOthers());
+
+    }
+
 }
+//1

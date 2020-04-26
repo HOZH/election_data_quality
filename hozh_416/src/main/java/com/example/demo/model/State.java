@@ -24,13 +24,13 @@ import static javax.persistence.CascadeType.ALL;
 public class State {
 
     @Id
-    @Column(length = 60)
+//    @Column(length = 60)
 
 //    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
 
 
-    private String canonicalName;
+//    private String canonicalName;
 
 
     @OneToMany(fetch = FetchType.LAZY, cascade = ALL, mappedBy = "state")

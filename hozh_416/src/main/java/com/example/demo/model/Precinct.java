@@ -26,18 +26,10 @@ import java.util.Map;
 
 public class Precinct {
 
-//    public Precinct() {
-//    }
-
     @Id
     @JsonProperty("precinctId")
-    @Column(length = 60)
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @Column(length = 60)
     private String id;
-//
-//    @JsonProperty("cus")
-//    private String temp;
-
 
 
 
@@ -49,29 +41,59 @@ public class Precinct {
     private boolean multipleBorder;
 
 
-    //todo get rid of this two field later
     @Transient
     private String stateId;
 
-    //todo get rid of this two field later
 
     @Transient
     private String countyId;
 
 
-//    private String defaultId;
 
 
+    @Column(length = 2000)
     private String coordinates;
 
 
-
-    //fixme will be change later
-    @Transient
-    private Map<EthnicityEnum, Integer> ethnicityData; //todo is required when filling data into database/ not required for production stage
-
+//    //todo is required when filling data into database/ not required for production stage
 //    @Transient
-//    private Long districtId;
+//    private Map<EthnicityEnum, Integer> ethnicityData;
+
+
+
+
+
+
+    @Transient
+    private boolean demographicDataModified;
+
+    @Transient
+    private int white;
+
+    @Transient
+    private int africanAmerican;
+
+    @Transient
+    private int asianPacific;
+
+    @Transient
+    private int nativeAmerican;
+
+    @Transient
+    private int others;
+
+    @Transient
+    private int pacificIslanders;
+
+
+
+
+
+
+
+
+
+
 
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -94,10 +116,6 @@ public class Precinct {
     @ElementCollection
     @CollectionTable(name = "ENCLOSING_PRECINCT_IDS")
     private List<String> enclosingPrecinctIds;
-
-//    @Column(length = 2000)
-//    @ElementCollection
-//    private List<ArrayList<ArrayList<Double>>> coordinates;
 
 
     @SuppressWarnings("JpaDataSourceORMInspection")
