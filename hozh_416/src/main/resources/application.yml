@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: review
+    active: wsl
 
 
 
@@ -14,6 +14,8 @@ spring:
     username: root
     password: 123456
     url: jdbc:mysql://localhost:3306/sbjpa
+#    url: jdbc:mysql://192.168.1.10:3306/temp
+
     #    url: jdbc:mysql://localhost:3306/sbjpa?sessionVariables=sql_mode='NO_ENGINE_SUBSTITUTION'&jdbcCompliantTruncation=false
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
@@ -34,6 +36,35 @@ server:
 
 
 
+---
+
+
+spring:
+  profiles: wsl
+  datasource:
+    username: root
+
+#    url: jdbc:mysql://localhost:3306/sbjpa
+    url: jdbc:mysql://192.168.1.10:3306/temp
+
+    #    url: jdbc:mysql://localhost:3306/sbjpa?sessionVariables=sql_mode='NO_ENGINE_SUBSTITUTION'&jdbcCompliantTruncation=false
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    show-sql: true
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+      ddl-auto: create-drop
+
+    properties.hibernate.dialect: org.hibernate.dialect.MySQL5Dialect
+
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
+
+server:
+  port: 8080
+
 
 
 
@@ -45,7 +76,9 @@ spring:
   datasource:
     username: hyejeong
     password: ENC(YXbdQsErstFCCthiGfMYPbCLP37vd7l2)
-    url: jdbc:mysql://mysql3.cs.stonybrook.edu:3306/hyejeong
+    url: jdbc:mysql://mysql3.cs.stonybrook.edu:3306/hyeje1ong
+
+    #    url: jdbc:mysql://mysql3.cs.stonybrook.edu:3306/hyejeong
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     show-sql: true

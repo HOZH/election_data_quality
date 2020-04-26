@@ -38,7 +38,7 @@ public class Controller {
         this.countyService = countyService;
     }
 
-
+//todo change naimg to XX handler
     /**
      * Get method router for records of all the precincts
      *
@@ -170,13 +170,6 @@ public class Controller {
     }
 
 
-    //fixme testing route
-//@GetMapping(path = "/precinct/default/{defaultId}")
-//
-//public Precinct findPrecinctByDefaultIdRequest(@PathVariable("defaultId") String defaultId) {
-//
-//return precinctService.selectByDefaultId(defaultId);
-//    }
 
 
 }

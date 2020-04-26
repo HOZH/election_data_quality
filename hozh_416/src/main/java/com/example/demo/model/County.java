@@ -35,6 +35,8 @@ public class County {
     private Map<EthnicityEnum, Integer> ethnicityData;
 
     @Id
+    @Column(length = 60)
+
 //    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
 

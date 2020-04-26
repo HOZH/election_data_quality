@@ -31,6 +31,7 @@ public class Precinct {
 
     @Id
     @JsonProperty("precinctId")
+    @Column(length = 60)
 //    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
 //

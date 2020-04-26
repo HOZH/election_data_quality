@@ -24,6 +24,8 @@ import static javax.persistence.CascadeType.ALL;
 public class State {
 
     @Id
+    @Column(length = 60)
+
 //    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
 
