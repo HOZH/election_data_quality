@@ -39,9 +39,6 @@ public class PrecinctService {
     try {
       return pem.findById(id).orElse(null);
     } catch (Exception ex) {
-
-      // fixme for now we may encounter Illegal arg exception, change generic handler to more
-      // concrete one later
       System.err.println(ex.getMessage());
       return null;
     }

@@ -90,7 +90,6 @@ public class Controller {
      * @param id type Long, fetched through path variable
      * @return String of deletion state
      * status code is always set to 200
-     * //todo may change to void before code review/final delivery
      */
     @DeleteMapping(path = "/precinct/{id}")
     private ResponseEntity<String> removePrecinctByIdHandler(@PathVariable("id") String id) {
@@ -104,7 +103,6 @@ public class Controller {
      * @param precinct type Precinct, fetched through request body
      * @return Precinct object of saved precinct
      * status code is set to 200 if insertion/modification of the precinct is completed otherwise 400
-     * //todo may change type of return before code review/final delivery
      */
     @RequestMapping(path = "/precinct", method = {RequestMethod.POST, RequestMethod.PUT})
     private ResponseEntity<Precinct> savePrecinctHandler(HttpServletRequest request, @Valid @NotNull @RequestBody Precinct precinct) {
