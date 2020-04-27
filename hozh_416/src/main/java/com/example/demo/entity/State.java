@@ -21,17 +21,11 @@ import static javax.persistence.CascadeType.ALL;
 @Entity(name = "STATES")
 @Table
 public class State {
-    /**
-     * primary key for STATE_TBL table
-     */
-    @Id
-    private String id;
+  /** primary key for STATE_TBL table */
+  @Id private String id;
 
-    /**
-     * List of County objects that belong to this state
-     */
-    @OneToMany(fetch = FetchType.LAZY, cascade = ALL, mappedBy = "state")
-    @JsonIgnoreProperties("state")
-    private List<County> counties;
-
+  /** List of County objects that belong to this state */
+  @OneToMany(fetch = FetchType.LAZY, cascade = ALL, mappedBy = "state")
+  @JsonIgnoreProperties("state")
+  private List<County> counties;
 }

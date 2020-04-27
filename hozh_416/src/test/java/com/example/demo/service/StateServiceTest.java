@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.hamcrest.CoreMatchers.is;
 
-
 /*
  * @created 27/04/2020 - 3:15 PM
  * @project IntelliJ IDEA
@@ -14,11 +13,10 @@ import static org.hamcrest.CoreMatchers.is;
  */
 public class StateServiceTest {
 
-    @Autowired
-    StateService ss;
+  @Autowired StateService ss;
 
-    @Test
-    public void selectStateById() {
-        Assert.assertThat(ss.selectStateById("sid").getId(), is("sid"));
-    }
+  @Test
+  public void selectStateById() {
+    Assert.assertThat(ss.selectStateById("sid").getId(), is("sid"));
+  }
 }

@@ -13,12 +13,10 @@ import static org.hamcrest.CoreMatchers.is;
  */
 public class CountyServiceTest {
 
-    @Autowired
-    CountyService cs;
+  @Autowired CountyService cs;
 
-    @Test
-    public void selectCountyById() {
-        Assert.assertThat(cs.selectCountyById("cid").getId(), is("cid"));
-    }
-
+  @Test
+  public void selectCountyById() {
+    Assert.assertThat(cs.selectCountyById("cid").getId(), is("cid"));
+  }
 }

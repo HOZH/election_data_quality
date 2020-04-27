@@ -1,6 +1,5 @@
 package com.example.demo.entitymanager;
 
-
 import com.example.demo.entity.County;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -11,5 +10,4 @@ import org.springframework.stereotype.Repository;
  * @project hozh-416-server
  */
 @Repository
-public interface CountyEntityManager extends JpaRepository<County, String> {
-}
+public interface CountyEntityManager extends JpaRepository<County, String> {}

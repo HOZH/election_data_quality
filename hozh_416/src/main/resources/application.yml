@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: development
+    active: review
 
 
 
@@ -76,6 +76,7 @@ spring:
     hibernate:
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+#      ddl-auto: validate
       ddl-auto: update
     properties.hibernate.dialect: org.hibernate.dialect.MySQL5Dialect
 
