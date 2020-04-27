@@ -96,16 +96,13 @@ public class Precinct {
     /**
      * following are the help fields of the object which won't be persist in the database
      */
-
     @Transient
     private String canonicalName;
-
     /**
      * help field for mapping the precinct to its belonging county
      */
     @Transient
     private String stateId;
-
     /**
      * help field for mapping the precinct's belonging county to its belonging state
      */
@@ -118,27 +115,20 @@ public class Precinct {
     @Transient
     private boolean demoModified;
     ;
-
     /**
      * following are the demographic population help fields,
      * can be ignore if demographicDataModified is set to false
      */
     @Transient
     private int white;
-
     @Transient
     private int africanAmer;
-
     @Transient
     private int asian;
-
     @Transient
     private int nativeAmer;
-
     @Transient
     private int others;
-
     @Transient
     private int pasifika;
-
 }

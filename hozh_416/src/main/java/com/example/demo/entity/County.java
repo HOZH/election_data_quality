@@ -64,7 +64,6 @@ public class County {
     private int asian;
     private int others;
 
-
     /**
      * helper field for initialing the belonging state
      */

@@ -21,7 +21,6 @@ import static javax.persistence.CascadeType.ALL;
 @Entity(name = "STATES")
 @Table
 public class State {
-
     /**
      * primary key for STATE_TBL table
      */

@@ -31,10 +31,12 @@ public class PrecinctService {
     /**
      * query a precinct by the given id
      *
-     * @param id -> String type, using as a id to query the target precinct
-     * @return query result by given id -> type Precinct, return null if illegal arg exception raised
+     * @param id String type, using as a id to query the target precinct
+     * @return query result by given id type Precinct, return null if illegal arg exception raised
+     * @throws IllegalArgumentException if arg of pem.findById is nullable
      */
     public Precinct selectPrecinctById(String id) {
+
         try {
             return pem.findById(id).orElse(null);
         } catch (Exception ex) {
@@ -47,7 +49,7 @@ public class PrecinctService {
     /**
      * return a collection of all the precinct records in the database
      *
-     * @return query result -> type List<Precinct>
+     * @return query result type List<Precinct>
      */
     public List<Precinct> selectAllPrecincts() {
         return pem.findAll();
@@ -65,17 +67,16 @@ public class PrecinctService {
     /**
      * update a precinct record in database.
      *
-     * @param precinct -> precinct type
-     * @return the saved precinct entity -> type precinct, return null if null pointer/ illegal arg exception raised
+     * @param precinct Precinct type
+     * @return the saved precinct entity type precinct, return null if exceptions raised
+     * @throws IllegalArgumentException if arg of cs.selectCountyById or arg of pem.save is nullable
+     * @throws NullPointerException     if ?.getAdjPrecIds is nullable
      * @see this.updateNeighbors
      */
     public Precinct updatePrecinct(Precinct precinct) {
+
         try {
-            // getCountyId is never going to be null by convention in our group
             County targetCounty = cs.selectCountyById(precinct.getCountyId());
-
-
-            // nullity check has been done in first selection
             // pull up the precinct record of target precinct in database
             var precinctRecord = pem.findById(precinct.getId()).orElse(null);
 
@@ -88,17 +89,12 @@ public class PrecinctService {
                     cs.saveCounty(targetCounty);
                 }
                 precinct.setCounty(targetCounty);
-
-                // save the target precinct into the database
                 return pem.save(precinct);
-
             } else {
                 //else go to helper method updateNeighbors
                 return updateNeighbors(precinct);
             }
-
         } catch (Exception ex) {
-
             //fixme may encounter nested exception, need a more concert error handler for that
             System.err.println("precinct adjacentPrecinctIds is null");
             System.err.println(ex.getMessage());
@@ -109,20 +105,20 @@ public class PrecinctService {
     /**
      * add a precinct object into database.
      *
-     * @param precinct -> precinct type
-     * @return the saved precinct entity -> type precinct, return null if null pointer/ illegal arg exception raised
+     * @param precinct Precinct type
+     * @return the saved precinct entity type precinct, return null if exception raised
+     * @throws IllegalArgumentException if arg of cs.selectCountyById or arg of pem.save is nullable
+     * @throws NullPointerException     if ?.getAdjPrecIds is nullable
      */
     public Precinct addPrecinct(Precinct precinct) {
+
         try {
             // getCountyId is never going to be null by convention in our group
             County targetCounty = cs.selectCountyById(precinct.getCountyId());
-
-
             var countyNotFound = targetCounty == null;
-
-            // query current precinct's belonging county
             // if the belonging county is not found in database then create the county with county id and ethnicity
             // data wrapped in the current precinct
+
             if (countyNotFound) {
                 targetCounty = new County();
                 targetCounty.setId(precinct.getCountyId());
@@ -136,34 +132,25 @@ public class PrecinctService {
                 updateEthnicityDataHelper(targetCounty, precinct);
                 cs.saveCounty(targetCounty);
             }
-
-            // set the county field for target precinct
             precinct.setCounty(targetCounty);
 
             // if the precinct id is not given then generate a random string id for the precinct in uuid v4 format
             if (precinct.getId() == null) {
                 precinct.setId(UUID.randomUUID().toString());
             }
-
             // save the target precinct into the database
             var result = pem.save(precinct);
-
             // inform the target precinct's adjacent precincts to add it to their adjacent precinct id list
             pem.findAllById(precinct.getAdjPrecIds()).forEach(e -> {
 
                 // if not already include then add to the target's list and save the changes
                 if (!e.getAdjPrecIds().contains(result.getId())) {
-
                     e.getAdjPrecIds().add(result.getId());
                     pem.save(e);
                 }
             });
-
             return result;
-//            }
-
         } catch (Exception ex) {
-
             //fixme may encounter nested exception, need a more concert error handler for that
             System.err.println("precinct adjacentPrecinctIds is null");
             System.err.println(ex.getMessage());
@@ -171,13 +158,14 @@ public class PrecinctService {
         }
     }
 
-
     /**
      * helper method for updating a precinct, it will update the adjacentPrecinctIds list of target
      * precinct and its adjacent precincts bidirectionally
      *
-     * @param precinct -> precinct type
-     * @return the saved precinct entity -> type precinct, return null if null pointer/ illegal arg exception raised
+     * @param precinct precinct type
+     * @return the saved precinct entity type precinct, return null if null pointer/ illegal arg exception raised
+     * @throws IllegalArgumentException if arg of cs.selectCountyById or arg of pem.save is nullable
+     * @throws NullPointerException     if ?.getAdjPrecIds is nullable
      */
     public Precinct updateNeighbors(Precinct precinct) {
 
@@ -185,13 +173,10 @@ public class PrecinctService {
             // pull up record of target precinct in the database
             // nullity check has been done in the method calling this
             var precinctRecord = pem.findById(precinct.getId()).orElse(null);
-
             // set diff of adjacentPrecinctIds from the record in database and current precinct
             ArrayList<String> deleted = new ArrayList(precinctRecord.getAdjPrecIds());
-
             // set diff of adjacentPrecinctIds from current precinct and the record in database
             ArrayList<String> added = new ArrayList(precinct.getAdjPrecIds());
-
             // adjacentPrecinctIds cannot be null by convention
             deleted.remove(new ArrayList(precinct.getAdjPrecIds()));
             added.remove(new ArrayList(precinctRecord.getAdjPrecIds()));
@@ -211,7 +196,6 @@ public class PrecinctService {
             // if the adjacentPrecinctIds of target precinct is not changed then check is demographic data modified for its county
             if (precinct.isDemoModified()) {
                 var targetCounty = cs.selectCountyById(precinct.getCountyId());
-
                 updateEthnicityDataHelper(targetCounty, precinct);
                 precinct.setCounty(targetCounty);
                 cs.saveCounty(targetCounty);
@@ -227,21 +211,20 @@ public class PrecinctService {
     /**
      * merging two precincts
      *
-     * @param precincts -> type List<Precinct>, index 0 -> primary precinct, index 1 deleting precinct
+     * @param precincts type List<Precinct>, index 0 primary precinct, index 1 deleting precinct
      * @return Precinct object of survived precinct
+     * @throws IllegalArgumentException if arg of pem.save is nullable
+     * @throws NullPointerException     if ?.getAdjPrecIds is nullable
      */
     public Precinct mergePrecincts(List<Precinct> precincts) {
-
+        
         try {
-
             // primary precinct
             Precinct primaryPrecinct = precincts.get(0);
             // deleting precinct
             Precinct deletingPrecinct = precincts.get(1);
-
             // merge two's adjacent list and delete the deleting precinct's id from its adjacent precinct ids
             deletingPrecinct.getAdjPrecIds().forEach(e -> {
-
                 // precinct queried by the ids in deleting precincts' adjacent precinct ids list
                 var temp = pem.findById(e).orElse(null);
 
@@ -257,16 +240,11 @@ public class PrecinctService {
                 temp.getAdjPrecIds().remove(deletingPrecinct.getId());
                 pem.save(temp);
             });
-
             // deleting precinct's id from temp's list
             primaryPrecinct.getAdjPrecIds().remove(deletingPrecinct.getId());
-
             // remove deleting precinct from database
             pem.deleteById(deletingPrecinct.getId());
-
-            // save primaryPrecinct precinct
             return pem.save(primaryPrecinct);
-
         } catch (NullPointerException ex) {
             System.err.println("precinct adjacentPrecinctIds is null");
             System.err.println(ex.getMessage());
@@ -277,7 +255,7 @@ public class PrecinctService {
     /**
      * set ethnicity data of a County object to ethnicity data of a Precinct object
      *
-     * @param c -> type County, p -> type Precinct
+     * @param c type County, p type Precinct
      */
     private void updateEthnicityDataHelper(County c, Precinct p) {
         c.setWhite(p.getWhite());
