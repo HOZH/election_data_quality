@@ -1,40 +1,39 @@
 package com.example.demo.entity;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-
 import javax.persistence.*;
 import java.util.List;
 import java.util.Map;
 
-
 /**
- * @author Hong Zheng
+ * @author Hong Zheng, Hyejun Jeong
  * @created 19/03/2020 - 4:14 PM
  * @project hozh-416-server
  */
+
 @Data
 @ToString(exclude = {"county"})
 @NoArgsConstructor
-@Entity(name = "PRECINCT_TBL")
-@Table
+@Entity(name = "precinct")
+@Table(name = "PRECINCT")
 
 public class Precinct {
 
     /**
-     * primary key for PRECINCT_TBL
+     * primary key for PRECINCT
      */
     @Id
     @JsonProperty("precinctId")
+    @Column(length = 15)
     private String id;
 
     /**
-     * flag to determine whether
-     * this precinct is a ghost precinct
+     * flag to determine whether this
+     * precinct is a ghost precinct
      */
     private boolean ghost;
 
@@ -62,6 +61,8 @@ public class Precinct {
      */
     @SuppressWarnings("JpaDataSourceORMInspection")
     @ElementCollection
+    @MapKeyColumn(name="election_type")
+    @Column(name="election_result")
     @CollectionTable(name = "ELECTION_DATA")
     private Map<ElectionEnum, Integer> electionData;
 
@@ -71,7 +72,8 @@ public class Precinct {
      */
     @SuppressWarnings("JpaDataSourceORMInspection")
     @ElementCollection
-    @CollectionTable(name = "ADJACENT_PRECINCT_IDS")
+    @CollectionTable(name = "ADJACENT_PRECINCT")
+    @Column(name = "adjacent_pid", length = 15)
     private List<String> adjacentPrecinctIds;
 
     /**
@@ -80,7 +82,8 @@ public class Precinct {
      */
     @SuppressWarnings("JpaDataSourceORMInspection")
     @ElementCollection
-    @CollectionTable(name = "ENCLOSING_PRECINCT_IDS")
+    @CollectionTable(name = "ENCLOSING_PRECINCT")
+    @Column(name = "enclosed_pid", length = 15)
     private List<String> enclosingPrecinctIds;
 
     /**
@@ -88,11 +91,13 @@ public class Precinct {
      */
     @SuppressWarnings("JpaDataSourceORMInspection")
     @ElementCollection
-    @CollectionTable(name = "LOG_BAG")
-    private Map<Integer, String> logBag;
+    @MapKeyColumn(name="log_id")
+    @Column(name="log")
+    @CollectionTable(name = "LOG")
+    private Map<Integer, String> log;
 
     /**
-     * following are the help fields of the object which won't be persist in the database
+     * followings are the help fields of the object which won't be persist in the database
      */
 
     @Transient
@@ -114,7 +119,7 @@ public class Precinct {
      * flag to determine whether to update this precinct's belonging county's demographic data
      */
     @Transient
-    private boolean demographicDataModified;
+    private boolean demoModified;
 
     /**
      * following are the demographic population help fields,
@@ -124,18 +129,18 @@ public class Precinct {
     private int white;
 
     @Transient
-    private int africanAmerican;
+    private int afrAmer;
 
     @Transient
-    private int asianPacific;
+    private int asian;
 
     @Transient
-    private int nativeAmerican;
+    private int natAmer;
 
     @Transient
     private int others;
 
     @Transient
-    private int pacificIslanders;
+    private int pacIslr;
 
 }

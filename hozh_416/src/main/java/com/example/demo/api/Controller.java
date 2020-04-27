@@ -1,6 +1,5 @@
 package com.example.demo.api;
 
-
 import com.example.demo.entity.County;
 import com.example.demo.entity.Precinct;
 import com.example.demo.entity.State;
@@ -11,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -21,15 +19,14 @@ import java.util.List;
  * @created 19/03/2020 - 4:14 PM
  * @project hozh-416-server
  */
+
 @RequestMapping("api")
 @RestController
 public class Controller {
 
-
     private final PrecinctService precinctService;
     private final StateService stateService;
     private final CountyService countyService;
-
 
     @Autowired
     private Controller(PrecinctService precinctService, StateService stateService, CountyService countyService) {
@@ -37,7 +34,6 @@ public class Controller {
         this.stateService = stateService;
         this.countyService = countyService;
     }
-
 
     /**
      * Get method router for records of all the precincts
@@ -49,8 +45,6 @@ public class Controller {
      */
     @GetMapping(path = "/precinct/all")
     private ResponseEntity<List<Precinct>> getAllPrecinctRequestHandler() {
-
-
         return new ResponseEntity<>(precinctService.selectAllPrecincts(), HttpStatus.OK);
     }
 
@@ -63,12 +57,8 @@ public class Controller {
      */
     @GetMapping(path = "/state/{id}")
     private ResponseEntity<State> getStateByIdRequestHandler(@PathVariable("id") String id) {
-
-
         var queryResult = stateService.selectStateById(id);
-
         return new ResponseEntity<>(queryResult, queryResult == null ? HttpStatus.NOT_FOUND : HttpStatus.OK);
-
     }
 
     /**
@@ -80,13 +70,9 @@ public class Controller {
      */
     @GetMapping(path = "/county/{id}")
     private ResponseEntity<County> getCountyByIdRequestHandler(@PathVariable("id") String id) {
-
         var queryResult = countyService.selectCountyById(id);
-
         return new ResponseEntity<>(queryResult, queryResult == null ? HttpStatus.NOT_FOUND : HttpStatus.OK);
-
     }
-
 
     /**
      * Get method router for getting record of a precinct by given id
@@ -97,14 +83,9 @@ public class Controller {
      */
     @GetMapping(path = "/precinct/{id}")
     private ResponseEntity<Precinct> getPrecinctByIdRequestHandler(@PathVariable("id") String id) {
-
-
         var queryResult = precinctService.selectPrecinctById(id);
         return new ResponseEntity<>(queryResult, queryResult == null ? HttpStatus.NOT_FOUND : HttpStatus.OK);
-
-
     }
-
 
     /**
      * Delete method router for delete record of precinct in database by given id
@@ -116,13 +97,9 @@ public class Controller {
      */
     @DeleteMapping(path = "/precinct/{id}")
     private ResponseEntity<String> removePrecinctByIdRequestHandler(@PathVariable("id") String id) {
-
         precinctService.deletePrecinctById(id);
-
         return new ResponseEntity<>("OK", HttpStatus.OK);
-
     }
-
 
     /**
      * Put/Post method router for adding/updating a precinct with database.
@@ -135,13 +112,8 @@ public class Controller {
      */
     @RequestMapping(path = "/precinct", method = {RequestMethod.POST, RequestMethod.PUT})
     private ResponseEntity<Precinct> savePrecinctRequestHandler(@Valid @NotNull @RequestBody Precinct precinct) {
-
-
         var operationResult = precinctService.savePrecinct(precinct);
-
         return new ResponseEntity<>(operationResult, operationResult == null ? HttpStatus.BAD_REQUEST : HttpStatus.OK);
-
-
     }
 
     /**
@@ -153,17 +125,9 @@ public class Controller {
      * @return Precinct object of survived precinct
      * status code is set to 200 if the merging operation of two precincts is completed otherwise 400
      */
-
     @DeleteMapping(path = "/precinct/merge")
     private ResponseEntity<Precinct> mergePrecinctsRequestHandler(@Valid @NotNull @RequestBody List<Precinct> precincts) {
-
-
         var mergingResult = precinctService.mergePrecincts(precincts);
-
         return new ResponseEntity<>(mergingResult, mergingResult == null ? HttpStatus.BAD_REQUEST : HttpStatus.OK);
-
-
     }
-
-
 }
