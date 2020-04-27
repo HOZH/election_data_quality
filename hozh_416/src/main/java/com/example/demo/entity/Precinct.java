@@ -98,9 +98,6 @@ public class Precinct {
     @Transient
     private String canonicalName;
 
-    @Transient
-    private int population;
-
     /**
      * help field for mapping the precinct to its belonging county
      */

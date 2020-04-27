@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: development
+    active: review
 
 
 
@@ -76,7 +76,7 @@ spring:
   datasource:
     username: hyejeong
     password: ENC(YXbdQsErstFCCthiGfMYPbCLP37vd7l2)
-    url: jdbc:mysql://mysql3.cs.stonybrook.edu:3306/hyeje1ong
+    url: jdbc:mysql://mysql3.cs.stonybrook.edu:3306/hyejeong
 
     #    url: jdbc:mysql://mysql3.cs.stonybrook.edu:3306/hyejeong
     driver-class-name: com.mysql.cj.jdbc.Driver

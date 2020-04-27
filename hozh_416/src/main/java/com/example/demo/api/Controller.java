@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -164,21 +163,6 @@ public class Controller {
         return new ResponseEntity<>(mergingResult, mergingResult == null ? HttpStatus.BAD_REQUEST : HttpStatus.OK);
 
 
-    }
-
-
-    @GetMapping(path = "/precinct/temp")
-    private ResponseEntity<List<String>> temp() {
-
-        var ps = precinctService.selectAllPrecincts();
-
-        var temp = new ArrayList<String>();
-        ps.stream().forEach(e -> {
-            temp.add(e.getId() + " : " + e.getAdjacentPrecinctIds().toString() + "\n");
-        });
-
-
-        return new ResponseEntity<>(temp, HttpStatus.OK);
     }
 
 
