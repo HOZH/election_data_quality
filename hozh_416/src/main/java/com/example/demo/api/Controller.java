@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -111,8 +113,14 @@ public class Controller {
      * //todo may change type of return before code review/final delivery
      */
     @RequestMapping(path = "/precinct", method = {RequestMethod.POST, RequestMethod.PUT})
-    private ResponseEntity<Precinct> savePrecinctRequestHandler(@Valid @NotNull @RequestBody Precinct precinct) {
-        var operationResult = precinctService.savePrecinct(precinct);
+    private ResponseEntity<Precinct> savePrecinctRequestHandler(HttpServletRequest request, @Valid @NotNull @RequestBody Precinct precinct) {
+        Precinct operationResult;
+        operationResult = switch (request.getMethod()) {
+
+            case "POST" -> precinctService.addPrecinct(precinct);
+            case "PUT" -> precinctService.updatePrecinct(precinct);
+            default -> null;
+        };
         return new ResponseEntity<>(operationResult, operationResult == null ? HttpStatus.BAD_REQUEST : HttpStatus.OK);
     }
 

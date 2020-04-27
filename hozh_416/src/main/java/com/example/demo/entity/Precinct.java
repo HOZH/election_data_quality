@@ -1,48 +1,47 @@
 package com.example.demo.entity;
 
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+
 import javax.persistence.*;
 import java.util.List;
 import java.util.Map;
 
+
 /**
- * @author Hong Zheng, Hyejun Jeong
+ * @author Hong Zheng
  * @created 19/03/2020 - 4:14 PM
  * @project hozh-416-server
  */
-
 @Data
 @ToString(exclude = {"county"})
 @NoArgsConstructor
-@Entity(name = "precinct")
-@Table(name = "PRECINCTS")
+@Entity(name = "PRECINCTS")
+@Table
 
 public class Precinct {
 
     /**
-     * primary key for PRECINCT
+     * primary key for PRECINCT_TBL
      */
     @Id
     @JsonProperty("precinctId")
-    @Column(length = 15)
     private String id;
 
     /**
-     * flag to determine whether this
-     * precinct is a ghost precinct
+     * flag to determine whether
+     * this precinct is a ghost precinct
      */
-    @Column(name = "is_ghost")
     private boolean ghost;
 
     /**
      * flag to determine whether this
      * precinct contains multiple border error
      */
-    @Column(name = "has_multiple_border")
     private boolean multipleBorder;
 
     /**
@@ -63,8 +62,6 @@ public class Precinct {
      */
     @SuppressWarnings("JpaDataSourceORMInspection")
     @ElementCollection
-    @MapKeyColumn(name="election_type")
-    @Column(name="election_result")
     @CollectionTable(name = "ELECTION_DATA")
     private Map<ElectionEnum, Integer> electionData;
 
@@ -75,7 +72,7 @@ public class Precinct {
     @SuppressWarnings("JpaDataSourceORMInspection")
     @ElementCollection
     @CollectionTable(name = "ADJACENT_PRECINCTS")
-    @Column(name = "adjacent_precinct_ids", length = 15)
+    @Column(name = "adjacent_precinct_ids")
     private List<String> adjPrecIds;
 
     /**
@@ -85,7 +82,7 @@ public class Precinct {
     @SuppressWarnings("JpaDataSourceORMInspection")
     @ElementCollection
     @CollectionTable(name = "ENCLOSING_PRECINCTS")
-    @Column(name = "enclosing_precinct_ids", length = 15)
+    @Column(name = "enclosing_precinct_ids")
     private List<String> enclPrecIds;
 
     /**
@@ -93,13 +90,11 @@ public class Precinct {
      */
     @SuppressWarnings("JpaDataSourceORMInspection")
     @ElementCollection
-    @MapKeyColumn(name="id")
-    @Column(name="log")
-    @CollectionTable(name = "LOGS")
-    private Map<Integer, String> log;
+    @CollectionTable(name = "LOG_BAG")
+    private Map<Integer, String> logBag;
 
     /**
-     * followings are the help fields of the object which won't be persist in the database
+     * following are the help fields of the object which won't be persist in the database
      */
 
     @Transient
@@ -122,6 +117,7 @@ public class Precinct {
      */
     @Transient
     private boolean demoModified;
+    ;
 
     /**
      * following are the demographic population help fields,

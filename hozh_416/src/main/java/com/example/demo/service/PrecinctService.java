@@ -5,6 +5,7 @@ import com.example.demo.entity.Precinct;
 import com.example.demo.entitymanager.PrecinctEntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -62,91 +63,40 @@ public class PrecinctService {
     }
 
     /**
-     * save a precinct object into database. Used for both insertion and modification of a precinct record
+     * update a precinct record in database.
      *
      * @param precinct -> precinct type
      * @return the saved precinct entity -> type precinct, return null if null pointer/ illegal arg exception raised
      * @see this.updateNeighbors
      */
-    public Precinct savePrecinct(Precinct precinct) {
+    public Precinct updatePrecinct(Precinct precinct) {
         try {
             // getCountyId is never going to be null by convention in our group
             County targetCounty = cs.selectCountyById(precinct.getCountyId());
 
-            // if the precinctId field is not passed then it will be the insertion of a new precinct
-            // if the select precinct by id result in a null it will be the insertion of a new precinct with given id
-            // first check the nullity of the precinct id field so the second predicate will be safely ignore with the 
-            // short-circuit ||
-            if (precinct.getId() == null || pem.findById(precinct.getId()).orElse(null) == null) {
 
-                var countyNotFound = targetCounty == null;
+            // nullity check has been done in first selection
+            // pull up the precinct record of target precinct in database
+            var precinctRecord = pem.findById(precinct.getId()).orElse(null);
 
-                // query current precinct's belonging county
-                // if the belonging county is not found in database then create the county with county id and ethnicity 
-                // data wrapped in the current precinct
-                if (countyNotFound) {
-                    targetCounty = new County();
-                    targetCounty.setId(precinct.getCountyId());
-                    targetCounty.setStateId(precinct.getStateId());
-                }
+            // comparing the adjacentPrecinctIds of the updated precinct and the record in the database
+            if (precinctRecord.getAdjPrecIds().containsAll(precinct.getAdjPrecIds()) && precinctRecord.getAdjPrecIds().size() == precinct.getAdjPrecIds().size()) {
 
-                // if the belonging county is not found in database or the flag for updating demographic data in 
-                // current precinct is set to true then update ethnicity data wrapped in the current precinct to 
-                // current county
-                if (countyNotFound || precinct.isDemoModified()) {
+                // if the adjacentPrecinctIds of target precinct is not changed then check is demographic data modified for its county
+                if (precinct.isDemoModified()) {
                     updateEthnicityDataHelper(targetCounty, precinct);
                     cs.saveCounty(targetCounty);
                 }
-
-                // set the county field for target precinct
                 precinct.setCounty(targetCounty);
 
-                // if the precinct id is not given then generate a random string id for the precinct in uuid v4 format
-                if (precinct.getId() == null) {
-                    precinct.setId(UUID.randomUUID().toString());
-                }
-
                 // save the target precinct into the database
-                var result = pem.save(precinct);
+                return pem.save(precinct);
 
-                // inform the target precinct's adjacent precincts to add it to their adjacent precinct id list
-                pem.findAllById(precinct.getAdjPrecIds()).forEach(e -> {
-
-                    // if not already include then add to the target's list and save the changes
-                    if (!e.getAdjPrecIds().contains(result.getId())) {
-
-                        e.getAdjPrecIds().add(result.getId());
-                        pem.save(e);
-                    }
-                });
-
-                return result;
+            } else {
+                //else go to helper method updateNeighbors
+                return updateNeighbors(precinct);
             }
-            // operation of modifying an existing precinct
-            else {
-                // nullity check has been done in first selection
-                // pull up the precinct record of target precinct in database
-                var precinctRecord = pem.findById(precinct.getId()).orElse(null);
 
-                // comparing the adjacentPrecinctIds of the updated precinct and the record in the database
-                if (precinctRecord.getAdjPrecIds().containsAll(precinct.getAdjPrecIds())
-                        && precinctRecord.getAdjPrecIds().size() == precinct.getAdjPrecIds().size()) {
-
-                    // if the adjacentPrecinctIds of target precinct is not changed then check is demographic data modified for its county
-                    if (precinct.isDemoModified()) {
-                        updateEthnicityDataHelper(targetCounty, precinct);
-                        cs.saveCounty(targetCounty);
-                    }
-                    precinct.setCounty(targetCounty);
-
-                    // save the target precinct into the database
-                    return pem.save(precinct);
-
-                } else {
-                    //else go to helper method updateNeighbors
-                    return updateNeighbors(precinct);
-                }
-            }
         } catch (Exception ex) {
 
             //fixme may encounter nested exception, need a more concert error handler for that
@@ -155,6 +105,72 @@ public class PrecinctService {
             return null;
         }
     }
+
+    /**
+     * add a precinct object into database.
+     *
+     * @param precinct -> precinct type
+     * @return the saved precinct entity -> type precinct, return null if null pointer/ illegal arg exception raised
+     */
+    public Precinct addPrecinct(Precinct precinct) {
+        try {
+            // getCountyId is never going to be null by convention in our group
+            County targetCounty = cs.selectCountyById(precinct.getCountyId());
+
+
+            var countyNotFound = targetCounty == null;
+
+            // query current precinct's belonging county
+            // if the belonging county is not found in database then create the county with county id and ethnicity
+            // data wrapped in the current precinct
+            if (countyNotFound) {
+                targetCounty = new County();
+                targetCounty.setId(precinct.getCountyId());
+                targetCounty.setStateId(precinct.getStateId());
+            }
+
+            // if the belonging county is not found in database or the flag for updating demographic data in
+            // current precinct is set to true then update ethnicity data wrapped in the current precinct to
+            // current county
+            if (countyNotFound || precinct.isDemoModified()) {
+                updateEthnicityDataHelper(targetCounty, precinct);
+                cs.saveCounty(targetCounty);
+            }
+
+            // set the county field for target precinct
+            precinct.setCounty(targetCounty);
+
+            // if the precinct id is not given then generate a random string id for the precinct in uuid v4 format
+            if (precinct.getId() == null) {
+                precinct.setId(UUID.randomUUID().toString());
+            }
+
+            // save the target precinct into the database
+            var result = pem.save(precinct);
+
+            // inform the target precinct's adjacent precincts to add it to their adjacent precinct id list
+            pem.findAllById(precinct.getAdjPrecIds()).forEach(e -> {
+
+                // if not already include then add to the target's list and save the changes
+                if (!e.getAdjPrecIds().contains(result.getId())) {
+
+                    e.getAdjPrecIds().add(result.getId());
+                    pem.save(e);
+                }
+            });
+
+            return result;
+//            }
+
+        } catch (Exception ex) {
+
+            //fixme may encounter nested exception, need a more concert error handler for that
+            System.err.println("precinct adjacentPrecinctIds is null");
+            System.err.println(ex.getMessage());
+            return null;
+        }
+    }
+
 
     /**
      * helper method for updating a precinct, it will update the adjacentPrecinctIds list of target
