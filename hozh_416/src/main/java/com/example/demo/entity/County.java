@@ -13,7 +13,7 @@ import static javax.persistence.CascadeType.ALL;
 
 
 /**
- * @author Hong Zheng
+ * @author Hong Zheng, Hyejun Jeong
  * @created 19/03/2020 - 4:14 PM
  * @project hozh-416-server
  */
@@ -48,12 +48,15 @@ public class County {
     /**
      * following are the demographic data in term of population of this precinct
      */
+    @SuppressWarnings("JpaDataSourceORMInspection")
     @Column(name = "african_american")
     private int africanAmer;
 
+    @SuppressWarnings("JpaDataSourceORMInspection")
     @Column(name = "native_american")
     private int nativeAmer;
 
+    @SuppressWarnings("JpaDataSourceORMInspection")
     @Column(name = "pacific_islanders")
     private int pasifika;
 
