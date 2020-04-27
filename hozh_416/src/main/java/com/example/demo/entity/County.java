@@ -19,7 +19,7 @@ import static javax.persistence.CascadeType.ALL;
 @ToString(exclude = {"state"})
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "COUNTY")
+@Entity(name = "COUNTIES")
 @Table
 public class County {
 
@@ -47,12 +47,18 @@ public class County {
     /**
      * following are the demographic data in term of population of this precinct
      */
+    @Column(name="african_american")
+    private int africanAmer;
+
+    @Column(name="native_american")
+    private int nativeAmer;
+
+    @Column(name="pacific_islanders")
+    private int pasifika;
+
     private int white;
-    private int afrAmer;
     private int asian;
-    private int natAmer;
     private int others;
-    private int pacIslr;
 
     /**
      * helper field for initialing the belonging state

@@ -18,13 +18,13 @@ import java.util.UUID;
 @Service
 public class PrecinctService {
 
-    private final PrecinctEntityManager precinctEntityManager;
-    private final CountyService countyService;
+    private final PrecinctEntityManager pem;
+    private final CountyService cs;
 
     @Autowired
-    public PrecinctService(PrecinctEntityManager precinctEntityManager, CountyService countyService) {
-        this.precinctEntityManager = precinctEntityManager;
-        this.countyService = countyService;
+    public PrecinctService(PrecinctEntityManager pem, CountyService cs) {
+        this.pem = pem;
+        this.cs = cs;
     }
 
     /**
@@ -35,7 +35,7 @@ public class PrecinctService {
      */
     public Precinct selectPrecinctById(String id) {
         try {
-            return precinctEntityManager.findById(id).orElse(null);
+            return pem.findById(id).orElse(null);
         } catch (Exception ex) {
             //fixme for now we may encounter Illegal arg exception, change generic handler to more concrete one later
             System.err.println(ex.getMessage());
@@ -49,7 +49,7 @@ public class PrecinctService {
      * @return query result -> type List<Precinct>
      */
     public List<Precinct> selectAllPrecincts() {
-        return precinctEntityManager.findAll();
+        return pem.findAll();
     }
 
     /**
@@ -58,7 +58,7 @@ public class PrecinctService {
      * @param id -> String type, using as a id to query the target precinct
      */
     public void deletePrecinctById(String id) {
-        precinctEntityManager.deleteById(id);
+        pem.deleteById(id);
     }
 
     /**
@@ -71,13 +71,13 @@ public class PrecinctService {
     public Precinct savePrecinct(Precinct precinct) {
         try {
             // getCountyId is never going to be null by convention in our group
-            County targetCounty = countyService.selectCountyById(precinct.getCountyId());
+            County targetCounty = cs.selectCountyById(precinct.getCountyId());
 
             // if the precinctId field is not passed then it will be the insertion of a new precinct
             // if the select precinct by id result in a null it will be the insertion of a new precinct with given id
             // first check the nullity of the precinct id field so the second predicate will be safely ignore with the 
             // short-circuit ||
-            if (precinct.getId() == null || precinctEntityManager.findById(precinct.getId()).orElse(null) == null) {
+            if (precinct.getId() == null || pem.findById(precinct.getId()).orElse(null) == null) {
 
                 var countyNotFound = targetCounty == null;
 
@@ -95,7 +95,7 @@ public class PrecinctService {
                 // current county
                 if (countyNotFound || precinct.isDemoModified()) {
                     updateEthnicityDataHelper(targetCounty, precinct);
-                    countyService.saveCounty(targetCounty);
+                    cs.saveCounty(targetCounty);
                 }
 
                 // set the county field for target precinct
@@ -107,16 +107,16 @@ public class PrecinctService {
                 }
 
                 // save the target precinct into the database
-                var result = precinctEntityManager.save(precinct);
+                var result = pem.save(precinct);
 
                 // inform the target precinct's adjacent precincts to add it to their adjacent precinct id list
-                precinctEntityManager.findAllById(precinct.getAdjacentPrecinctIds()).forEach(e -> {
+                pem.findAllById(precinct.getAdjPrecIds()).forEach(e -> {
 
                     // if not already include then add to the target's list and save the changes
-                    if (!e.getAdjacentPrecinctIds().contains(result.getId())) {
+                    if (!e.getAdjPrecIds().contains(result.getId())) {
 
-                        e.getAdjacentPrecinctIds().add(result.getId());
-                        precinctEntityManager.save(e);
+                        e.getAdjPrecIds().add(result.getId());
+                        pem.save(e);
                     }
                 });
 
@@ -126,20 +126,21 @@ public class PrecinctService {
             else {
                 // nullity check has been done in first selection
                 // pull up the precinct record of target precinct in database
-                var precinctRecord = precinctEntityManager.findById(precinct.getId()).orElse(null);
+                var precinctRecord = pem.findById(precinct.getId()).orElse(null);
 
                 // comparing the adjacentPrecinctIds of the updated precinct and the record in the database
-                if (precinctRecord.getAdjacentPrecinctIds().containsAll(precinct.getAdjacentPrecinctIds()) && precinctRecord.getAdjacentPrecinctIds().size() == precinct.getAdjacentPrecinctIds().size()) {
+                if (precinctRecord.getAdjPrecIds().containsAll(precinct.getAdjPrecIds())
+                        && precinctRecord.getAdjPrecIds().size() == precinct.getAdjPrecIds().size()) {
 
                     // if the adjacentPrecinctIds of target precinct is not changed then check is demographic data modified for its county
                     if (precinct.isDemoModified()) {
                         updateEthnicityDataHelper(targetCounty, precinct);
-                        countyService.saveCounty(targetCounty);
+                        cs.saveCounty(targetCounty);
                     }
                     precinct.setCounty(targetCounty);
 
                     // save the target precinct into the database
-                    return precinctEntityManager.save(precinct);
+                    return pem.save(precinct);
 
                 } else {
                     //else go to helper method updateNeighbors
@@ -167,39 +168,39 @@ public class PrecinctService {
         try {
             // pull up record of target precinct in the database
             // nullity check has been done in the method calling this
-            var precinctRecord = precinctEntityManager.findById(precinct.getId()).orElse(null);
+            var precinctRecord = pem.findById(precinct.getId()).orElse(null);
 
             // set diff of adjacentPrecinctIds from the record in database and current precinct
-            ArrayList<String> deleted = new ArrayList(precinctRecord.getAdjacentPrecinctIds());
+            ArrayList<String> deleted = new ArrayList(precinctRecord.getAdjPrecIds());
 
             // set diff of adjacentPrecinctIds from current precinct and the record in database
-            ArrayList<String> added = new ArrayList(precinct.getAdjacentPrecinctIds());
+            ArrayList<String> added = new ArrayList(precinct.getAdjPrecIds());
 
             // adjacentPrecinctIds cannot be null by convention
-            deleted.remove(new ArrayList(precinct.getAdjacentPrecinctIds()));
-            added.remove(new ArrayList(precinctRecord.getAdjacentPrecinctIds()));
+            deleted.remove(new ArrayList(precinct.getAdjPrecIds()));
+            added.remove(new ArrayList(precinctRecord.getAdjPrecIds()));
 
             // removing target precinct's id from its deleted precinct ids in their adjacent precinct ids list
-            for (var i : precinctEntityManager.findAllById(deleted)) {
-                i.getAdjacentPrecinctIds().remove(precinct.getId());
-                precinctEntityManager.save(i);
+            for (var i : pem.findAllById(deleted)) {
+                i.getAdjPrecIds().remove(precinct.getId());
+                pem.save(i);
             }
 
             // adding target precinct's id to its newly added precinct ids in their adjacent precinct ids list
-            for (var i : precinctEntityManager.findAllById(added)) {
-                i.getAdjacentPrecinctIds().add(precinct.getId());
-                precinctEntityManager.save(i);
+            for (var i : pem.findAllById(added)) {
+                i.getAdjPrecIds().add(precinct.getId());
+                pem.save(i);
             }
 
             // if the adjacentPrecinctIds of target precinct is not changed then check is demographic data modified for its county
             if (precinct.isDemoModified()) {
-                var targetCounty = countyService.selectCountyById(precinct.getCountyId());
+                var targetCounty = cs.selectCountyById(precinct.getCountyId());
 
                 updateEthnicityDataHelper(targetCounty, precinct);
                 precinct.setCounty(targetCounty);
-                countyService.saveCounty(targetCounty);
+                cs.saveCounty(targetCounty);
             }
-            return precinctEntityManager.save(precinct);
+            return pem.save(precinct);
         } catch (NullPointerException | IllegalArgumentException ex) {
             System.err.println("precinct adjacentPrecinctIds is null");
             System.err.println(ex.getMessage());
@@ -223,32 +224,32 @@ public class PrecinctService {
             Precinct deletingPrecinct = precincts.get(1);
 
             // merge two's adjacent list and delete the deleting precinct's id from its adjacent precinct ids
-            deletingPrecinct.getAdjacentPrecinctIds().forEach(e -> {
+            deletingPrecinct.getAdjPrecIds().forEach(e -> {
 
                 // precinct queried by the ids in deleting precincts' adjacent precinct ids list
-                var temp = precinctEntityManager.findById(e).orElse(null);
+                var temp = pem.findById(e).orElse(null);
 
                 // if the primary precinct not already contained the temp then
-                if (!primaryPrecinct.getAdjacentPrecinctIds().contains(e)) {
+                if (!primaryPrecinct.getAdjPrecIds().contains(e)) {
 
                     // if temp is not primary precinct, add each other to their id to their adjacent precinct ids
                     if (!e.equals(primaryPrecinct.getId())) {
-                        primaryPrecinct.getAdjacentPrecinctIds().add(e);
-                        temp.getAdjacentPrecinctIds().add(primaryPrecinct.getId());
+                        primaryPrecinct.getAdjPrecIds().add(e);
+                        temp.getAdjPrecIds().add(primaryPrecinct.getId());
                     }
                 }
-                temp.getAdjacentPrecinctIds().remove(deletingPrecinct.getId());
-                precinctEntityManager.save(temp);
+                temp.getAdjPrecIds().remove(deletingPrecinct.getId());
+                pem.save(temp);
             });
 
             // deleting precinct's id from temp's list
-            primaryPrecinct.getAdjacentPrecinctIds().remove(deletingPrecinct.getId());
+            primaryPrecinct.getAdjPrecIds().remove(deletingPrecinct.getId());
 
             // remove deleting precinct from database
-            precinctEntityManager.deleteById(deletingPrecinct.getId());
+            pem.deleteById(deletingPrecinct.getId());
 
             // save primaryPrecinct precinct
-            return precinctEntityManager.save(primaryPrecinct);
+            return pem.save(primaryPrecinct);
 
         } catch (NullPointerException ex) {
             System.err.println("precinct adjacentPrecinctIds is null");
@@ -264,10 +265,10 @@ public class PrecinctService {
      */
     private void updateEthnicityDataHelper(County c, Precinct p) {
         c.setWhite(p.getWhite());
-        c.setAfrAmer(p.getAfrAmer());
+        c.setAfricanAmer(p.getAfricanAmer());
         c.setAsian(p.getAsian());
-        c.setNatAmer(p.getNatAmer());
-        c.setPacIslr(p.getPacIslr());
+        c.setNativeAmer(p.getNativeAmer());
+        c.setPasifika(p.getPasifika());
         c.setOthers(p.getOthers());
     }
 }

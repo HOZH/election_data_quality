@@ -17,7 +17,7 @@ import static javax.persistence.CascadeType.ALL;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "STATE")
+@Entity(name = "STATES")
 @Table
 public class State {
 

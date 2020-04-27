@@ -8,14 +8,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @created 19/03/2020 - 4:14 PM
  * @project hozh-416-server
  */
+
 @SpringBootApplication
 public class Hozh416BackendDemoApplication {
-
-
     public static void main(String[] args) {
-
-
         SpringApplication.run(Hozh416BackendDemoApplication.class, args);
     }
-
 }

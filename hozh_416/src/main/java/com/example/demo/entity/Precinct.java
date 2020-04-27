@@ -19,7 +19,7 @@ import java.util.Map;
 @ToString(exclude = {"county"})
 @NoArgsConstructor
 @Entity(name = "precinct")
-@Table(name = "PRECINCT")
+@Table(name = "PRECINCTS")
 
 public class Precinct {
 
@@ -35,12 +35,14 @@ public class Precinct {
      * flag to determine whether this
      * precinct is a ghost precinct
      */
+    @Column(name = "is_ghost")
     private boolean ghost;
 
     /**
      * flag to determine whether this
      * precinct contains multiple border error
      */
+    @Column(name = "has_multiple_border")
     private boolean multipleBorder;
 
     /**
@@ -72,9 +74,9 @@ public class Precinct {
      */
     @SuppressWarnings("JpaDataSourceORMInspection")
     @ElementCollection
-    @CollectionTable(name = "ADJACENT_PRECINCT")
-    @Column(name = "adjacent_pid", length = 15)
-    private List<String> adjacentPrecinctIds;
+    @CollectionTable(name = "ADJACENT_PRECINCTS")
+    @Column(name = "adjacent_precinct_ids", length = 15)
+    private List<String> adjPrecIds;
 
     /**
      * list of precinct's ids for which enclosing to
@@ -82,18 +84,18 @@ public class Precinct {
      */
     @SuppressWarnings("JpaDataSourceORMInspection")
     @ElementCollection
-    @CollectionTable(name = "ENCLOSING_PRECINCT")
-    @Column(name = "enclosed_pid", length = 15)
-    private List<String> enclosingPrecinctIds;
+    @CollectionTable(name = "ENCLOSING_PRECINCTS")
+    @Column(name = "enclosing_precinct_ids", length = 15)
+    private List<String> enclPrecIds;
 
     /**
      * map for log messages
      */
     @SuppressWarnings("JpaDataSourceORMInspection")
     @ElementCollection
-    @MapKeyColumn(name="log_id")
+    @MapKeyColumn(name="id")
     @Column(name="log")
-    @CollectionTable(name = "LOG")
+    @CollectionTable(name = "LOGS")
     private Map<Integer, String> log;
 
     /**
@@ -129,18 +131,18 @@ public class Precinct {
     private int white;
 
     @Transient
-    private int afrAmer;
+    private int africanAmer;
 
     @Transient
     private int asian;
 
     @Transient
-    private int natAmer;
+    private int nativeAmer;
 
     @Transient
     private int others;
 
     @Transient
-    private int pacIslr;
+    private int pasifika;
 
 }
