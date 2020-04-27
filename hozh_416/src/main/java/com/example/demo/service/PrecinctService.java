@@ -167,7 +167,7 @@ public class PrecinctService {
      * @throws IllegalArgumentException if arg of cs.selectCountyById or arg of pem.save is nullable
      * @throws NullPointerException     if ?.getAdjPrecIds is nullable
      */
-    public Precinct updateNeighbors(Precinct precinct) {
+    private Precinct updateNeighbors(Precinct precinct) {
 
         try {
             // pull up record of target precinct in the database
@@ -217,7 +217,7 @@ public class PrecinctService {
      * @throws NullPointerException     if ?.getAdjPrecIds is nullable
      */
     public Precinct mergePrecincts(List<Precinct> precincts) {
-        
+
         try {
             // primary precinct
             Precinct primaryPrecinct = precincts.get(0);
