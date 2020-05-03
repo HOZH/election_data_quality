@@ -26,16 +26,12 @@ import java.util.List;
 @RestController
 public class Controller {
 
-    private final PrecinctService precinctService;
-    private final StateService stateService;
-    private final CountyService countyService;
-
     @Autowired
-    private Controller(PrecinctService precinctService, StateService stateService, CountyService countyService) {
-        this.precinctService = precinctService;
-        this.stateService = stateService;
-        this.countyService = countyService;
-    }
+    private PrecinctService precinctService;
+    @Autowired
+    private StateService stateService;
+    @Autowired
+    private CountyService countyService;
 
     /**
      * Get method router for records of all the precincts

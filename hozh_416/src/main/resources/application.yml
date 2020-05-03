@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: review1
+    active: review
 
 
 

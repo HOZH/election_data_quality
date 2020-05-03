@@ -18,14 +18,10 @@ import java.util.UUID;
 @Service
 public class PrecinctService {
 
-  private final PrecinctEntityManager pem;
-  private final CountyService cs;
-
   @Autowired
-  public PrecinctService(PrecinctEntityManager pem, CountyService cs) {
-    this.pem = pem;
-    this.cs = cs;
-  }
+  private PrecinctEntityManager pem;
+  @Autowired
+  private CountyService cs;
 
   /**
    * query a precinct by the given id

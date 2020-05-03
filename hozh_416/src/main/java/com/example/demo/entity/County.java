@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-
 import javax.persistence.*;
 import java.util.List;
 
@@ -20,12 +19,18 @@ import static javax.persistence.CascadeType.ALL;
 @ToString(exclude = {"state"})
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "COUNTIES")
-@Table
+@Entity(name = "county")
+@Table(name = "COUNTIES")
 public class County {
 
   /** primary key for COUNTRY_TBL table */
-  @Id private String id;
+  @Id
+  @Column(length = 6)
+  private String id;
+
+  /** String of coordinates -> geo data */
+  @Column(columnDefinition="longtext")
+  private String coordinates;
 
   /** state that this county belongs to */
   @ManyToOne(fetch = FetchType.LAZY)

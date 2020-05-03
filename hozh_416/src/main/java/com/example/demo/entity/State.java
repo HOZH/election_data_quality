@@ -18,11 +18,17 @@ import static javax.persistence.CascadeType.ALL;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "STATES")
-@Table
+@Entity(name = "state")
+@Table(name = "STATES")
 public class State {
   /** primary key for STATE_TBL table */
-  @Id private String id;
+  @Id
+  @Column(length = 2)
+  private String id;
+  
+  /** String of coordinates -> geo data */
+  @Column(columnDefinition="longtext")
+  private String coordinates;
 
   /** List of County objects that belong to this state */
   @OneToMany(fetch = FetchType.LAZY, cascade = ALL, mappedBy = "state")

@@ -13,12 +13,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class StateService {
 
-  private final StateEntityManager sem;
-
   @Autowired
-  public StateService(StateEntityManager sem) {
-    this.sem = sem;
-  }
+  private StateEntityManager sem;
 
   /**
    * query a state by the given id

@@ -15,22 +15,26 @@ import java.util.Map;
  * @created 19/03/2020 - 4:14 PM
  * @project hozh-416-server
  */
+
 @Data
 @ToString(exclude = {"county"})
 @NoArgsConstructor
-@Entity(name = "PRECINCTS")
-@Table
+@Entity(name = "precinct")
+@Table(name = "PRECINCTS")
 public class Precinct {
 
   /** primary key for PRECINCT_TBL */
   @Id
+  @Column(length = 128)
   @JsonProperty("precinctId")
   private String id;
 
   /** flag to determine whether this precinct is a ghost precinct */
+  @Column(name = "is_ghost")  
   private boolean ghost;
 
   /** flag to determine whether this precinct contains multiple border error */
+  @Column(name = "has_multiple_border")
   private boolean multipleBorder;
 
   /** String of coordinates -> geo data */
@@ -45,6 +49,8 @@ public class Precinct {
   /** election data of this precinct */
   @SuppressWarnings("JpaDataSourceORMInspection")
   @ElementCollection
+  @MapKeyColumn(name="election_type")
+  @Column(name="election_result")
   @CollectionTable(name = "ELECTION_DATA")
   private Map<ElectionEnum, Integer> electionData;
 
@@ -65,27 +71,41 @@ public class Precinct {
   /** map for log messages */
   @SuppressWarnings("JpaDataSourceORMInspection")
   @ElementCollection
-  @CollectionTable(name = "LOG_BAG")
+  @MapKeyColumn(name="id")
+  @Column(name="log")
+  @CollectionTable(name = "LOGS")
   private Map<Integer, String> logBag;
 
   /** following are the help fields of the object which won't be persist in the database */
-  @Transient private String canonicalName;
+  @Transient 
+  private String canonicalName;
+  
   /** help field for mapping the precinct to its belonging county */
-  @Transient private String stateId;
+  @Transient 
+  private String stateId;
+  
   /** help field for mapping the precinct's belonging county to its belonging state */
-  @Transient private String countyId;
+  @Transient 
+  private String countyId;
 
   /** flag to determine whether to update this precinct's belonging county's demographic data */
-  @Transient private boolean demoModified;;
+  @Transient 
+  private boolean demoModified;;
 
   /**
    * following are the demographic population help fields, can be ignore if demographicDataModified
    * is set to false
    */
-  @Transient private int white;
-  @Transient private int africanAmer;
-  @Transient private int asian;
-  @Transient private int nativeAmer;
-  @Transient private int others;
-  @Transient private int pasifika;
+  @Transient 
+  private int white;
+  @Transient 
+  private int africanAmer;
+  @Transient 
+  private int asian;
+  @Transient 
+  private int nativeAmer;
+  @Transient 
+  private int others;
+  @Transient 
+  private int pasifika;
 }

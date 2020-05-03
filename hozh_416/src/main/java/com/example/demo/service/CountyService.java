@@ -14,14 +14,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class CountyService {
 
-  private final CountyEntityManager cem;
-  private final StateService ss;
-
   @Autowired
-  public CountyService(CountyEntityManager cem, StateService ss) {
-    this.cem = cem;
-    this.ss = ss;
-  }
+  private CountyEntityManager cem;
+  @Autowired
+  private StateService ss;
 
   /**
    * query a county by the given id
