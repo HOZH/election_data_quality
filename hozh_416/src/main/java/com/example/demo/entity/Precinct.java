@@ -1,11 +1,10 @@
 package com.example.demo.entity;
 
+import com.example.demo.View;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonView;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.List;
@@ -18,7 +17,6 @@ import java.util.Map;
  */
 
 @Data
-//@ToString(exclude = {"county"})
 @NoArgsConstructor
 @Entity(name = "precinct")
 @Table(name = "PRECINCTS")
@@ -27,29 +25,32 @@ public class Precinct {
   /** primary key for PRECINCT_TBL */
   @Id
   @Column(length = 128)
-  @JsonProperty("precinctId")
+  @JsonView(View.PrecinctView.class)
   private String id;
 
   /** flag to determine whether this precinct is a ghost precinct */
-  @Column(name = "is_ghost")  
+  @Column(name = "is_ghost")
+  @JsonView(View.PrecinctData.class)
   private boolean ghost;
 
   /** flag to determine whether this precinct contains multiple border error */
   @Column(name = "has_multiple_border")
+  @JsonView(View.PrecinctData.class)
   private boolean multipleBorder;
 
   /** String of coordinates -> geo data */
   @Column(columnDefinition="longtext")
+  @JsonView(View.PrecinctCoords.class)
   private String coordinates;
 
   /** county that this precinct belongs to */
-  @JsonIgnoreProperties("precinct, county, state")
+  @JsonIgnore
   @ManyToOne(fetch = FetchType.LAZY)
   private County county;
 
   /** election data of this precinct */
   @SuppressWarnings("JpaDataSourceORMInspection")
-  @JsonIgnore
+  @JsonView(View.PrecinctData.class)
   @ElementCollection
   @MapKeyColumn(name="election_type")
   @Column(name="election_result")
@@ -58,7 +59,7 @@ public class Precinct {
 
   /** list of precinct's ids for which adjacent to this precinct */
   @SuppressWarnings("JpaDataSourceORMInspection")
-  //@JsonIgnore
+  @JsonView(View.PrecinctData.class)
   @ElementCollection
   @CollectionTable(name = "ADJACENT_PRECINCTS")
   @Column(name = "adjacent_precinct_ids",columnDefinition="longtext")
@@ -66,7 +67,7 @@ public class Precinct {
 
   /** list of precinct's ids for which enclosing to this precinct -> used for determine errors */
   @SuppressWarnings("JpaDataSourceORMInspection")
-  @JsonIgnore
+  @JsonView(View.PrecinctData.class)
   @ElementCollection
   @CollectionTable(name = "ENCLOSING_PRECINCTS")
   @Column(name = "enclosing_precinct_ids",columnDefinition="longtext")
@@ -74,7 +75,7 @@ public class Precinct {
 
   /** map for log messages */
   @SuppressWarnings("JpaDataSourceORMInspection")
-  @JsonIgnore
+  @JsonView(View.PrecinctData.class)
   @ElementCollection
   @MapKeyColumn(name="id")
   @Column(name="log")
@@ -82,7 +83,8 @@ public class Precinct {
   private Map<Integer, String> logBag;
 
   /** following are the help fields of the object which won't be persist in the database */
-  @Transient 
+  @Transient
+  @JsonView(View.PrecinctData.class)
   private String canonicalName;
   
   /** help field for mapping the precinct to its belonging county */
@@ -94,7 +96,8 @@ public class Precinct {
   private String countyId;
 
   /** flag to determine whether to update this precinct's belonging county's demographic data */
-  @Transient 
+  @Transient
+  @JsonView(View.PrecinctData.class)
   private boolean demoModified;
 
   /**
@@ -102,16 +105,27 @@ public class Precinct {
    * is set to false
    */
   @Transient
+  @JsonView(View.PrecinctData.class)
   private int white;
-  @Transient 
+
+  @Transient
+  @JsonView(View.PrecinctData.class)
   private int africanAmer;
-  @Transient 
+
+  @Transient
+  @JsonView(View.PrecinctData.class)
   private int asian;
-  @Transient 
+
+  @Transient
+  @JsonView(View.PrecinctData.class)
   private int nativeAmer;
-  @Transient 
+
+  @Transient
+  @JsonView(View.PrecinctData.class)
   private int others;
-  @Transient 
+
+  @Transient
+  @JsonView(View.PrecinctData.class)
   private int pasifika;
 
   public int getWhite() {

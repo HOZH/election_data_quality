@@ -1,9 +1,12 @@
 package com.example.demo.service;
 
+import com.example.demo.entity.Precinct;
 import com.example.demo.entity.State;
 import com.example.demo.entitymanager.StateEntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * @author Hong Zheng
@@ -32,6 +35,16 @@ public class StateService {
       return null;
     }
   }
+
+  /**
+   * return a collection of all the precinct records in the database
+   *
+   * @return query result type List<State>
+   */
+  public List<State> selectAllStates() {
+    return sem.findAll();
+  }
+
 
   /**
    * save a state object into database

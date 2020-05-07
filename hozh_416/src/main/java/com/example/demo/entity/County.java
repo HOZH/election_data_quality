@@ -1,12 +1,12 @@
 package com.example.demo.entity;
 
+import com.example.demo.View;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonView;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 import javax.persistence.*;
 import java.util.List;
 
@@ -18,10 +18,8 @@ import static javax.persistence.CascadeType.ALL;
  * @project hozh-416-server
  */
 @Data
-@ToString(exclude = {"state"})
 @AllArgsConstructor
 @NoArgsConstructor
-
 @Entity(name = "county")
 @Table(name = "COUNTIES")
 public class County {
@@ -29,10 +27,12 @@ public class County {
   /** primary key for COUNTRY_TBL table */
   @Id
   @Column(length = 6)
+  @JsonView(View.CountyView.class)
   private String id;
 
   /** String of coordinates -> geo data */
   @Column(columnDefinition="longtext")
+  @JsonView(View.CountyCoords.class)
   private String coordinates;
 
   /** state that this county belongs to */
@@ -43,24 +43,32 @@ public class County {
 
   /** List of Precinct objects that belong to this county */
   @OneToMany(fetch = FetchType.LAZY, cascade = ALL, mappedBy = "county")
-  @JsonIgnoreProperties("county")
+  @JsonView(View.PrecinctCoords.class)
   private List<Precinct> precincts;
 
   /** following are the demographic data in term of population of this precinct */
   @SuppressWarnings("JpaDataSourceORMInspection")
+  @JsonView(View.CountyData.class)
   @Column(name = "african_american")
   private int africanAmer;
 
   @SuppressWarnings("JpaDataSourceORMInspection")
+  @JsonView(View.CountyData.class)
   @Column(name = "native_american")
   private int nativeAmer;
 
   @SuppressWarnings("JpaDataSourceORMInspection")
+  @JsonView(View.CountyData.class)
   @Column(name = "pacific_islanders")
   private int pasifika;
 
+  @JsonView(View.CountyData.class)
   private int white;
+
+  @JsonView(View.CountyData.class)
   private int asian;
+
+  @JsonView(View.CountyData.class)
   private int others;
 
   /** helper field for initialing the belonging state */

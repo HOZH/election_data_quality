@@ -5,9 +5,6 @@ import com.example.demo.entity.Precinct;
 import com.example.demo.entitymanager.PrecinctEntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -32,7 +29,7 @@ public class PrecinctService {
    * @return query result by given id type Precinct, return null if illegal arg exception raised
    * @throws IllegalArgumentException if arg of pem.findById is nullable
    */
-  public Precinct selectPrecinctById(String id) {
+  public Precinct selecyId(String id) {
     try {
       return pem.findById(id).orElse(null);
     } catch (Exception ex) {

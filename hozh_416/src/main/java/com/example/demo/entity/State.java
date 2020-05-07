@@ -1,11 +1,10 @@
 package com.example.demo.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.example.demo.View;
+import com.fasterxml.jackson.annotation.JsonView;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
 import java.util.List;
 
@@ -25,14 +24,16 @@ public class State {
   /** primary key for STATE_TBL table */
   @Id
   @Column(length = 2)
+  @JsonView(View.StateView.class)
   private String id;
   
   /** String of coordinates -> geo data */
   @Column(columnDefinition="longtext")
+  @JsonView(View.StateView.class)
   private String coordinates;
 
   /** List of County objects that belong to this state */
+  @JsonView(View.CountyCoords.class)
   @OneToMany(fetch = FetchType.LAZY, cascade = ALL, mappedBy = "state")
-  @JsonIgnoreProperties("state")
   private List<County> counties;
 }

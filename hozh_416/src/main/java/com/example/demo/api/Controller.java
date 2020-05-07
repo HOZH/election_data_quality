@@ -3,9 +3,11 @@ package com.example.demo.api;
 import com.example.demo.entity.County;
 import com.example.demo.entity.Precinct;
 import com.example.demo.entity.State;
+import com.example.demo.View;
 import com.example.demo.service.CountyService;
 import com.example.demo.service.PrecinctService;
 import com.example.demo.service.StateService;
+import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +19,7 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
- * @author Hong Zheng
+ * @author Hong Zheng, Hyejun Jeong
  * @created 19/03/2020 - 4:14 PM
  * @project hozh-416-server
  */
@@ -51,11 +53,19 @@ public class Controller {
      * @return State Object base on its id, null when the Object is not found in our database via query
      * status code is set to 200 if a record in the database is found otherwise 404
      */
+    @JsonView(View.CountyCoords.class)
     @GetMapping(path = "/state/{id}")
     private ResponseEntity<State> getStateByIdHandler(@PathVariable("id") String id) {
         var queryResult = stateService.selectStateById(id);
         return new ResponseEntity<>(queryResult, queryResult == null ? HttpStatus.NOT_FOUND : HttpStatus.OK);
     }
+
+    @JsonView(View.StateView.class)
+    @GetMapping(path = "/state/all")
+    private ResponseEntity<List<State>> getAllStatesHandler() {
+        return new ResponseEntity<>(stateService.selectAllStates(), HttpStatus.OK);
+    }
+
 
     /**
      * Get method router for getting record of a district by given id
@@ -63,6 +73,7 @@ public class Controller {
      * @return District object base on its id, null when the Object is not found in our database via query
      * status code is set to 200 if a record in the database is found otherwise 404
      */
+    @JsonView(View.PrecinctCoords.class)
     @GetMapping(path = "/county/{id}")
     private ResponseEntity<County> getCountyByIdHandler(@PathVariable("id") String id) {
         var queryResult = countyService.selectCountyById(id);
@@ -75,6 +86,7 @@ public class Controller {
      * @return Precinct object base on its id, null when the Object is not found in our database via query
      * status code is set to 200 if a record in the database is found otherwise 404
      */
+    @JsonView(View.PrecinctData.class)
     @GetMapping(path = "/precinct/{id}")
     private ResponseEntity<Precinct> getPrecinctByIdHandler(@PathVariable("id") String id) {
         var queryResult = precinctService.selectPrecinctById(id);
@@ -87,6 +99,7 @@ public class Controller {
      * @return String of deletion state
      * status code is always set to 200
      */
+    //@JsonView(View.PrecinctData.class)
     @DeleteMapping(path = "/precinct/{id}")
     private ResponseEntity<String> removePrecinctByIdHandler(@PathVariable("id") String id) {
         precinctService.deletePrecinctById(id);
