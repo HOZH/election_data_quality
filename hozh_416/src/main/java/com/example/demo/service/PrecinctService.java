@@ -29,7 +29,7 @@ public class PrecinctService {
    * @return query result by given id type Precinct, return null if illegal arg exception raised
    * @throws IllegalArgumentException if arg of pem.findById is nullable
    */
-  public Precinct selecyId(String id) {
+  public Precinct selectPrecinctById(String id) {
     try {
       return pem.findById(id).orElse(null);
     } catch (Exception ex) {
