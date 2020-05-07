@@ -1,6 +1,6 @@
 package com.example.demo.entity;
 
-import com.example.demo.View;
+import com.example.demo.api.View;
 import com.fasterxml.jackson.annotation.JsonView;
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,6 +1,6 @@
 package com.example.demo.entity;
 
-import com.example.demo.View;
+import com.example.demo.api.View;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonView;
