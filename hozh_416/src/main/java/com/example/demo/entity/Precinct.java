@@ -28,6 +28,9 @@ public class Precinct {
   @JsonView(View.PrecinctView.class)
   private String id;
 
+  @JsonView(View.PrecinctData.class)
+  private int population;
+
   /** flag to determine whether this precinct is a ghost precinct */
   @Column(name = "is_ghost")
   @JsonView(View.PrecinctData.class)
@@ -160,6 +163,7 @@ public class Precinct {
   @Override
   public String toString() {
     return "pid: " + id +
+            "\npopulation: " + population +
             "\ncoord: " + coordinates +
             "\nisghost: " + ghost +
             "\nhasmultiborder: " + multipleBorder +
