@@ -34,15 +34,6 @@ public class PrecinctService {
    */
   public Precinct selectPrecinctById(String id) {
     try {
-//      List l = em.createQuery(
-//              //"select county.id from precinct p where p.id LIKE :pid")
-//              "select p from precinct p where p.id LIKE :pid")
-//              .setParameter("pid", id)
-//              .getResultList();
-//      for(Object p:l){
-//        //System.out.println(p);
-//        return (Precinct) p;
-//      }
       return pem.findById(id).orElse(null);
     } catch (Exception ex) {
       System.err.println(ex.getMessage());

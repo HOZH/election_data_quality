@@ -86,5 +86,4 @@ public class County {
             "\npasifika: " + pasifika +
             "\nstateid: " + state.getId();
   }
-
 }

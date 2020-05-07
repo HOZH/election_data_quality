@@ -44,7 +44,6 @@ public class Precinct {
 
   /** county that this precinct belongs to */
   @JsonIgnoreProperties("precinct, county, state")
-  @JsonIgnore
   @ManyToOne(fetch = FetchType.LAZY)
   private County county;
 
@@ -103,22 +102,17 @@ public class Precinct {
    * is set to false
    */
   @Transient
-  private int white;// = county.getWhite();
+  private int white;
   @Transient 
-  private int africanAmer; //= county.getAfricanAmer();
+  private int africanAmer;
   @Transient 
-  private int asian; //= county.getAsian();
+  private int asian;
   @Transient 
-  private int nativeAmer; //= county.getNativeAmer();
+  private int nativeAmer;
   @Transient 
-  private int others;// = county.getOthers();
+  private int others;
   @Transient 
-  private int pasifika;// = county.getPasifika();
-//
-//  public void setPopulation(int white, int africanAmer, int asian, int nativeAmer, int others, int pasifika) {
-//    this.white = county.getWhite();
-//
-//  }
+  private int pasifika;
 
   public int getWhite() {
     return county.getWhite();
@@ -141,7 +135,6 @@ public class Precinct {
   public String getStateId() {
     return county.getStateId();
   }
-
   public String getCountyId() {
     return county.getId();
   }
