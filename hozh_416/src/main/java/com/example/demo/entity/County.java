@@ -18,7 +18,7 @@ import static javax.persistence.CascadeType.ALL;
  * @project hozh-416-server
  */
 @Data
-//@ToString(exclude = {"state"})
+@ToString(exclude = {"state"})
 @AllArgsConstructor
 @NoArgsConstructor
 
@@ -42,9 +42,8 @@ public class County {
   private State state;
 
   /** List of Precinct objects that belong to this county */
-  @JsonIgnore
   @OneToMany(fetch = FetchType.LAZY, cascade = ALL, mappedBy = "county")
-  //@JsonIgnoreProperties("county")
+  @JsonIgnoreProperties("county")
   private List<Precinct> precincts;
 
   /** following are the demographic data in term of population of this precinct */

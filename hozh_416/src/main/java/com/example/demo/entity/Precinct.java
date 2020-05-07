@@ -58,7 +58,7 @@ public class Precinct {
 
   /** list of precinct's ids for which adjacent to this precinct */
   @SuppressWarnings("JpaDataSourceORMInspection")
-  @JsonIgnore
+  //@JsonIgnore
   @ElementCollection
   @CollectionTable(name = "ADJACENT_PRECINCTS")
   @Column(name = "adjacent_precinct_ids",columnDefinition="longtext")
