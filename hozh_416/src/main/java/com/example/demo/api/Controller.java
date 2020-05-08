@@ -35,18 +35,6 @@ public class Controller {
     private CountyService countyService;
 
     /**
-     * Get method router for records of all the precincts
-     * @return a json array of all the precincts,
-     * status code is always set to 200
-     * unless the accessibility to the server is blocked which will automatically
-     * return a status code with 500 level
-     */
-    @GetMapping(path = "/precinct/all")
-    private ResponseEntity<List<Precinct>> getAllPrecinctsHandler() {
-        return new ResponseEntity<>(precinctService.selectAllPrecincts(), HttpStatus.OK);
-    }
-
-    /**
      * Get method router for getting record of a state by given id
      * @param id type Long, fetched through path variable
      * @return State Object base on its id, null when the Object is not found in our database via query
@@ -64,7 +52,6 @@ public class Controller {
     private ResponseEntity<List<State>> getAllStatesHandler() {
         return new ResponseEntity<>(stateService.selectAllStates(), HttpStatus.OK);
     }
-
 
     /**
      * Get method router for getting record of a district by given id
