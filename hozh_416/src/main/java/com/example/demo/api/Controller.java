@@ -36,6 +36,7 @@ public class Controller {
 
     /**
      * Get method router for getting record of a state by given id
+     *
      * @param id type Long, fetched through path variable
      * @return State Object base on its id, null when the Object is not found in our database via query
      * status code is set to 200 if a record in the database is found otherwise 404
@@ -55,6 +56,7 @@ public class Controller {
 
     /**
      * Get method router for getting record of a district by given id
+     *
      * @param id type Long, fetched through path variable
      * @return District object base on its id, null when the Object is not found in our database via query
      * status code is set to 200 if a record in the database is found otherwise 404
@@ -68,6 +70,7 @@ public class Controller {
 
     /**
      * Get method router for getting record of a precinct by given id
+     *
      * @param id type Long, fetched through path variable
      * @return Precinct object base on its id, null when the Object is not found in our database via query
      * status code is set to 200 if a record in the database is found otherwise 404
@@ -81,6 +84,7 @@ public class Controller {
 
     /**
      * Delete method router for delete record of precinct in database by given id
+     *
      * @param id type Long, fetched through path variable
      * @return String of deletion state
      * status code is always set to 200
@@ -95,6 +99,7 @@ public class Controller {
     /**
      * Put/Post method router for adding/updating a precinct with database.
      * Distinction between add/update will be detect on service layer
+     *
      * @param precinct type Precinct, fetched through request body
      * @return Precinct object of saved precinct
      * status code is set to 200 if insertion/modification of the precinct is completed otherwise 400
@@ -114,6 +119,7 @@ public class Controller {
      * Delete method router for merging two precincts
      * index 0  primary precinct, index 1 deleting precinct
      * front end should already merge all the data from the deleting precinct expect for the adjacentPrecinctIds
+     *
      * @param precincts type List<Precinct>, fetched through request body
      * @return Precinct object of survived precinct
      * status code is set to 200 if the merging operation of two precincts is completed otherwise 400

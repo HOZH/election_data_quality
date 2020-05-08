@@ -1,7 +1,6 @@
 package com.example.demo.entitymanager;
 
 import com.example.demo.entity.County;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -12,4 +11,5 @@ import org.springframework.stereotype.Repository;
  */
 
 @Repository("cem")
-public interface CountyEntityManager extends JpaRepository<County, String> {}
+public interface CountyEntityManager extends JpaRepository<County, String> {
+}
