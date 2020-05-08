@@ -38,7 +38,6 @@ public class StateService {
 
   /**
    * return a collection of all the precinct records in the database
-   *
    * @return query result type List<State>
    */
   public List<State> selectAllStates() {
