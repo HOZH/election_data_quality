@@ -1,10 +1,10 @@
 package com.example.demo.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.example.demo.api.View;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.List;
@@ -15,8 +15,8 @@ import java.util.Map;
  * @created 19/03/2020 - 4:14 PM
  * @project hozh-416-server
  */
+
 @Data
-@ToString(exclude = {"county"})
 @NoArgsConstructor
 @Entity(name = "precinct")
 @Table(name = "PRECINCTS")
@@ -24,29 +24,33 @@ public class Precinct {
 
   /** primary key for PRECINCT_TBL */
   @Id
-  @Column(length = 36)
-  @JsonProperty("precinctId")
+  @Column(length = 128)
+  @JsonView(View.PrecinctView.class)
   private String id;
 
   /** flag to determine whether this precinct is a ghost precinct */
   @Column(name = "is_ghost")
+  @JsonView(View.PrecinctData.class)
   private boolean ghost;
 
   /** flag to determine whether this precinct contains multiple border error */
   @Column(name = "has_multiple_border")
+  @JsonView(View.PrecinctData.class)
   private boolean multipleBorder;
 
   /** String of coordinates -> geo data */
   @Column(columnDefinition="longtext")
+  @JsonView(View.PrecinctCoords.class)
   private String coordinates;
 
   /** county that this precinct belongs to */
+  @JsonIgnore
   @ManyToOne(fetch = FetchType.LAZY)
-  @JsonIgnoreProperties("precincts")
   private County county;
 
   /** election data of this precinct */
   @SuppressWarnings("JpaDataSourceORMInspection")
+  @JsonView(View.PrecinctData.class)
   @ElementCollection
   @MapKeyColumn(name="election_type")
   @Column(name="election_result")
@@ -55,13 +59,15 @@ public class Precinct {
 
   /** list of precinct's ids for which adjacent to this precinct */
   @SuppressWarnings("JpaDataSourceORMInspection")
-  @ElementCollection
+  @JsonView(View.PrecinctData.class)
+  @ElementCollection(fetch = FetchType.EAGER)
   @CollectionTable(name = "ADJACENT_PRECINCTS")
   @Column(name = "adjacent_precinct_ids",columnDefinition="longtext")
   private List<String> adjPrecIds;
 
   /** list of precinct's ids for which enclosing to this precinct -> used for determine errors */
   @SuppressWarnings("JpaDataSourceORMInspection")
+  @JsonView(View.PrecinctData.class)
   @ElementCollection
   @CollectionTable(name = "ENCLOSING_PRECINCTS")
   @Column(name = "enclosing_precinct_ids",columnDefinition="longtext")
@@ -69,6 +75,7 @@ public class Precinct {
 
   /** map for log messages */
   @SuppressWarnings("JpaDataSourceORMInspection")
+  @JsonView(View.PrecinctData.class)
   @ElementCollection
   @MapKeyColumn(name="id")
   @Column(name="log")
@@ -77,34 +84,85 @@ public class Precinct {
 
   /** following are the help fields of the object which won't be persist in the database */
   @Transient
+  @JsonView(View.PrecinctData.class)
   private String canonicalName;
-
+  
   /** help field for mapping the precinct to its belonging county */
-  @Transient
+  @Transient 
   private String stateId;
-
+  
   /** help field for mapping the precinct's belonging county to its belonging state */
-  @Transient
+  @Transient 
   private String countyId;
 
   /** flag to determine whether to update this precinct's belonging county's demographic data */
   @Transient
-  private boolean demoModified;;
+  @JsonView(View.PrecinctData.class)
+  private boolean demoModified;
 
   /**
    * following are the demographic population help fields, can be ignore if demographicDataModified
    * is set to false
    */
   @Transient
+  @JsonView(View.PrecinctData.class)
   private int white;
+
   @Transient
+  @JsonView(View.PrecinctData.class)
   private int africanAmer;
+
   @Transient
+  @JsonView(View.PrecinctData.class)
   private int asian;
+
   @Transient
+  @JsonView(View.PrecinctData.class)
   private int nativeAmer;
+
   @Transient
+  @JsonView(View.PrecinctData.class)
   private int others;
+
   @Transient
+  @JsonView(View.PrecinctData.class)
   private int pasifika;
+
+  public int getWhite() {
+    return county.getWhite();
+  }
+  public int getAfricanAmer() {
+    return county.getAfricanAmer();
+  }
+  public int getAsian() {
+    return county.getAsian();
+  }
+  public int getNativeAmer() {
+    return county.getNativeAmer();
+  }
+  public int getOthers() {
+    return county.getOthers();
+  }
+  public int getPasifika() {
+    return county.getPasifika();
+  }
+  public String getStateId() {
+    return county.getStateId();
+  }
+  public String getCountyId() {
+    return county.getId();
+  }
+
+  public void setCountyId(String id) {
+    county.setId(id);
+  }
+
+  @Override
+  public String toString() {
+    return "pid: " + id +
+            "\ncoord: " + coordinates +
+            "\nisghost: " + ghost +
+            "\nhasmultiborder: " + multipleBorder +
+            "\ncountyid: " + county.getId();
+  }
 }

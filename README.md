@@ -27,17 +27,9 @@ finished 4/26:
   change naming in local variables I used in service components
   javadoc
 
-
-
-
-
-
-
-
-
-
-
-
+finished 4/27: 
+  DI
+  tests
 
 
 todos:
@@ -47,10 +39,10 @@ todos:
     Hong:
 
       high priority:
-        DI
-        test
+
 
       low priority:
+        limited size of some cols in db?
         figure out some unhandled exceptions
         Time stamp for log bag
         change data type for log bag
@@ -78,9 +70,8 @@ by the time you send the request, the population for first precinct should alrea
 The server is mainly dealing with the recursive realtions betwwen two adjacentPrecinctIds which need to be update bidirectionally
 
 
-use savePrecinct for both update/add    don't include id (not precinct id, state id, it's id field) in a add operation
-good convestion /api via post method for addition, via put method for modification
 
+good convention /api via post method for addition, via put method for modification
 add delete change comment/other datas by sending a put request to savePrecinct api
 
 
@@ -97,30 +88,24 @@ add delete change comment/other datas by sending a put request to savePrecinct a
 
 data fomart convertion for json
 
-    {
-
-
-    #precinctId remove this line, id is a auto generated string type . only use when update a exsiting precinct(may throw error/mess up db if the precinct with input id is not in the databse, don't use it when add a precinct!!!!!), dont include this field in add precinct
-
+{
 	
 	
 	
-	
-		"precinctId":"4",
+		"precinctId":"1",
         "countyId": "cid",
         "stateId": "sid",
-        "canonicalName": "foo-bar",
         "population": "22",
         "multipleBorder":false,
-        "demographicDataModified":true
+        "demoModified":true
         ,
-        
+  
        "white":114,
-      "africanAmerican":100,
-      "asianPacific":200,
-      "nativeAmerican":300,
+      "africanAmer":100,
+      "asian":200,
+      "nativeAmer":300,
       "others":400,
-      "pacificIslanders":10,
+      "pasifika":10,
    
     "electionData": {      "CONGRESSIONAL_16_REP":10,  "CONGRESSIONAL_18_REP":200,
       "PRESIDENTIAL_16_REP":300,
@@ -128,9 +113,8 @@ data fomart convertion for json
       "CONGRESSIONAL_18_DEM":200,
       "PRESIDENTIAL_16_DEM":300
     },
-    
-        "adjacentPrecinctIds": ["1","2","3"],
-        "enclosingPrecinctIds":["4","5","id for precinct"],
+    	"adjPrecIds":[],
+        "enclPrecIds":["4","5","id for precinct"],
         "logBag": {
           "1": "i dunno what i'm doing",
           "2": "the integer key is the id for each comment"
@@ -142,6 +126,3 @@ data fomart convertion for json
 	
 	
 }
-
-
-

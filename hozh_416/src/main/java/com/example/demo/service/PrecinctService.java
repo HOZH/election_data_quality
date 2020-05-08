@@ -4,20 +4,16 @@ import com.example.demo.entity.County;
 import com.example.demo.entity.Precinct;
 import com.example.demo.entitymanager.PrecinctEntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 /**
- * @author Hong Zheng, Hyejun Jeong
+ * @author Hong Zheng
  * @created 19/03/2020 - 4:14 PM
  * @project hozh-416-server
  */
-
 @Service
 public class PrecinctService {
 
@@ -65,6 +61,21 @@ public class PrecinctService {
    *
    * @param precinct Precinct type
    * @return the saved precinct entity type precinct, return null if exceptions raised
+   */
+//  public Precinct updatePrecinct(Precinct precinct) {
+//    try {
+//      return pem.save(precinct);
+//    } catch (Exception ex) {
+//      System.err.println(ex.getMessage());
+//      return null;
+//    }
+//  }
+
+  /**
+   * update a precinct record in database.
+   *
+   * @param precinct Precinct type
+   * @return the saved precinct entity type precinct, return null if exceptions raised
    * @throws IllegalArgumentException if arg of cs.selectCountyById or arg of pem.save is nullable
    * @throws NullPointerException if ?.getAdjPrecIds is nullable
    * @see this.updateNeighbors
@@ -73,7 +84,6 @@ public class PrecinctService {
 
     try {
       County targetCounty = cs.selectCountyById(precinct.getCountyId());
-
       // pull up the precinct record of target precinct in database
       var precinctRecord = pem.findById(precinct.getId()).orElse(null);
 

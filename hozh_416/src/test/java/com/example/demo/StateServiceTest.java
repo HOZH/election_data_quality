@@ -28,7 +28,8 @@ public class StateServiceTest {
 
   @Test
   public void selectStateById() {
-    Assert.assertNotNull(ss);
-    Assert.assertThat(ss.selectStateById("21").getId(), is("21"));
+    var queryResult = ss.selectStateById("21").getId();
+    System.out.println("queryResult = " + queryResult);
+    Assert.assertThat(queryResult, is("21"));
   }
 }

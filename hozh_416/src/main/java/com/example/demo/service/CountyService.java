@@ -4,11 +4,10 @@ import com.example.demo.entity.County;
 import com.example.demo.entity.State;
 import com.example.demo.entitymanager.CountyEntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 /**
- * @author Hong Zheng, Hyejun Jeong
+ * @author Hong Zheng
  * @created 19/03/2020 - 4:14 PM
  * @project hozh-416-server
  */
@@ -20,12 +19,6 @@ public class CountyService {
   @Autowired
   private StateService ss;
 
-//  @Autowired
-//  public CountyService(CountyEntityManager cem, StateService ss) {
-//    this.cem = cem;
-//    this.ss = ss;
-//  }
-
   /**
    * query a county by the given id
    *
@@ -33,7 +26,6 @@ public class CountyService {
    * @return query result by given id -> type county, return null if illegal arg exception raised
    * @throws IllegalArgumentException if arg of cem.findById is nullable
    */
-
   public County selectCountyById(String id) {
 
     try {
