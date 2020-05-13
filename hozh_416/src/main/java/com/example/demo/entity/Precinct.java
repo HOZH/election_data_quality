@@ -34,7 +34,7 @@ public class Precinct {
   private boolean ghost;
 
   /** flag to determine whether this precinct contains multiple border error */
-  @Column(name = "has_multiple_border")
+  @Column(name = "has_multiple_borders")
   @JsonView(View.PrecinctData.class)
   private boolean multipleBorder;
 
@@ -72,6 +72,14 @@ public class Precinct {
   @CollectionTable(name = "ENCLOSING_PRECINCTS")
   @Column(name = "enclosing_precinct_ids",columnDefinition="longtext")
   private List<String> enclPrecIds;
+
+  /** list of precinct's ids for which intersecting with this precinct */
+  @SuppressWarnings("JpaDataSourceORMInspection")
+  @JsonView(View.PrecinctData.class)
+  @ElementCollection//(fetch = FetchType.EAGER)
+  @CollectionTable(name = "INTERSECTING_PRECINCTS")
+  @Column(name = "intersecting_precinct_ids",columnDefinition="longtext")
+  private List<String> interPrecIds;
 
   /** map for log messages */
   @SuppressWarnings("JpaDataSourceORMInspection")

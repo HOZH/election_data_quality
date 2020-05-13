@@ -8,4 +8,5 @@ public class View {
     public interface PrecinctView{}
     public interface PrecinctCoords extends PrecinctView{}
     public interface PrecinctData extends PrecinctView, CountyData{}
+    public interface ErrorView{}
 }

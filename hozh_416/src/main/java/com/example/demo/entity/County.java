@@ -77,7 +77,6 @@ public class County {
   public String getStateId() {
     return state.getId();
   }
-
   public void setStateId(String id) {
     state.setId(id);
   }
