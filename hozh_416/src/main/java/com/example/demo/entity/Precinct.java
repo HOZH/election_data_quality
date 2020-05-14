@@ -34,7 +34,7 @@ public class Precinct {
   private boolean ghost;
 
   /** flag to determine whether this precinct contains multiple border error */
-  @Column(name = "has_multiple_borders")
+  @Column(name = "has_multiple_border")
   @JsonView(View.PrecinctData.class)
   private boolean multipleBorder;
 
