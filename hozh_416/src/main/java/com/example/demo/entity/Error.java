@@ -28,10 +28,9 @@ public class Error {
     /** following are the demographic data in term of population of this precinct */
     @SuppressWarnings("JpaDataSourceORMInspection")
     @JsonView(View.ErrorView.class)
+    @Enumerated(EnumType.STRING)
     @Column(name = "error_type", length = 10)
-//    @Enumerated(EnumType.ORDINAL)
-//    private ErrorEnum errorType;
-    private String errorType;
+    private ErrorEnum errorType;
 
     @ManyToOne
     @JoinColumn(name="pid1", nullable = false)
@@ -40,10 +39,6 @@ public class Error {
     @ManyToOne
     @JoinColumn(name="pid2")
     private Precinct precinct2;
-
-
-//    /** helper field for initialing the belonging state */
-//    @Transient private String precId;
 
     @Override
     public String toString() {

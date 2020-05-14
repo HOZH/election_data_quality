@@ -8,7 +8,7 @@ public enum ErrorEnum {
     ERRDATA,    // data anomaly
 
     /** Change log */
-    HSHAPE,     // changed shape
+    CHSHAPE,     // changed shape
     CHDATA,     // changed data
     ADDNEIGH,   // add neighbor
     DELNEIGH    // delete neighbor

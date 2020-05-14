@@ -52,9 +52,10 @@ public class Precinct {
   @SuppressWarnings("JpaDataSourceORMInspection")
   @JsonView(View.PrecinctData.class)
   @ElementCollection
-  @MapKeyColumn(name="election_type")
-  @Column(name="election_result")
   @CollectionTable(name = "ELECTION_DATA")
+  @MapKeyEnumerated(EnumType.STRING)
+  @MapKeyColumn(name="election_type", length = 20)
+  @Column(name="election_result")
   private Map<ElectionEnum, Integer> electionData;
 
   /** list of precinct's ids for which adjacent to this precinct */
