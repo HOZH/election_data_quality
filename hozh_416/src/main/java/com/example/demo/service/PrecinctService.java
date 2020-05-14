@@ -5,12 +5,13 @@ import com.example.demo.entity.Precinct;
 import com.example.demo.entitymanager.PrecinctEntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 /**
- * @author Hong Zheng
+ * @author Hong Zheng, Hyejun Jeong
  * @created 19/03/2020 - 4:14 PM
  * @project hozh-416-server
  */
@@ -53,6 +54,23 @@ public class PrecinctService {
    * @param id -> String type, using as a id to query the target precinct
    */
   public void deletePrecinctById(String id) {
+
+    // pull up record of target precinct in the database
+    // nullity check has been done in the method calling this
+
+    try {
+      ArrayList<String> deleted = new ArrayList(selectPrecinctById(id).getAdjPrecIds());
+
+      // removing target precinct's id from its deleted precinct ids in their adjacent precinct ids
+      for (var i : pem.findAllById(deleted)) {
+        i.getAdjPrecIds().remove(id);
+        pem.save(i);
+      }
+    } catch (NullPointerException | IllegalArgumentException ex) {
+      System.err.println("fail to delete a precinct");
+      System.err.println(ex.getMessage());
+    }
+
     pem.deleteById(id);
   }
 
@@ -61,35 +79,21 @@ public class PrecinctService {
    *
    * @param precinct Precinct type
    * @return the saved precinct entity type precinct, return null if exceptions raised
-   */
-//  public Precinct updatePrecinct(Precinct precinct) {
-//    try {
-//      return pem.save(precinct);
-//    } catch (Exception ex) {
-//      System.err.println(ex.getMessage());
-//      return null;
-//    }
-//  }
-
-  /**
-   * update a precinct record in database.
-   *
-   * @param precinct Precinct type
-   * @return the saved precinct entity type precinct, return null if exceptions raised
    * @throws IllegalArgumentException if arg of cs.selectCountyById or arg of pem.save is nullable
-   * @throws NullPointerException if ?.getAdjPrecIds is nullable
+   * @throws NullPointerException     if ?.getAdjPrecIds is nullable
    * @see this.updateNeighbors
    */
   public Precinct updatePrecinct(Precinct precinct) {
 
     try {
       County targetCounty = cs.selectCountyById(precinct.getCountyId());
+
       // pull up the precinct record of target precinct in database
       var precinctRecord = pem.findById(precinct.getId()).orElse(null);
 
       // comparing the adjacentPrecinctIds of the updated precinct and the record in the database
       if (precinctRecord.getAdjPrecIds().containsAll(precinct.getAdjPrecIds())
-          && precinctRecord.getAdjPrecIds().size() == precinct.getAdjPrecIds().size()) {
+              && precinctRecord.getAdjPrecIds().size() == precinct.getAdjPrecIds().size()) {
 
         // if the adjacentPrecinctIds of target precinct is not changed then check is demographic
         // data modified for its county
@@ -106,7 +110,6 @@ public class PrecinctService {
       }
     } catch (Exception ex) {
 
-      // fixme may encounter nested exception, need a more concert error handler for that
       System.err.println("precinct adjacentPrecinctIds is null");
       System.err.println(ex.getMessage());
       return null;
@@ -119,7 +122,7 @@ public class PrecinctService {
    * @param precinct Precinct type
    * @return the saved precinct entity type precinct, return null if exception raised
    * @throws IllegalArgumentException if arg of cs.selectCountyById or arg of pem.save is nullable
-   * @throws NullPointerException if ?.getAdjPrecIds is nullable
+   * @throws NullPointerException     if ?.getAdjPrecIds is nullable
    */
   public Precinct addPrecinct(Precinct precinct) {
 
@@ -156,15 +159,15 @@ public class PrecinctService {
 
       // inform the target precinct's adjacent precincts to add it to their adjacent precinct ids
       pem.findAllById(precinct.getAdjPrecIds())
-          .forEach(
-              e -> {
+              .forEach(
+                      e -> {
 
-                // if not already include then add to the target's list and save the changes
-                if (!e.getAdjPrecIds().contains(result.getId())) {
-                  e.getAdjPrecIds().add(result.getId());
-                  pem.save(e);
-                }
-              });
+                        // if not already include then add to the target's list and save the changes
+                        if (!e.getAdjPrecIds().contains(result.getId())) {
+                          e.getAdjPrecIds().add(result.getId());
+                          pem.save(e);
+                        }
+                      });
       return result;
     } catch (Exception ex) {
 
@@ -181,9 +184,9 @@ public class PrecinctService {
    *
    * @param precinct precinct type
    * @return the saved precinct entity type precinct, return null if null pointer/ illegal arg
-   *     exception raised
+   * exception raised
    * @throws IllegalArgumentException if arg of cs.selectCountyById or arg of pem.save is nullable
-   * @throws NullPointerException if ?.getAdjPrecIds is nullable
+   * @throws NullPointerException     if ?.getAdjPrecIds is nullable
    */
   private Precinct updateNeighbors(Precinct precinct) {
     try {
@@ -236,7 +239,7 @@ public class PrecinctService {
    * @param precincts type List<Precinct>, index 0 primary precinct, index 1 deleting precinct
    * @return Precinct object of survived precinct
    * @throws IllegalArgumentException if arg of pem.save is nullable
-   * @throws NullPointerException if ?.getAdjPrecIds is nullable
+   * @throws NullPointerException     if ?.getAdjPrecIds is nullable
    */
   public Precinct mergePrecincts(List<Precinct> precincts) {
 
@@ -250,26 +253,26 @@ public class PrecinctService {
 
       // merge two's adjacent ids and delete the deleting precinct id from its adjacent precinct ids
       deletingPrecinct
-          .getAdjPrecIds()
-          .forEach(
-              e -> {
+              .getAdjPrecIds()
+              .forEach(
+                      e -> {
 
-                // precinct queried by the ids in deleting precincts' adjacent precinct ids list
-                var temp = pem.findById(e).orElse(null);
+                        // precinct queried by the ids in deleting precincts' adjacent precinct ids list
+                        var temp = pem.findById(e).orElse(null);
 
-                // if the primary precinct not already contained the temp then
-                if (!primaryPrecinct.getAdjPrecIds().contains(e)) {
+                        // if the primary precinct not already contained the temp then
+                        if (!primaryPrecinct.getAdjPrecIds().contains(e)) {
 
-                  // if temp is not primary precinct, add each other to their id to their adjacent
-                  // precinct ids
-                  if (!e.equals(primaryPrecinct.getId())) {
-                    primaryPrecinct.getAdjPrecIds().add(e);
-                    temp.getAdjPrecIds().add(primaryPrecinct.getId());
-                  }
-                }
-                temp.getAdjPrecIds().remove(deletingPrecinct.getId());
-                pem.save(temp);
-              });
+                          // if temp is not primary precinct, add each other to their id to their adjacent
+                          // precinct ids
+                          if (!e.equals(primaryPrecinct.getId())) {
+                            primaryPrecinct.getAdjPrecIds().add(e);
+                            temp.getAdjPrecIds().add(primaryPrecinct.getId());
+                          }
+                        }
+                        temp.getAdjPrecIds().remove(deletingPrecinct.getId());
+                        pem.save(temp);
+                      });
 
       // deleting precinct's id from temp's list
       primaryPrecinct.getAdjPrecIds().remove(deletingPrecinct.getId());
