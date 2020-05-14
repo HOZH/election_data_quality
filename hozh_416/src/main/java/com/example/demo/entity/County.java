@@ -7,7 +7,6 @@ import com.fasterxml.jackson.annotation.JsonView;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
 import java.util.List;
 
@@ -25,86 +24,72 @@ import static javax.persistence.CascadeType.ALL;
 @Table(name = "COUNTIES")
 public class County {
 
-    /**
-     * primary key for COUNTRY_TBL table
-     */
-    @Id
-    @Column(length = 6)
-    @JsonView(View.CountyView.class)
-    private String id;
+  /** primary key for COUNTRY_TBL table */
+  @Id
+  @Column(length = 6)
+  @JsonView(View.CountyView.class)
+  private String id;
 
-    /**
-     * String of coordinates -> geo data
-     */
-    @Column(columnDefinition = "longtext")
-    @JsonView(View.CountyCoords.class)
-    private String coordinates;
+  /** String of coordinates -> geo data */
+  @Column(columnDefinition="longtext")
+  @JsonView(View.CountyCoords.class)
+  private String coordinates;
 
-    /**
-     * state that this county belongs to
-     */
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties("county")
-    @JsonIgnore
-    private State state;
+  /** state that this county belongs to */
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JsonIgnoreProperties("county")
+  @JsonIgnore
+  private State state;
 
-    /**
-     * List of Precinct objects that belong to this county
-     */
-    @OneToMany(fetch = FetchType.LAZY, cascade = ALL, mappedBy = "county")
-    @JsonView(View.PrecinctCoords.class)
-    private List<Precinct> precincts;
+  /** List of Precinct objects that belong to this county */
+  @OneToMany(fetch = FetchType.LAZY, cascade = ALL, mappedBy = "county")
+  @JsonView(View.PrecinctCoords.class)
+  private List<Precinct> precincts;
 
-    /**
-     * following are the demographic data in term of population of this precinct
-     */
-    @SuppressWarnings("JpaDataSourceORMInspection")
-    @JsonView(View.CountyData.class)
-    @Column(name = "african_american")
-    private int africanAmer;
+  /** following are the demographic data in term of population of this precinct */
+  @SuppressWarnings("JpaDataSourceORMInspection")
+  @JsonView(View.CountyData.class)
+  @Column(name = "african_american")
+  private int africanAmer;
 
-    @SuppressWarnings("JpaDataSourceORMInspection")
-    @JsonView(View.CountyData.class)
-    @Column(name = "native_american")
-    private int nativeAmer;
+  @SuppressWarnings("JpaDataSourceORMInspection")
+  @JsonView(View.CountyData.class)
+  @Column(name = "native_american")
+  private int nativeAmer;
 
-    @SuppressWarnings("JpaDataSourceORMInspection")
-    @JsonView(View.CountyData.class)
-    @Column(name = "pacific_islanders")
-    private int pasifika;
+  @SuppressWarnings("JpaDataSourceORMInspection")
+  @JsonView(View.CountyData.class)
+  @Column(name = "pacific_islanders")
+  private int pasifika;
 
-    @JsonView(View.CountyData.class)
-    private int white;
+  @JsonView(View.CountyData.class)
+  private int white;
 
-    @JsonView(View.CountyData.class)
-    private int asian;
+  @JsonView(View.CountyData.class)
+  private int asian;
 
-    @JsonView(View.CountyData.class)
-    private int others;
+  @JsonView(View.CountyData.class)
+  private int others;
 
-    /**
-     * helper field for initialing the belonging state
-     */
-    @Transient
-    private String stateId;
+  /** helper field for initialing the belonging state */
+  @Transient private String stateId;
 
-    public String getStateId() {
-        return state.getId();
-    }
+  public String getStateId() {
+    return state.getId();
+  }
+  public void setStateId(String id) {
+    state.setId(id);
+  }
 
-    public void setStateId(String id) {
-        state.setId(id);
-    }
-
-    @Override
-    public String toString() {
-        return "cid: " + id +
-                "\nwhite: " + white +
-                "\nafricanAmer: " + africanAmer +
-                "\nasian: " + asian +
-                "\nnativeAmer: " + nativeAmer +
-                "\nothers: " + others +
-                "\npasifika: " + pasifika +
-                "\nstateid: " + state.getId();
-    }
+  @Override
+  public String toString() {
+    return "cid: " + id +
+            "\nwhite: " + white +
+            "\nafricanAmer: " + africanAmer +
+            "\nasian: " + asian +
+            "\nnativeAmer: " + nativeAmer +
+            "\nothers: " + others +
+            "\npasifika: " + pasifika +
+            "\nstateid: " + state.getId();
+  }
 }

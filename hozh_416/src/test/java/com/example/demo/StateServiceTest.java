@@ -23,13 +23,13 @@ import static org.hamcrest.CoreMatchers.is;
 @RunWith(SpringJUnit4ClassRunner.class)
 public class StateServiceTest {
 
-    @Autowired
-    StateService ss;
+  @Autowired
+  StateService ss;
 
-    @Test
-    public void selectStateById() {
-        var queryResult = ss.selectStateById("21").getId();
-        System.out.println("queryResult = " + queryResult);
-        Assert.assertThat(queryResult, is("21"));
-    }
+  @Test
+  public void selectStateById() {
+    var queryResult = ss.selectStateById("21").getId();
+    System.out.println("queryResult = " + queryResult);
+    Assert.assertThat(queryResult, is("21"));
+  }
 }
