@@ -10,6 +10,8 @@ import javax.persistence.*;
 import java.util.List;
 import java.util.Map;
 
+import static javax.persistence.CascadeType.ALL;
+
 /**
  * @author Hong Zheng, Hyejun Jeong
  * @created 19/03/2020 - 4:14 PM
@@ -83,13 +85,9 @@ public class Precinct {
   private List<String> interPrecIds;
 
   /** map for log messages */
-  @SuppressWarnings("JpaDataSourceORMInspection")
+  @OneToMany(fetch = FetchType.LAZY, cascade = ALL, mappedBy = "precinct")
   @JsonView(View.PrecinctData.class)
-  @ElementCollection
-  @MapKeyColumn(name="id")
-  @Column(name="log")
-  @CollectionTable(name = "LOGS")
-  private Map<Integer, String> logBag;
+  private List<Log> logBag;
 
   /** following are the help fields of the object which won't be persist in the database */
   @Transient
