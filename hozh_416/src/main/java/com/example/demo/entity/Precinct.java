@@ -65,7 +65,7 @@ public class Precinct {
   @JsonView(View.PrecinctData.class)
   @ElementCollection(fetch = FetchType.EAGER)
   @CollectionTable(name = "ADJACENT_PRECINCTS")
-  @Column(name = "adjacent_precinct_ids",columnDefinition="longtext")
+  @Column(name = "adjacent_precinct_id",length=128)
   private List<String> adjPrecIds;
 
   /** list of precinct's ids for which enclosing to this precinct -> used for determine errors */
@@ -73,7 +73,7 @@ public class Precinct {
   @JsonView(View.PrecinctData.class)
   @ElementCollection
   @CollectionTable(name = "ENCLOSING_PRECINCTS")
-  @Column(name = "enclosing_precinct_ids",columnDefinition="longtext")
+  @Column(name = "enclosing_precinct_id",length=128)
   private List<String> enclPrecIds;
 
   /** list of precinct's ids for which intersecting with this precinct */
@@ -81,7 +81,7 @@ public class Precinct {
   @JsonView(View.PrecinctData.class)
   @ElementCollection//(fetch = FetchType.EAGER)
   @CollectionTable(name = "INTERSECTING_PRECINCTS")
-  @Column(name = "intersecting_precinct_ids",columnDefinition="longtext")
+  @Column(name = "intersecting_precinct_id",length=128)
   private List<String> interPrecIds;
 
   /** map for log messages */

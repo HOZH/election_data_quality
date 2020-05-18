@@ -22,7 +22,8 @@ public class Log {
     private int id;
 
     @JsonView(View.PrecinctData.class)
-    private String type;
+    @Enumerated(EnumType.STRING)
+    private ErrorEnum type;
 
     @JsonView(View.PrecinctData.class)
     private Timestamp time;
