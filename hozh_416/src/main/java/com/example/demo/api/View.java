@@ -6,7 +6,7 @@ public class View {
     public interface CountyCoords extends CountyView{}
     public interface CountyData extends CountyView{}
     public interface PrecinctView{}
-    public interface PrecinctCoords extends PrecinctView{}
+    public interface PrecinctCoords extends PrecinctView, CountyView{}
     public interface PrecinctData extends PrecinctView, CountyData{}
     public interface ErrorView{}
 }

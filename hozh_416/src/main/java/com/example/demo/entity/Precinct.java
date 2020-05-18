@@ -10,6 +10,8 @@ import javax.persistence.*;
 import java.util.List;
 import java.util.Map;
 
+import static javax.persistence.CascadeType.ALL;
+
 /**
  * @author Hong Zheng, Hyejun Jeong
  * @created 19/03/2020 - 4:14 PM
@@ -63,7 +65,7 @@ public class Precinct {
   @JsonView(View.PrecinctData.class)
   @ElementCollection(fetch = FetchType.EAGER)
   @CollectionTable(name = "ADJACENT_PRECINCTS")
-  @Column(name = "adjacent_precinct_ids",columnDefinition="longtext")
+  @Column(name = "adjacent_precinct_id",length=128)
   private List<String> adjPrecIds;
 
   /** list of precinct's ids for which enclosing to this precinct -> used for determine errors */
@@ -71,7 +73,7 @@ public class Precinct {
   @JsonView(View.PrecinctData.class)
   @ElementCollection
   @CollectionTable(name = "ENCLOSING_PRECINCTS")
-  @Column(name = "enclosing_precinct_ids",columnDefinition="longtext")
+  @Column(name = "enclosing_precinct_id",length=128)
   private List<String> enclPrecIds;
 
   /** list of precinct's ids for which intersecting with this precinct */
@@ -79,17 +81,13 @@ public class Precinct {
   @JsonView(View.PrecinctData.class)
   @ElementCollection//(fetch = FetchType.EAGER)
   @CollectionTable(name = "INTERSECTING_PRECINCTS")
-  @Column(name = "intersecting_precinct_ids",columnDefinition="longtext")
+  @Column(name = "intersecting_precinct_id",length=128)
   private List<String> interPrecIds;
 
   /** map for log messages */
-  @SuppressWarnings("JpaDataSourceORMInspection")
+  @OneToMany(fetch = FetchType.LAZY, cascade = ALL, mappedBy = "precinct")
   @JsonView(View.PrecinctData.class)
-  @ElementCollection
-  @MapKeyColumn(name="id")
-  @Column(name="log")
-  @CollectionTable(name = "LOGS")
-  private Map<Integer, String> logBag;
+  private List<Log> logBag;
 
   /** following are the help fields of the object which won't be persist in the database */
   @Transient
@@ -155,7 +153,6 @@ public class Precinct {
   public int getPasifika() {
     return county.getPasifika();
   }
-
   public String getStateId() {
     return county.getStateId();
   }

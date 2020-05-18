@@ -35,6 +35,11 @@ public class County {
   @JsonView(View.CountyCoords.class)
   private String coordinates;
 
+  /** flag to determine whether this precinct is a ghost precinct */
+  @Column(name = "has_error")
+  @JsonView(View.CountyView.class)
+  private boolean hasError;
+
   /** state that this county belongs to */
   @ManyToOne(fetch = FetchType.LAZY)
   @JsonIgnoreProperties("county")
