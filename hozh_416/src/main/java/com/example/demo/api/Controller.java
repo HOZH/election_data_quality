@@ -95,39 +95,61 @@ public class Controller {
   }
 
   /**
-   * Post method router for adding a precinct with database.
+   * Put/Post method router for adding/updating a precinct with database.
+   * Distinction between add/update will be detect on service layer
    *
    * @param precinct type Precinct, fetched through request body
-   * @return Precinct object of saved precinct status code is set to 200 if insertion of the
-   *     precinct is completed otherwise 400
+   * @return Precinct object of saved precinct
+   * status code is set to 200 if insertion/modification of the precinct is completed otherwise 400
    */
-  @PostMapping(path ="/precinct")
-  private ResponseEntity<Precinct> addPrecinctHandler(
-      @Valid @NotNull @RequestBody Precinct precinct) {
-    Precinct operationResult;
-    operationResult = precinctService.addPrecinct(precinct);
-
-    return new ResponseEntity<>(
-        operationResult, operationResult == null ? HttpStatus.BAD_REQUEST : HttpStatus.OK);
-  }
-
-  /**
-   * Put method router for updating a precinct with database.
-   *
-   * @param precinct type Precinct, fetched through request body
-   * @return Precinct object of saved precinct status code is set to 200 if modification of the
-   *     precinct is completed otherwise 400
-   */
-  @JsonView(View.PrecinctData.class)
-  //@PutMapping(path ="/precinct")
-  @RequestMapping(value = "/precinct", method = RequestMethod.PUT)
-  private ResponseEntity<Precinct> updatePrecinctHandler(
-      @Valid @NotNull @RequestBody Precinct precinct) {
+  @RequestMapping(path = "/precinct", method = {RequestMethod.POST, RequestMethod.PUT})
+  private ResponseEntity<Precinct> savePrecinctHandler(HttpServletRequest request, @Valid @NotNull @RequestBody Precinct precinct) {
     System.out.println();
-    System.out.println("precinct=" + precinct);
 
-  return null;
+    Precinct operationResult;
+    operationResult = switch (request.getMethod()) {
+      case "POST" -> precinctService.addPrecinct(precinct);
+      case "PUT" -> precinctService.updatePrecinct(precinct);
+      default -> null;
+    };
+    return new ResponseEntity<>(operationResult, operationResult == null ? HttpStatus.BAD_REQUEST : HttpStatus.OK);
   }
+
+
+//  /**
+//   * Post method router for adding a precinct with database.
+//   *
+//   * @param precinct type Precinct, fetched through request body
+//   * @return Precinct object of saved precinct status code is set to 200 if insertion of the
+//   *     precinct is completed otherwise 400
+//   */
+//  @PostMapping(path ="/precinct")
+//  private ResponseEntity<Precinct> addPrecinctHandler(
+//      @Valid @NotNull @RequestBody Precinct precinct) {
+//    Precinct operationResult;
+//    operationResult = precinctService.addPrecinct(precinct);
+//
+//    return new ResponseEntity<>(
+//        operationResult, operationResult == null ? HttpStatus.BAD_REQUEST : HttpStatus.OK);
+//  }
+//
+//  /**
+//   * Put method router for updating a precinct with database.
+//   *
+//   * @param precinct type Precinct, fetched through request body
+//   * @return Precinct object of saved precinct status code is set to 200 if modification of the
+//   *     precinct is completed otherwise 400
+//   */
+//  @JsonView(View.PrecinctData.class)
+//  //@PutMapping(path ="/precinct")
+//  @RequestMapping(value = "/precinct", method = RequestMethod.PUT)
+//  private ResponseEntity<Precinct> updatePrecinctHandler(
+//      @Valid @NotNull @RequestBody Precinct precinct) {
+//    System.out.println();
+//    System.out.println("precinct=" + precinct);
+//
+//  return null;
+//  }
 
   /**
    * Delete method router for merging two precincts index 0 primary precinct, index 1 deleting

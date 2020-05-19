@@ -78,23 +78,23 @@ public class County {
 
   /** helper field for initialing the belonging state */
   @Transient private String stateId;
+//
+//  public String getStateId() {
+//    return state.getId();
+//  }
+//  public void setStateId(String id) {
+//    state.setId(id);
+//  }
 
-  public String getStateId() {
-    return state.getId();
-  }
-  public void setStateId(String id) {
-    state.setId(id);
-  }
-
-  @Override
-  public String toString() {
-    return "cid: " + id +
-            "\nwhite: " + white +
-            "\nafricanAmer: " + africanAmer +
-            "\nasian: " + asian +
-            "\nnativeAmer: " + nativeAmer +
-            "\nothers: " + others +
-            "\npasifika: " + pasifika +
-            "\nstateid: " + state.getId();
-  }
+//  @Override
+//  public String toString() {
+//    return "cid: " + id +
+//            "\nwhite: " + white +
+//            "\nafricanAmer: " + africanAmer +
+//            "\nasian: " + asian +
+//            "\nnativeAmer: " + nativeAmer +
+//            "\nothers: " + others +
+//            "\npasifika: " + pasifika +
+//            "\nstateid: " + state.getId();
+//  }
 }

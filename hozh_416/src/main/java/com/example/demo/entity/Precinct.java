@@ -136,40 +136,40 @@ public class Precinct {
   @JsonView(View.PrecinctData.class)
   private int pasifika;
 
-  public int getWhite() {
-    return county.getWhite();
-  }
-  public int getAfricanAmer() {
-    return county.getAfricanAmer();
-  }
-  public int getAsian() {
-    return county.getAsian();
-  }
-  public int getNativeAmer() {
-    return county.getNativeAmer();
-  }
-  public int getOthers() {
-    return county.getOthers();
-  }
-  public int getPasifika() {
-    return county.getPasifika();
-  }
-  public String getStateId() {
-    return county.getStateId();
-  }
-  public String getCountyId() {
-    return county.getId();
-  }
+//  public int getWhite() {
+//    return county.getWhite();
+//  }
+//  public int getAfricanAmer() {
+//    return county.getAfricanAmer();
+//  }
+//  public int getAsian() {
+//    return county.getAsian();
+//  }
+//  public int getNativeAmer() {
+//    return county.getNativeAmer();
+//  }
+//  public int getOthers() {
+//    return county.getOthers();
+//  }
+//  public int getPasifika() {
+//    return county.getPasifika();
+//  }
+//  public String getStateId() {
+//    return county.getStateId();
+//  }
+//  public String getCountyId() {
+//    return county.getId();
+//  }
+//
+//  public void setCountyId(String id) {
+//    county.setId(id);
+//  }
 
-  public void setCountyId(String id) {
-    county.setId(id);
-  }
-
-  @Override
-  public String toString() {
-    return "pid: " + id +
-            "\ncoord: " + coordinates +
-            "\nisghost: " + ghost +
-            "\nhasmultiborder: " + multipleBorder;
-  }
+//  @Override
+//  public String toString() {
+//    return "pid: " + id +
+//            "\ncoord: " + coordinates +
+//            "\nisghost: " + ghost +
+//            "\nhasmultiborder: " + multipleBorder;
+//  }
 }
