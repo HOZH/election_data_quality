@@ -2,6 +2,7 @@ package com.example.demo.api;
 
 public class View {
     public interface StateView{}
+    public interface StateData extends StateView{}
     public interface CountyView{}
     public interface CountyCoords extends CountyView{}
     public interface CountyData extends CountyView{}

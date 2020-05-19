@@ -33,8 +33,14 @@ public class Precinct {
 
   /** flag to determine whether this precinct is a ghost precinct */
   @Column(name = "is_ghost")
-  @JsonView(View.PrecinctData.class)
+  @JsonView(View.PrecinctCoords.class)
   private boolean ghost;
+
+  // This will be uncommented after has_error column is populated.
+//  /** flag to determine whether this precinct has an error */
+//  @Column(name = "has_error")
+//  @JsonView(View.PrecinctCoords.class)
+//  private boolean error;
 
   /** flag to determine whether this precinct contains multiple border error */
   @Column(name = "has_multiple_border")
@@ -136,40 +142,45 @@ public class Precinct {
   @JsonView(View.PrecinctData.class)
   private int pasifika;
 
-  public int getWhite() {
-    return county.getWhite();
-  }
-  public int getAfricanAmer() {
-    return county.getAfricanAmer();
-  }
-  public int getAsian() {
-    return county.getAsian();
-  }
-  public int getNativeAmer() {
-    return county.getNativeAmer();
-  }
-  public int getOthers() {
-    return county.getOthers();
-  }
-  public int getPasifika() {
-    return county.getPasifika();
-  }
-  public String getStateId() {
-    return county.getStateId();
-  }
-  public String getCountyId() {
-    return county.getId();
-  }
+  //  @JsonView(View.PrecinctData.class)
+  @Transient
+  private int population;
 
-  public void setCountyId(String id) {
-    county.setId(id);
-  }
 
-  @Override
-  public String toString() {
-    return "pid: " + id +
-            "\ncoord: " + coordinates +
-            "\nisghost: " + ghost +
-            "\nhasmultiborder: " + multipleBorder;
-  }
+//  public int getWhite() {
+//    return county.getWhite();
+//  }
+//  public int getAfricanAmer() {
+//    return county.getAfricanAmer();
+//  }
+//  public int getAsian() {
+//    return county.getAsian();
+//  }
+//  public int getNativeAmer() {
+//    return county.getNativeAmer();
+//  }
+//  public int getOthers() {
+//    return county.getOthers();
+//  }
+//  public int getPasifika() {
+//    return county.getPasifika();
+//  }
+//  public String getStateId() {
+//    return county.getStateId();
+//  }
+//  public String getCountyId() {
+//    return county.getId();
+//  }
+//
+//  public void setCountyId(String id) {
+//    county.setId(id);
+//  }
+
+//  @Override
+//  public String toString() {
+//    return "pid: " + id +
+//            "\ncoord: " + coordinates +
+//            "\nisghost: " + ghost +
+//            "\nhasmultiborder: " + multipleBorder;
+//  }
 }

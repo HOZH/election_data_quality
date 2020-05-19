@@ -45,7 +45,7 @@ public class CountyService {
    */
   public County saveCounty(County county) {
 
-    try {
+//    try {
       // if the target county is not yet assigned to a state (case newly created county)
       // create a state by the stateId field in county object
       if (county.getState() == null) {
@@ -59,9 +59,9 @@ public class CountyService {
         county.setState(targetState);
       }
       return cem.save(county);
-    } catch (Exception ex) {
-      System.err.println(ex.getMessage());
-      return null;
-    }
+//    } catch (Exception ex) {
+//      System.err.println(ex.getMessage());
+//      return null;
+//    }
   }
 }

@@ -20,6 +20,7 @@ public class PrecinctService {
 
   @Autowired
   private PrecinctEntityManager pem;
+
   @Autowired
   private CountyService cs;
 
@@ -86,6 +87,10 @@ public class PrecinctService {
   public Precinct updatePrecinct(Precinct precinct) {
 
     try {
+        precinct.setCoordinates(pem.findById(precinct.getId()).orElse(null).getCoordinates());
+
+
+
       County targetCounty = cs.selectCountyById(precinct.getCountyId());
 
       // pull up the precinct record of target precinct in database
@@ -126,7 +131,7 @@ public class PrecinctService {
    */
   public Precinct addPrecinct(Precinct precinct) {
 
-    try {
+//    try {
 
       // getCountyId is never going to be null by convention in our group
       County targetCounty = cs.selectCountyById(precinct.getCountyId());
@@ -137,6 +142,7 @@ public class PrecinctService {
       if (countyNotFound) {
         targetCounty = new County();
         targetCounty.setId(precinct.getCountyId());
+
         targetCounty.setStateId(precinct.getStateId());
       }
 
@@ -169,13 +175,13 @@ public class PrecinctService {
                         }
                       });
       return result;
-    } catch (Exception ex) {
-
-      // fixme may encounter nested exception, need a more concert error handler for that
-      System.err.println("precinct adjacentPrecinctIds is null");
-      System.err.println(ex.getMessage());
-      return null;
-    }
+//    } catch (Exception ex) {
+//
+//      // fixme may encounter nested exception, need a more concert error handler for that
+//      System.err.println("precinct adjacentPrecinctIds is null");
+//      System.err.println(ex.getMessage());
+//      return null;
+//    }
   }
 
   /**
@@ -243,7 +249,7 @@ public class PrecinctService {
    */
   public Precinct mergePrecincts(List<Precinct> precincts) {
 
-    try {
+//    try {
 
       // primary precinct
       Precinct primaryPrecinct = precincts.get(0);
@@ -251,40 +257,48 @@ public class PrecinctService {
       // deleting precinct
       Precinct deletingPrecinct = precincts.get(1);
 
-      // merge two's adjacent ids and delete the deleting precinct id from its adjacent precinct ids
-      deletingPrecinct
-              .getAdjPrecIds()
-              .forEach(
-                      e -> {
+    // merge two's adjacent ids and delete the deleting precinct id from its adjacent precinct ids
+    deletingPrecinct
+        .getAdjPrecIds()
+        .forEach(
+            e -> {
+              System.err.println(e);
 
-                        // precinct queried by the ids in deleting precincts' adjacent precinct ids list
-                        var temp = pem.findById(e).orElse(null);
 
-                        // if the primary precinct not already contained the temp then
-                        if (!primaryPrecinct.getAdjPrecIds().contains(e)) {
+              // precinct queried by the ids in deleting precincts' adjacent precinct ids list
+              var temp = pem.findById(e).orElse(null);
 
-                          // if temp is not primary precinct, add each other to their id to their adjacent
-                          // precinct ids
-                          if (!e.equals(primaryPrecinct.getId())) {
-                            primaryPrecinct.getAdjPrecIds().add(e);
-                            temp.getAdjPrecIds().add(primaryPrecinct.getId());
-                          }
-                        }
-                        temp.getAdjPrecIds().remove(deletingPrecinct.getId());
-                        pem.save(temp);
-                      });
+              if(temp==null)
+                  return;
+
+              // if the primary precinct not already contained the temp then
+              if (!primaryPrecinct.getAdjPrecIds().contains(e)) {
+
+                // if temp is not primary precinct, add each other to their id to their adjacent
+                // precinct ids
+                if (!e.equals(primaryPrecinct.getId())) {
+                  primaryPrecinct.getAdjPrecIds().add(e);
+                  temp.getAdjPrecIds().add(primaryPrecinct.getId());
+                }
+              }
+              temp.getAdjPrecIds().remove(deletingPrecinct.getId());
+              pem.save(temp);
+            });
 
       // deleting precinct's id from temp's list
       primaryPrecinct.getAdjPrecIds().remove(deletingPrecinct.getId());
 
+
+      //set county
+      primaryPrecinct.setCounty(cs.selectCountyById(primaryPrecinct.getCountyId()));
       // remove deleting precinct from database
       pem.deleteById(deletingPrecinct.getId());
       return pem.save(primaryPrecinct);
-    } catch (NullPointerException ex) {
-      System.err.println("precinct adjacentPrecinctIds is null");
-      System.err.println(ex.getMessage());
-      return null;
-    }
+//    } catch (NullPointerException ex) {
+//      System.err.println("precinct adjacentPrecinctIds is null");
+//      System.err.println(ex.getMessage());
+//      return null;
+//    }
   }
 
   /**
