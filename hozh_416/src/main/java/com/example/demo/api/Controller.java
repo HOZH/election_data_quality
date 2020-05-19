@@ -77,6 +77,15 @@ public class Controller {
   @GetMapping(path = "/precinct/{id}")
   private ResponseEntity<Precinct> getPrecinctByIdHandler(@PathVariable("id") String id) {
     var queryResult = precinctService.selectPrecinctById(id);
+    if(queryResult!=null){
+      queryResult.setAfricanAmer(queryResult.getCounty().getAfricanAmer());
+      queryResult.setAsian(queryResult.getCounty().getAsian());
+      queryResult.setPasifika(queryResult.getCounty().getPasifika());
+      queryResult.setWhite(queryResult.getCounty().getWhite());
+      queryResult.setNativeAmer(queryResult.getCounty().getNativeAmer());
+      queryResult.setOthers(queryResult.getCounty().getOthers());
+
+    }
     return new ResponseEntity<>(
         queryResult, queryResult == null ? HttpStatus.NOT_FOUND : HttpStatus.OK);
   }
@@ -102,6 +111,8 @@ public class Controller {
    * @return Precinct object of saved precinct
    * status code is set to 200 if insertion/modification of the precinct is completed otherwise 400
    */
+  @JsonView(View.PrecinctData.class)
+
   @RequestMapping(path = "/precinct", method = {RequestMethod.POST, RequestMethod.PUT})
   private ResponseEntity<Precinct> savePrecinctHandler(HttpServletRequest request, @Valid @NotNull @RequestBody Precinct precinct) {
     System.out.println();

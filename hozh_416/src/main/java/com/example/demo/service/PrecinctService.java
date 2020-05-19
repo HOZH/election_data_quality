@@ -257,28 +257,33 @@ public class PrecinctService {
       // deleting precinct
       Precinct deletingPrecinct = precincts.get(1);
 
-      // merge two's adjacent ids and delete the deleting precinct id from its adjacent precinct ids
-      deletingPrecinct
-              .getAdjPrecIds()
-              .forEach(
-                      e -> {
+    // merge two's adjacent ids and delete the deleting precinct id from its adjacent precinct ids
+    deletingPrecinct
+        .getAdjPrecIds()
+        .forEach(
+            e -> {
+              System.err.println(e);
 
-                        // precinct queried by the ids in deleting precincts' adjacent precinct ids list
-                        var temp = pem.findById(e).orElse(null);
 
-                        // if the primary precinct not already contained the temp then
-                        if (!primaryPrecinct.getAdjPrecIds().contains(e)) {
+              // precinct queried by the ids in deleting precincts' adjacent precinct ids list
+              var temp = pem.findById(e).orElse(null);
 
-                          // if temp is not primary precinct, add each other to their id to their adjacent
-                          // precinct ids
-                          if (!e.equals(primaryPrecinct.getId())) {
-                            primaryPrecinct.getAdjPrecIds().add(e);
-                            temp.getAdjPrecIds().add(primaryPrecinct.getId());
-                          }
-                        }
-                        temp.getAdjPrecIds().remove(deletingPrecinct.getId());
-                        pem.save(temp);
-                      });
+              if(temp==null)
+                  return;
+
+              // if the primary precinct not already contained the temp then
+              if (!primaryPrecinct.getAdjPrecIds().contains(e)) {
+
+                // if temp is not primary precinct, add each other to their id to their adjacent
+                // precinct ids
+                if (!e.equals(primaryPrecinct.getId())) {
+                  primaryPrecinct.getAdjPrecIds().add(e);
+                  temp.getAdjPrecIds().add(primaryPrecinct.getId());
+                }
+              }
+              temp.getAdjPrecIds().remove(deletingPrecinct.getId());
+              pem.save(temp);
+            });
 
       // deleting precinct's id from temp's list
       primaryPrecinct.getAdjPrecIds().remove(deletingPrecinct.getId());
