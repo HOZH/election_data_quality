@@ -117,6 +117,7 @@ public class Controller {
    * @return Precinct object of saved precinct status code is set to 200 if modification of the
    *     precinct is completed otherwise 400
    */
+  @PutMapping
   private ResponseEntity<Precinct> updatePrecinctHandler(
       @Valid @NotNull @RequestBody Precinct precinct) {
     Precinct operationResult;
