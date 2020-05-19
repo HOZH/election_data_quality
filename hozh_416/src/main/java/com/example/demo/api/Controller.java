@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -86,7 +87,7 @@ public class Controller {
    * @param id type Long, fetched through path variable
    * @return String of deletion state status code is always set to 200
    */
-  // @JsonView(View.PrecinctData.class)
+  @JsonView(View.PrecinctData.class)
   @DeleteMapping(path = "/precinct/{id}")
   private ResponseEntity<String> removePrecinctByIdHandler(@PathVariable("id") String id) {
     precinctService.deletePrecinctById(id);
@@ -117,12 +118,15 @@ public class Controller {
    * @return Precinct object of saved precinct status code is set to 200 if modification of the
    *     precinct is completed otherwise 400
    */
+  @JsonView(View.PrecinctData.class)
   @PutMapping
-  private ResponseEntity<Precinct> updatePrecinctHandler(
+  //@RequestMapping(path = "/precinct", method = RequestMethod.PUT)
+  private ResponseEntity<Precinct> updatePrecinctHandler(//HttpServletRequest request,
       @Valid @NotNull @RequestBody Precinct precinct) {
+    System.out.println("precinct=" + precinct);
+
     Precinct operationResult;
     operationResult = precinctService.updatePrecinct(precinct);
-
     return new ResponseEntity<>(
         operationResult, operationResult == null ? HttpStatus.BAD_REQUEST : HttpStatus.OK);
   }
