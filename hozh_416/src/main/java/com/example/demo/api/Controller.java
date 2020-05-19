@@ -101,7 +101,7 @@ public class Controller {
    * @return Precinct object of saved precinct status code is set to 200 if insertion of the
    *     precinct is completed otherwise 400
    */
-  @PostMapping
+  @PostMapping(path ="/precinct")
   private ResponseEntity<Precinct> addPrecinctHandler(
       @Valid @NotNull @RequestBody Precinct precinct) {
     Precinct operationResult;
@@ -119,16 +119,14 @@ public class Controller {
    *     precinct is completed otherwise 400
    */
   @JsonView(View.PrecinctData.class)
-  @PutMapping
+  @PutMapping(path ="/precinct")
   //@RequestMapping(path = "/precinct", method = RequestMethod.PUT)
   private ResponseEntity<Precinct> updatePrecinctHandler(//HttpServletRequest request,
       @Valid @NotNull @RequestBody Precinct precinct) {
+    System.out.println();
     System.out.println("precinct=" + precinct);
 
-    Precinct operationResult;
-    operationResult = precinctService.updatePrecinct(precinct);
-    return new ResponseEntity<>(
-        operationResult, operationResult == null ? HttpStatus.BAD_REQUEST : HttpStatus.OK);
+  return null;
   }
 
   /**
