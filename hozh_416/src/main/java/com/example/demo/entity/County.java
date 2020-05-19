@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.List;
+import java.util.Map;
 
 import static javax.persistence.CascadeType.ALL;
 
@@ -46,6 +47,9 @@ public class County {
   @JsonIgnore
   private State state;
 
+  @Transient
+  private Map<ElectionEnum, Integer> electionData;
+
   /** List of Precinct objects that belong to this county */
   @OneToMany(fetch = FetchType.LAZY, cascade = ALL, mappedBy = "county")
   @JsonView(View.PrecinctCoords.class)
@@ -75,6 +79,10 @@ public class County {
 
   @JsonView(View.CountyData.class)
   private int others;
+
+  //  @JsonView(View.CountyData.class)
+  @Transient
+  private int population;
 
   /** helper field for initialing the belonging state */
   @Transient private String stateId;

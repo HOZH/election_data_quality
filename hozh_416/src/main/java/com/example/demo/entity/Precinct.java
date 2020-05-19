@@ -33,8 +33,14 @@ public class Precinct {
 
   /** flag to determine whether this precinct is a ghost precinct */
   @Column(name = "is_ghost")
-  @JsonView(View.PrecinctData.class)
+  @JsonView(View.PrecinctCoords.class)
   private boolean ghost;
+
+  // This will be uncommented after has_error column is populated.
+//  /** flag to determine whether this precinct has an error */
+//  @Column(name = "has_error")
+//  @JsonView(View.PrecinctCoords.class)
+//  private boolean error;
 
   /** flag to determine whether this precinct contains multiple border error */
   @Column(name = "has_multiple_border")
@@ -135,6 +141,11 @@ public class Precinct {
   @Transient
   @JsonView(View.PrecinctData.class)
   private int pasifika;
+
+  //  @JsonView(View.PrecinctData.class)
+  @Transient
+  private int population;
+
 
 //  public int getWhite() {
 //    return county.getWhite();

@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.List;
+import java.util.Map;
 
 import static javax.persistence.CascadeType.ALL;
 
@@ -36,4 +37,30 @@ public class State {
   @JsonView(View.CountyCoords.class)
   @OneToMany(fetch = FetchType.LAZY, cascade = ALL, mappedBy = "state")
   private List<County> counties;
+
+  @Transient
+  private Map<ElectionEnum, Integer> electionData;
+
+  @Transient
+  private int white;
+
+  @Transient
+  private int africanAmer;
+
+  @Transient
+  private int asian;
+
+  @Transient
+  private int nativeAmer;
+
+  @Transient
+  private int others;
+
+  @Transient
+  private int pasifika;
+
+  // @JsonView(View.StateData.class)
+  @Transient
+  private int population;
+
 }
