@@ -10,6 +10,7 @@ import javax.persistence.*;
 import java.util.List;
 import java.util.Map;
 
+import static com.example.demo.entity.ElectionEnum.CONGRESSIONAL_16_DEM;
 import static javax.persistence.CascadeType.ALL;
 
 /**
@@ -169,7 +170,6 @@ public class Precinct {
     return "pid: " + id +
             "\ncoord: " + coordinates +
             "\nisghost: " + ghost +
-            "\nhasmultiborder: " + multipleBorder +
-            "\ncountyid: " + county.getId();
+            "\nhasmultiborder: " + multipleBorder;
   }
 }

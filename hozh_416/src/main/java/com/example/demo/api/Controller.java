@@ -119,9 +119,9 @@ public class Controller {
    *     precinct is completed otherwise 400
    */
   @JsonView(View.PrecinctData.class)
-  @PutMapping(path ="/precinct")
-  //@RequestMapping(path = "/precinct", method = RequestMethod.PUT)
-  private ResponseEntity<Precinct> updatePrecinctHandler(//HttpServletRequest request,
+  //@PutMapping(path ="/precinct")
+  @RequestMapping(value = "/precinct", method = RequestMethod.PUT)
+  private ResponseEntity<Precinct> updatePrecinctHandler(
       @Valid @NotNull @RequestBody Precinct precinct) {
     System.out.println();
     System.out.println("precinct=" + precinct);
