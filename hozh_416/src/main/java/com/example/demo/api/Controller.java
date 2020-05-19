@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -41,6 +42,42 @@ public class Controller {
   @GetMapping(path = "/state/{id}")
   private ResponseEntity<State> getStateByIdHandler(@PathVariable("id") String id) {
     var queryResult = stateService.selectStateById(id);
+//    System.err.println(queryResult.getCounties().size());
+    int africanAmer =0;
+    int asian=0;
+    int pasifika=0;
+    int white=0;
+    int nativeAmer=0;
+    int others=0;
+    int population=0;
+
+
+   if(queryResult!=null){
+     for(var i : queryResult.getCounties()){
+       africanAmer+=i.getAfricanAmer();
+       asian+=i.getAsian();
+       pasifika+=i.getPasifika();
+       white+=i.getWhite();
+       nativeAmer+=i.getNativeAmer();
+       others+=i.getOthers();
+
+     }
+
+     population = africanAmer+asian+pasifika+white+nativeAmer+others;
+
+     queryResult.setAfricanAmer(africanAmer);
+     queryResult.setAsian(asian);
+     queryResult.setPasifika(pasifika);
+     queryResult.setWhite(white);
+     queryResult.setNativeAmer(nativeAmer);
+     queryResult.setOthers(others);
+     queryResult.setPopulation(population);
+
+   }
+
+
+    System.out.println(population);
+
     return new ResponseEntity<>(
         queryResult, queryResult == null ? HttpStatus.NOT_FOUND : HttpStatus.OK);
   }
@@ -171,11 +208,23 @@ public class Controller {
    * @return Precinct object of survived precinct status code is set to 200 if the merging operation
    *     of two precincts is completed otherwise 400
    */
+//  @DeleteMapping(path = "/precinct/merge")
+//  private ResponseEntity<Precinct> mergePrecinctsHandler(
+//      @Valid @NotNull @RequestBody List<Precinct> precincts) {
+//    var mergingResult = precinctService.mergePrecincts(precincts);
+//    return new ResponseEntity<>(
+//        mergingResult, mergingResult == null ? HttpStatus.BAD_REQUEST : HttpStatus.OK);
+//  }
+//}
   @DeleteMapping(path = "/precinct/merge")
   private ResponseEntity<Precinct> mergePrecinctsHandler(
-      @Valid @NotNull @RequestBody List<Precinct> precincts) {
-    var mergingResult = precinctService.mergePrecincts(precincts);
+          @Valid @NotNull @RequestBody Precinct precinct) {
+    var temp = precinctService.selectPrecinctById(precinct.getMergeHolder());
+    List<Precinct> tempArr = new ArrayList<>();
+    tempArr.add(precinct);
+    tempArr.add(temp);
+    var mergingResult = precinctService.mergePrecincts(tempArr);
     return new ResponseEntity<>(
-        mergingResult, mergingResult == null ? HttpStatus.BAD_REQUEST : HttpStatus.OK);
+            mergingResult, mergingResult == null ? HttpStatus.BAD_REQUEST : HttpStatus.OK);
   }
 }
