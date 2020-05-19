@@ -147,6 +147,9 @@ public class Precinct {
   private int population;
 
 
+  @Transient String mergeHolder;
+
+
 //  public int getWhite() {
 //    return county.getWhite();
 //  }
