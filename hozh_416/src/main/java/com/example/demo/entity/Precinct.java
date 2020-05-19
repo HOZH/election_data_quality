@@ -36,11 +36,10 @@ public class Precinct {
   @JsonView(View.PrecinctCoords.class)
   private boolean ghost;
 
-  // This will be uncommented after has_error column is populated.
-//  /** flag to determine whether this precinct has an error */
-//  @Column(name = "has_error")
-//  @JsonView(View.PrecinctCoords.class)
-//  private boolean error;
+  /** flag to determine whether this precinct has an error */
+  @Column(name = "has_error")
+  @JsonView(View.PrecinctCoords.class)
+  private boolean error;
 
   /** flag to determine whether this precinct contains multiple border error */
   @Column(name = "has_multiple_border")
